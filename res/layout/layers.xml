@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+<CheckBox android:layout_height="wrap_content" android:layout_alignParentLeft="true" android:layout_width="fill_parent" android:id="@+id/CheckBox01" android:text="@string/canada" android:checked="true"></CheckBox>
+<CheckBox android:layout_height="wrap_content" android:layout_alignParentLeft="true" android:layout_width="fill_parent" android:id="@+id/CheckBox02" android:text="@string/new_construction" android:layout_below="@+id/CheckBox01" android:checked="true"></CheckBox>
+<CheckBox android:layout_height="wrap_content" android:layout_alignParentLeft="true" android:layout_width="fill_parent" android:id="@+id/CheckBox03" android:layout_below="@+id/CheckBox02" android:text="@string/owned" android:checked="true"></CheckBox>
+<CheckBox android:layout_height="wrap_content" android:layout_alignParentLeft="true" android:layout_width="fill_parent" android:id="@+id/CheckBox04" android:layout_below="@+id/CheckBox03" android:text="@string/managed" android:checked="true"></CheckBox>
+<CheckBox android:layout_height="wrap_content" android:layout_alignParentLeft="true" android:layout_width="fill_parent" android:id="@+id/CheckBox05" android:layout_below="@+id/CheckBox04" android:text="@string/central_america" android:checked="true"></CheckBox>
+<Button android:layout_height="wrap_content" android:id="@+id/Button01" android:layout_width="fill_parent" android:text="@string/done" android:layout_alignParentBottom="true"></Button>
+</RelativeLayout>

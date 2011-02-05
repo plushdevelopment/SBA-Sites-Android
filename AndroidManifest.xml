@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.sbasite.activities" android:versionName="@string/app_version" android:versionCode="1">
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<application android:name=".SBASitesApplication" android:label="@string/app_name" android:icon="@drawable/cw" android:allowClearUserData="true" android:permission="android.permission.WRITE_OWNER_DATA" android:debuggable="true" android:enabled="true">
+		<uses-library android:name="com.google.android.maps" />
+		<activity android:label="@string/app_name" android:name="SBAMapActivity">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:label="@string/instructions" android:name="Instructions">
+		</activity>
+		<activity android:label="@string/layers" android:name="Layers">
+		</activity>
+		<activity android:label="@string/list_view" android:name="ListView">
+		</activity>
+	
+</application>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+<uses-permission android:name="android.permission.WRITE_OWNER_DATA"></uses-permission>
+
+</manifest>
