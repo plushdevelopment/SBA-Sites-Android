@@ -66,10 +66,8 @@ public class SBASitesApplication extends com.activeandroid.Application {
             // Parsing has finished. 
             
             Log.v("Total Records", Integer.toString(totalRecordsCount));
-            
 		} catch (Exception e) {
             // Display any Error to the GUI. 
-            
 		}
 		
 		new Thread(new Runnable() {
@@ -100,7 +98,6 @@ public class SBASitesApplication extends com.activeandroid.Application {
 				}
 		    }
 		  }).start();
-		*/
 	}
 	
 	public void setCurrentSites(ArrayList<Site> currentSites) {
@@ -112,6 +109,10 @@ public class SBASitesApplication extends com.activeandroid.Application {
 	}
 	
 	public ArrayList<Site> loadSitesForRegion(double minLat, double maxLat, double minLong, double maxLong) {
+		
+		
+		
+		
 	    // Execute query
 		String where = String.format("SITE_LATITUDE > %f AND SITE_LATITUDE < %f AND SITE_LONGITUDE > %f AND SITE_LONGITUDE < %f", minLat, maxLat, minLong, maxLong);
 		Log.d("DB", where);
@@ -142,7 +143,7 @@ public class SBASitesApplication extends com.activeandroid.Application {
 				site.mta = cursor.getString(13);
 				site.phone = cursor.getString(14);
 				site.siteCode = cursor.getString(15);
-				site.siteLayer = cursor.getString(16);
+				//site.siteLayer = cursor.getString(16);
 				site.siteName = cursor.getString(17);
 				site.siteStatus = cursor.getString(18);
 				site.stateProvince = cursor.getString(19);
@@ -159,41 +160,6 @@ public class SBASitesApplication extends com.activeandroid.Application {
 	  }
 	
 	public void addSite(Site site) {
-		assert(null != site);
-		
-		ContentValues values = new ContentValues();
-		values.put(SITE_ADDRESS, site.address);
-		values.put(SITE_AGL, site.agl);
-		values.put(SITE_BTA, site.bta);
-		values.put(SITE_CITY, site.city);
-		values.put(SITE_CODE, site.siteCode);
-		values.put(SITE_CONTACT, site.contact);
-		values.put(SITE_COUNTY, site.county);
-		values.put(SITE_DELETED, site.deleted);
-		values.put(SITE_EMAIL, site.email);
-		values.put(SITE_LASTUPDATED, site.lastUpdated);
-		values.put(SITE_LATITUDE, site.latitude);
-		values.put(SITE_LAYER, site.siteLayer);
-		values.put(SITE_LONGITUDE, site.longitude);
-		values.put(SITE_MOBILEKEY, site.mobileKey);
-		values.put(SITE_MTA, site.mta);
-		values.put(SITE_NAME, site.siteName);
-		values.put(SITE_PHONE, site.phone);
-		values.put(SITE_STATEPROVINCE, site.stateProvince);
-		values.put(SITE_STATUS, site.siteStatus);
-		values.put(SITE_STRUCTUREHEIGHT, site.structureHeight);
-		values.put(SITE_STRUCTUREID, site.structureID);
-		values.put(SITE_STRUCTURETYPE, site.structureType);
-		values.put(SITE_ZIP, site.zip);
-		
-		try {
-			String where = String.format("SITE_MOBILEKEY LIKE \"%s\"", SITE_MOBILEKEY, site.mobileKey);
-			int rowsCount = database.update(SITES_TABLE, values, where, null);
-			Log.d("DB", Integer.toString(rowsCount));
-		} catch (SQLException e) {
-			database.insert(SITES_TABLE, "NOT SET", values);
-		}
-		
 		
 	}
 	
