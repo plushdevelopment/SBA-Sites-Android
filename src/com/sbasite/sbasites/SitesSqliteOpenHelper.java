@@ -13,7 +13,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 /**
  * @author rosschapman
@@ -21,9 +20,10 @@ import android.util.Log;
  */
 public class SitesSqliteOpenHelper extends SQLiteOpenHelper {
 	//The Android's default system path of your application database.
-    private static String DB_PATH = "/data/data/com.sbasite.activities/databases/";
+    private static String DB_PATH = "/data/data/com.sbasite.sbasites/databases/";
 	public static final int VERSION = 1;
-	public static final String DB_NAME = "sbasites_db.sqlite";
+	public static final String DB_NAME1 = "Application.mp3";
+	public static final String DB_NAME2 = "Application.db";
 	public static final String SITES_TABLE = "SITES";
 	public static final String SITE_ID = "ID";
 	public static final String SITE_LATITUDE = "SITE_LATITUDE";
@@ -61,7 +61,7 @@ public class SitesSqliteOpenHelper extends SQLiteOpenHelper {
 	 * @param version
 	 */
 	public SitesSqliteOpenHelper(Context context) {
-		super(context, DB_NAME, null, VERSION);
+		super(context, DB_NAME2, null, VERSION);
 		this.myContext = context;
 	}
 	
@@ -74,20 +74,16 @@ public class SitesSqliteOpenHelper extends SQLiteOpenHelper {
  
     	if(dbExist){
     		//do nothing - database already exist
-    		Log.d("DB", "Database Exists!!!!!!!!");
     	}else{
-    		Log.d("DB", "Database doesn't exist");
-    		//By calling this method and empty database will be created into the default system path
-               //of your application so we are gonna be able to overwrite that database with our database.
-        	this.getReadableDatabase();
  
+    		//By calling this method and empty database will be created into the default system path
+            //of your application so we are gonna be able to overwrite that database with our database.
+    		this.getReadableDatabase();
+    	
         	try {
  
     			copyDataBase();
-    			dbExist = checkDataBase();
-    			if(dbExist){
-    				Log.d("DB", "Database Exists!!!!!!!!");
-    			}
+ 
     		} catch (IOException e) {
  
         		throw new Error("Error copying database");
@@ -106,13 +102,11 @@ public class SitesSqliteOpenHelper extends SQLiteOpenHelper {
     	SQLiteDatabase checkDB = null;
  
     	try{
-    		String myPath = DB_PATH + DB_NAME;
-    		checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
- 
+    		String myPath = DB_PATH + DB_NAME2;
+    		checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
     	}catch(SQLiteException e){
  
     		//database does't exist yet.
-    		Log.d("DB", "Database does not exist yet");
  
     	}
  
@@ -124,7 +118,7 @@ public class SitesSqliteOpenHelper extends SQLiteOpenHelper {
  
     	return checkDB != null ? true : false;
     }
-    
+ 
     /**
      * Copies your database from your local assets-folder to the just created empty database in the
      * system folder, from where it can be accessed and handled.
@@ -133,14 +127,14 @@ public class SitesSqliteOpenHelper extends SQLiteOpenHelper {
     private void copyDataBase() throws IOException{
  
     	//Open your local db as the input stream
-    	InputStream myInput = myContext.getAssets().open(DB_NAME);
+    	InputStream myInput = myContext.getAssets().open(DB_NAME1);
  
     	// Path to the just created empty db
-    	String outFileName = DB_PATH + DB_NAME;
+    	String outFileName = DB_PATH + DB_NAME2;
  
     	//Open the empty db as the output stream
     	OutputStream myOutput = new FileOutputStream(outFileName);
- 
+    	
     	//transfer bytes from the inputfile to the outputfile
     	byte[] buffer = new byte[1024];
     	int length;
@@ -154,29 +148,13 @@ public class SitesSqliteOpenHelper extends SQLiteOpenHelper {
     	myInput.close();
  
     }
-    
-    public void createDatabase() throws IOException {
-    	 
-        InputStream assetsDB = myContext.getAssets().open("sbasites_db.sqlite");
-        OutputStream dbOut = new FileOutputStream("/data/data/com.sbasite.activities/database/sbasites_db.sqlite");
-     
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = assetsDB.read(buffer))>0){
-          dbOut.write(buffer, 0, length);
-        }
-     
-        dbOut.flush();
-        dbOut.close();
-        assetsDB.close();
-    }
  
     public SQLiteDatabase openDataBase() throws SQLException{
  
     	//Open the database
-        String myPath = DB_PATH + DB_NAME;
-    	return myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
- 
+        String myPath = DB_PATH + DB_NAME2;
+    	myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
+    	return myDataBase;
     }
  
     @Override
@@ -188,24 +166,19 @@ public class SitesSqliteOpenHelper extends SQLiteOpenHelper {
     	    super.close();
  
 	}
-
-	/* (non-Javadoc)
-	 * @see android.database.sqlite.SQLiteOpenHelper#onCreate(android.database.sqlite.SQLiteDatabase)
-	 */
+ 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		
-		
+ 
 	}
-
-
-	/* (non-Javadoc)
-	 * @see android.database.sqlite.SQLiteOpenHelper#onUpgrade(android.database.sqlite.SQLiteDatabase, int, int)
-	 */
+ 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// TODO Auto-generated method stub
-
+ 
 	}
-
+ 
+        // Add your public helper methods to access and get content from the database.
+       // You could return cursors by doing "return myDataBase.query(....)" so it'd be easy
+       // to you to create adapters for your views.
+ 
 }

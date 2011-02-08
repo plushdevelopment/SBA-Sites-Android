@@ -38,7 +38,7 @@ public class XMLHandler extends DefaultHandler{
 	private boolean inStructureTypeTag = false;
 	private boolean inZipTag = false;
 	
-	private Site mySite;
+	public Site mySite;
 	public Context context;
 	public SBASitesApplication delegate;
 
@@ -127,7 +127,7 @@ public class XMLHandler extends DefaultHandler{
 	throws SAXException {
 		if (localName.equals("Site")) {
 			mySite.save();
-			delegate.addSite(null);
+			//delegate.addSite(null);
 		}else if (localName.equals("TotalRecordCount")) {
 			this.inTotalRecordCountTag = false;
 		}else if (localName.equals("AGL")) {

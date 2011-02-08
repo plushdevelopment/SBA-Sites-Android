@@ -1,6 +1,6 @@
 package com.sbasite.sbasites;
 
-import java.sql.Date;
+import java.util.ArrayList;
 
 import android.content.Context;
 
@@ -82,4 +82,8 @@ public class Site extends ActiveRecordBase<Site> {
 	@Column(name = "SITE_ZIP")
     public String zip;
     
+	public static ArrayList<Site> loadSitesForRegion(Context context, double minLat, double maxLat, double minLong, double maxLong) {
+		return Site.query(context, Site.class, new String[] { "SITE_NAME", "SITE_LATITUDE, SITE_LONGITUDE"}, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong, null);
+	}
+	
 }
