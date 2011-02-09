@@ -12,11 +12,13 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:label="@string/instructions" android:name="Instructions">
+		<activity android:label="@string/instructions2" android:name="Instructions">
 		</activity>
 		<activity android:label="@string/layers" android:name="Layers">
 		</activity>
 		<activity android:label="@string/list_view" android:name="ListView">
+		</activity>
+		<activity android:label="@string/site_name_id" android:name="SearchSiteNameAddress">
 		</activity>
 	
 </application>
