@@ -8,18 +8,9 @@
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
-<<<<<<< HEAD
-		</activity>
-		<activity android:label="@string/instructions2" android:name="Instructions">
-		</activity>
-		<activity android:label="@string/layers" android:name="Layers">
-		</activity>
-		<activity android:label="@string/list_view" android:name="ListView">
-=======
 		</activity><activity android:label="@string/instructions" android:name="Instructions">
 		</activity><activity android:label="@string/layers" android:name="Layers">
 		</activity><activity android:label="@string/list_view" android:name="ListView">
->>>>>>> eb0b38dc5beef60a9aec00cef8d7bfe19513e1b7
 		</activity>
 		<activity android:label="@string/site_name_id" android:name="SearchSiteNameAddress">
 		</activity>
