@@ -3,27 +3,44 @@ package com.sbasite.sbasites;
 import com.sbasite.sbasites.R;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class Instructions extends Activity {
+public class Instructions extends Activity implements OnClickListener {
 
-	private Button doneButton;
+	private Button emailButton;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.instructions);
-        this.doneButton = (Button)this.findViewById(R.id.Button01);
-        this.doneButton.setOnClickListener(new OnClickListener() {
+        
+        this.emailButton = (Button) findViewById(R.id.Button08);
+        this.emailButton.setOnClickListener(this);
 
+    	((Button) findViewById(R.id.Button01)).setOnClickListener(this);
+    	((Button) findViewById(R.id.Button02)).setOnClickListener(this);
+    	((Button) findViewById(R.id.Button03)).setOnClickListener(this);
+    	((Button) findViewById(R.id.Button04)).setOnClickListener(this);
+    	
+	}
+    	
 			public void onClick(View v) {
-	            finish();
+				switch (v.getId()){
+				case R.id.Button01:
+					Intent searchsitenameaddressIntent = new Intent(this, SearchSiteNameAddress.class);
+					startActivity(searchsitenameaddressIntent);
+					break;
+				case R.id.Button08:
+				Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+				emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"stevendavis@aplusrep.com"});
+				emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "SBA Sites Support Request");
+				emailIntent.setType("text/plain");
+				startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+				finish();
+				};
 			}
-        });
-
-    }
-
 }
