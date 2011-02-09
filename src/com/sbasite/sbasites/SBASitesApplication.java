@@ -1,23 +1,10 @@
 package com.sbasite.sbasites;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
-
-
-import android.app.Application;
-import android.content.ContentValues;
-import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import static com.sbasite.sbasites.SitesSqliteOpenHelper.*;
-import android.util.Log;
 
 public class SBASitesApplication extends com.activeandroid.Application {
 
@@ -39,6 +26,7 @@ public class SBASitesApplication extends com.activeandroid.Application {
         try { database = helper.openDataBase(); }
         catch (SQLException sqle) { throw sqle; }
         
+		/*
 		currentSites = new ArrayList<Site>();
 		
 		final XMLHandler myExampleHandler = new XMLHandler(this);
@@ -49,7 +37,8 @@ public class SBASitesApplication extends com.activeandroid.Application {
 			if(lastUpdate == null) {
 				lastUpdate = "2008-09-24T15:05:04";
 			}
-			String urlString = "http://map.sbasite.com/Mobile/GetData?LastUpdate=" + lastUpdate + "&Skip=" + totalRecordsUpdated + "&Take=0";
+			String urlString = "http://map.sbasite.com/Mobile/GetData?LastUpdate=" + lastUpdate + "&Skip=0&Take=0";
+			Log.d("Request String", urlString);
             URL url = new URL(urlString);
 
             // Get a SAXParser from the SAXPArserFactory.
@@ -75,7 +64,7 @@ public class SBASitesApplication extends com.activeandroid.Application {
 		    	for (int i = 0; i < totalRecordsCount; i++) {
 					try {
 			            // Create a URL we want to load some xml-data from.
-						String urlString = "http://map.sbasite.com/Mobile/GetData?LastUpdate=" + lastUpdate + "&Skip=" + i + "&Take=1Ky";
+						String urlString = "http://map.sbasite.com/Mobile/GetData?LastUpdate=" + lastUpdate + "&Skip=" + i + "&Take=1";
 			            URL url = new URL(urlString);
 
 			            // Get a SAXParser from the SAXPArserFactory.
@@ -98,6 +87,7 @@ public class SBASitesApplication extends com.activeandroid.Application {
 				}
 		    }
 		  }).start();
+		  */
 	}
 	
 	public void setCurrentSites(ArrayList<Site> currentSites) {
@@ -107,7 +97,7 @@ public class SBASitesApplication extends com.activeandroid.Application {
 	public ArrayList<Site> getCurrentSites() {
 		return currentSites;
 	}
-	
+	/*
 	public ArrayList<Site> loadSitesForRegion(double minLat, double maxLat, double minLong, double maxLong) {
 		
 		
@@ -158,6 +148,7 @@ public class SBASitesApplication extends com.activeandroid.Application {
 		Log.d("Sites", sites.toString());
 		return sites;
 	  }
+	  */
 	
 	public void addSite(Site site) {
 		

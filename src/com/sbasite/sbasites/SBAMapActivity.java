@@ -1,17 +1,3 @@
-/* Copyright (c) 2008-2009 -- CommonsWare, LLC
-
-	 Licensed under the Apache License, Version 2.0 (the "License");
-	 you may not use this file except in compliance with the License.
-	 You may obtain a copy of the License at
-
-		 http://www.apache.org/licenses/LICENSE-2.0
-
-	 Unless required by applicable law or agreed to in writing, software
-	 distributed under the License is distributed on an "AS IS" BASIS,
-	 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	 See the License for the specific language governing permissions and
-	 limitations under the License.
-*/
 	 
 package com.sbasite.sbasites;
 
@@ -41,6 +27,7 @@ import com.sbasite.sbasites.R;
 
 public class SBAMapActivity extends MapActivity {
 	private MapView map;
+	@SuppressWarnings("unused")
 	private EditText searchText;
 	private MyLocationOverlay me;
 	private MapController mapController;
@@ -81,7 +68,7 @@ public class SBAMapActivity extends MapActivity {
 		
 		//mapController.setCenter(getPoint(46.0730555556, -100.546666667));
 		mapController.setCenter(getPoint(26.35049, -80.089004));
-		mapController.setZoom(10);
+		mapController.setZoom(11);
 		map.setBuiltInZoomControls(true);
 		map.displayZoomControls(true);
 		
@@ -96,14 +83,13 @@ public class SBAMapActivity extends MapActivity {
 		map.getOverlays().add(me);
 		
         messageHandler = new Handler() {
- 
-        	public void handleMessage(Message msg) {
+			public void handleMessage(Message msg) {
         		if(msg.obj.getClass() == OverlayItem.class) {
         			OverlayItem overlayItem = (OverlayItem)msg.obj;
         			sitesOverlay.addOverlay(overlayItem);
         		}
         		if(msg.obj.getClass() == ArrayList.class) {
-        			ArrayList<Site> overlays = (ArrayList<Site>)msg.obj;
+					ArrayList<Site> overlays = (ArrayList<Site>)msg.obj;
         			sitesOverlay.addOverlays(overlays);
         		}
  

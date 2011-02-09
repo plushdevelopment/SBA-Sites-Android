@@ -9,7 +9,6 @@ import android.util.Log;
  
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
-import com.google.android.maps.OverlayItem;
  
 public class UpdateMapsOverlaysThread implements Runnable {
  
@@ -20,13 +19,13 @@ public class UpdateMapsOverlaysThread implements Runnable {
  
 	private boolean enabled = true;
 	private boolean interrupted = false;
+	private boolean firstUpdate = true;
  
 	private int zoomLevel = 0;
 	private Handler mainThreadMessageHandler = null;
 	private Context context = null;
 	private MapView mapView = null;
 	private GeoPoint mapCenter = null;
-	private SBASitesApplication application;
  
 	/**
 	 * @param context
@@ -36,7 +35,6 @@ public class UpdateMapsOverlaysThread implements Runnable {
 		this.context = context;
 		this.mapView = mapView;
 		this.mainThreadMessageHandler = messageHandler;
-		this.application = application;
 	}
  
 	public void run() {
@@ -60,7 +58,7 @@ public class UpdateMapsOverlaysThread implements Runnable {
 		    		fireOverlayUpdater = true;
 		    	}
  
-		    	if(fireOverlayUpdater) {
+		    	if(fireOverlayUpdater || firstUpdate) {
  
 		    		Log.d(TAG, "Need to update overlays");
  
@@ -72,7 +70,7 @@ public class UpdateMapsOverlaysThread implements Runnable {
 		    		double minLat = (latCenter -  latSpan);
 		    		double maxLong = (longCenter + longSpan);
 		    		double minLong = (longCenter - longSpan);
-		    		ArrayList<Site> sites = application.loadSitesForRegion(minLat, maxLat, minLong, maxLong);
+		    		ArrayList<Site> sites = Site.loadSitesForRegion(this.context, minLat, maxLat, minLong, maxLong);
 		    		if(!sites.isEmpty()) {
 		    			// Send the overlays to the UI Thread
 		    			Message message = mainThreadMessageHandler.obtainMessage();
@@ -83,6 +81,7 @@ public class UpdateMapsOverlaysThread implements Runnable {
 		    		Log.d("Sites", sites.toString());
 			    	// Reset
 		    		fireOverlayUpdater = false;
+		    		firstUpdate = true;
 		    	}
  
 		    	// Wait until time to fire again
