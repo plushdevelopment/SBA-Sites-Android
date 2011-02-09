@@ -36,4 +36,5 @@
 	<string name="site_id_partial_search">Site ID Partial Search</string>
 	<string name="ex_fl98463_l">Ex: \"FL98463-L\"</string>
 	<string name="site_id_exact_search">Site ID Exact Search</string>
+	<string name="site_detail_activity">Site Detail</string>
 </resources>

@@ -3,12 +3,13 @@ package com.sbasite.sbasites;
 import com.sbasite.sbasites.R;
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class ListView extends Activity {
+public class ListView extends ListActivity {
 
 	private Button doneButton;
 	

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -14,6 +16,7 @@ import android.os.Message;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.android.maps.GeoPoint;
@@ -189,14 +192,19 @@ public class SBAMapActivity extends MapActivity {
 		}
  		
 		@Override
-		protected boolean onTap(int i) {
-			OverlayItem item = items.get(i);
-			AlertDialog.Builder dialog = new AlertDialog.Builder(SBAMapActivity.this);
-			dialog.setTitle(item.getTitle());
-			dialog.setMessage(item.getSnippet());
-			dialog.show();
-			return true;
-		}
+		  protected boolean onTap(int i) {
+		   OverlayItem item = items.get(i);
+		   AlertDialog.Builder dialog = new AlertDialog.Builder(SBAMapActivity.this);
+		   dialog.setTitle(item.getTitle());
+		   dialog.setMessage(item.getSnippet());
+		   dialog.setPositiveButton("Load", new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int Click) {
+		     Intent layersIntent = new Intent(SBAMapActivity.this, Layers.class);
+		     startActivity(layersIntent);    }
+		   });
+		   dialog.show();
+		   return true;
+		  }
 		
 		@Override
 		public int size() {
