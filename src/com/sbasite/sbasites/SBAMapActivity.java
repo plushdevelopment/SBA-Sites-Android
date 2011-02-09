@@ -6,7 +6,6 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -16,7 +15,6 @@ import android.os.Message;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.android.maps.GeoPoint;
@@ -75,7 +73,7 @@ public class SBAMapActivity extends MapActivity {
 		map.setBuiltInZoomControls(true);
 		map.displayZoomControls(true);
 		
-		Drawable marker=getResources().getDrawable(R.drawable.marker);
+		Drawable marker=getResources().getDrawable(R.drawable.owned);
 
 		marker.setBounds(0, 0, marker.getIntrinsicWidth(),
 														marker.getIntrinsicHeight());
@@ -199,7 +197,7 @@ public class SBAMapActivity extends MapActivity {
 		   dialog.setMessage(item.getSnippet());
 		   dialog.setPositiveButton("Load", new DialogInterface.OnClickListener() {
 		    public void onClick(DialogInterface dialog, int Click) {
-		     Intent layersIntent = new Intent(SBAMapActivity.this, Layers.class);
+		     Intent layersIntent = new Intent(SBAMapActivity.this, SiteDetailActivity.class);
 		     startActivity(layersIntent);    }
 		   });
 		   dialog.show();
