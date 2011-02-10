@@ -3,6 +3,19 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="fill_parent"
   android:layout_height="fill_parent">
-  <TextView android:text="Site Details" />
+  <Button android:layout_height="wrap_content" 
+		android:id="@+id/Button10" 
+		android:layout_width="fill_parent"  
+		android:gravity="left|center_vertical" 
+		android:text="Email Site">
+	</Button>
+	<TextView android:id="@+id/TextView03" 
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content" 
+		android:layout_below="@+id/Button10" 
+		android:text="Site Details" 
+		android:textSize="16sp" 
+		android:textStyle="bold">
+	</TextView>
   
 </LinearLayout>

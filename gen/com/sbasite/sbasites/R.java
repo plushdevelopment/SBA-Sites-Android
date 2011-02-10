@@ -39,6 +39,7 @@ public final class R {
         public static final int Button06=0x7f060008;
         public static final int Button07=0x7f060007;
         public static final int Button08=0x7f060009;
+        public static final int Button10=0x7f06001b;
         public static final int CheckBox01=0x7f06000a;
         public static final int CheckBox02=0x7f06000b;
         public static final int CheckBox03=0x7f06000c;
@@ -46,13 +47,19 @@ public final class R {
         public static final int CheckBox05=0x7f06000e;
         public static final int TextView01=0x7f060006;
         public static final int TextView02=0x7f060004;
+<<<<<<< HEAD
         public static final int button1=0x7f060014;
         public static final int button2=0x7f060013;
+=======
+        public static final int TextView03=0x7f06001c;
+        public static final int button1=0x7f060012;
+        public static final int button2=0x7f060014;
+>>>>>>> 1f995fbfa36c01cc9e9940428b8460655059b73f
         public static final int button3=0x7f060017;
         public static final int button4=0x7f060019;
-        public static final int instructions=0x7f06001d;
-        public static final int layers=0x7f06001b;
-        public static final int list_view=0x7f06001c;
+        public static final int instructions=0x7f06001f;
+        public static final int layers=0x7f06001d;
+        public static final int list_view=0x7f06001e;
         public static final int map=0x7f060010;
         public static final int searchText=0x7f06000f;
         public static final int textView1=0x7f060012;
