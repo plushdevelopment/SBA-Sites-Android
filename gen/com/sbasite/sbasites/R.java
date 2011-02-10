@@ -47,14 +47,9 @@ public final class R {
         public static final int CheckBox05=0x7f06000e;
         public static final int TextView01=0x7f060006;
         public static final int TextView02=0x7f060004;
-<<<<<<< HEAD
+        public static final int TextView03=0x7f06001c;
         public static final int button1=0x7f060014;
         public static final int button2=0x7f060013;
-=======
-        public static final int TextView03=0x7f06001c;
-        public static final int button1=0x7f060012;
-        public static final int button2=0x7f060014;
->>>>>>> 1f995fbfa36c01cc9e9940428b8460655059b73f
         public static final int button3=0x7f060017;
         public static final int button4=0x7f060019;
         public static final int instructions=0x7f06001f;
