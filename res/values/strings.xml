@@ -45,6 +45,8 @@
 	<string name="longitude_without_accepted">Longitude Without \'-\' Accepted</string>
 	<string name="ex_53.5_117.2b">Ex: “53.5,117.2”</string>
 	<string name="symbol_is_not_required_for_long">\'-\' symbol is not required for Long</string>
+	<string name="site_name">Site Name</string>
+	<string name="userLocationClicked">userLocationClicked</string>
 
 	<string name="address_search_with_full_address">Address Search with Full Address</string>
 	<string name="ex_1430_beechwood">Ex: “1430 Beechwood Cir, Lawrenceville, GA…</string>

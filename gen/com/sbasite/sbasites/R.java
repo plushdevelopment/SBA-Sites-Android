@@ -21,14 +21,15 @@ public final class R {
         public static final int icon_ipad=0x7f020007;
         public static final int light_blue_icon=0x7f020008;
         public static final int light_green_icon=0x7f020009;
-        public static final int managed=0x7f02000a;
-        public static final int marker=0x7f02000b;
-        public static final int new_construction=0x7f02000c;
-        public static final int owned=0x7f02000d;
-        public static final int purple_icon=0x7f02000e;
-        public static final int turquoise_icon=0x7f02000f;
-        public static final int welcome_instructions=0x7f020010;
-        public static final int yellow_icon=0x7f020011;
+        public static final int location=0x7f02000a;
+        public static final int managed=0x7f02000b;
+        public static final int marker=0x7f02000c;
+        public static final int new_construction=0x7f02000d;
+        public static final int owned=0x7f02000e;
+        public static final int purple_icon=0x7f02000f;
+        public static final int turquoise_icon=0x7f020010;
+        public static final int welcome_instructions=0x7f020011;
+        public static final int yellow_icon=0x7f020012;
     }
     public static final class id {
         public static final int Button01=0x7f060000;
@@ -39,14 +40,21 @@ public final class R {
         public static final int Button06=0x7f060008;
         public static final int Button07=0x7f060007;
         public static final int Button08=0x7f060009;
+<<<<<<< HEAD
         public static final int Button10=0x7f060024;
+=======
+        public static final int Button10=0x7f06001e;
+>>>>>>> f712168280151a1fee747fce070d574adc47ec92
         public static final int CheckBox01=0x7f06000a;
         public static final int CheckBox02=0x7f06000b;
         public static final int CheckBox03=0x7f06000c;
         public static final int CheckBox04=0x7f06000d;
         public static final int CheckBox05=0x7f06000e;
+        public static final int SiteIconImageButton=0x7f060010;
+        public static final int SiteNameTextView=0x7f060011;
         public static final int TextView01=0x7f060006;
         public static final int TextView02=0x7f060004;
+<<<<<<< HEAD
         public static final int TextView03=0x7f060025;
         public static final int button1=0x7f060012;
         public static final int button2=0x7f060015;
@@ -72,15 +80,40 @@ public final class R {
         public static final int textView7=0x7f06001b;
         public static final int textView8=0x7f06001c;
         public static final int textView9=0x7f06001e;
+=======
+        public static final int TextView03=0x7f06001f;
+        public static final int TopLayout=0x7f06000f;
+        public static final int button1=0x7f060017;
+        public static final int button2=0x7f060016;
+        public static final int button3=0x7f06001a;
+        public static final int button4=0x7f06001c;
+        public static final int instructions=0x7f060022;
+        public static final int layers=0x7f060020;
+        public static final int list_view=0x7f060021;
+        public static final int map=0x7f060013;
+        public static final int searchText=0x7f060012;
+        public static final int textView1=0x7f060015;
+        public static final int textView10=0x7f06001d;
+        public static final int textView2=0x7f060014;
+        public static final int textView5=0x7f060018;
+        public static final int textView6=0x7f060019;
+        public static final int textView8=0x7f06001b;
+>>>>>>> f712168280151a1fee747fce070d574adc47ec92
     }
     public static final class layout {
         public static final int instructions=0x7f030000;
         public static final int layers=0x7f030001;
         public static final int listview=0x7f030002;
         public static final int main=0x7f030003;
+<<<<<<< HEAD
         public static final int searchaddress=0x7f030004;
         public static final int searchcoordinates=0x7f030005;
         public static final int searchsitenameaddress=0x7f030006;
+=======
+        public static final int searchcoordinates=0x7f030004;
+        public static final int searchsitenameaddress=0x7f030005;
+        public static final int site_list_item=0x7f030006;
+>>>>>>> f712168280151a1fee747fce070d574adc47ec92
         public static final int sitedetailactivity=0x7f030007;
     }
     public static final class menu {
@@ -139,11 +172,16 @@ public final class R {
         public static final int site_id_exact_search=0x7f040023;
         public static final int site_id_examples=0x7f04001f;
         public static final int site_id_partial_search=0x7f040021;
+        public static final int site_name=0x7f04002c;
         public static final int site_name_examples=0x7f04001a;
         public static final int site_name_id=0x7f040009;
         public static final int state_province=0x7f040033;
         public static final int support=0x7f040001;
         public static final int symbol_is_not_required_for_long=0x7f04002b;
+<<<<<<< HEAD
         public static final int zip_code=0x7f040035;
+=======
+        public static final int userLocationClicked=0x7f04002d;
+>>>>>>> f712168280151a1fee747fce070d574adc47ec92
     }
 }

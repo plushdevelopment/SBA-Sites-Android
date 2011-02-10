@@ -1,19 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
-	<EditText
-		android:id="@+id/searchText"
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="horizontal"
 		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:hint="Site Name/ID, Coordinates, or Address"
-		/>
-	<com.google.android.maps.MapView android:id="@+id/map"
+		android:id="@+id/TopLayout" android:layout_height="wrap_content">
+		<ImageButton
+    		android:layout_width="wrap_content"  
+        	android:layout_height="wrap_content"  
+        	android:id="@+id/SiteIconImageButton" 
+        	android:layout_toLeftOf="@+id/SiteNameTextView"
+        	android:src="@drawable/location" 
+        	android:layout_gravity="left|center_vertical" 
+        	android:onClick="@string/userLocationClicked">
+    	</ImageButton>
+		<EditText
+			android:id="@+id/searchText"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:hint="Search" android:layout_gravity="right|center_vertical"/>
+	</LinearLayout>
+	<com.google.android.maps.MapView
+		android:id="@+id/map"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
-		android:apiKey="00_mTAS_1SR0jkrQp86tqQZFe7euZl_6Czp5tHA"
+		android:apiKey="0rpLA5b4fBX8iWpkbDyBNQWPYdYsOGdiNyEi__g"
 		android:clickable="true" 
-		/>
-</LinearLayout>    
-
+		android:layout_below="@+id/TopLayout"/>
+    
+</RelativeLayout>
