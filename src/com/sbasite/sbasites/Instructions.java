@@ -34,9 +34,13 @@ public class Instructions extends Activity implements OnClickListener {
 					Intent searchsitenameaddressIntent = new Intent(this, SearchSiteNameAddress.class);
 					startActivity(searchsitenameaddressIntent);
 					break;
+				case R.id.Button02:
+					Intent searchcoordinatesIntent = new Intent(this, SearchCoordinates.class);
+					startActivity(searchcoordinatesIntent);
+					break;
 				case R.id.Button08:
 				Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-				emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"stevendavis@aplusrep.com"});
+				emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"mobilesupport@sbasite.com"});
 				emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "SBA Sites Support Request");
 				emailIntent.setType("text/plain");
 				startActivity(Intent.createChooser(emailIntent, "Send mail..."));

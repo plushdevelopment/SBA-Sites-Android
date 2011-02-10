@@ -37,4 +37,13 @@
 	<string name="ex_fl98463_l">Ex: \"FL98463-L\"</string>
 	<string name="site_id_exact_search">Site ID Exact Search</string>
 	<string name="site_detail_activity">Site Detail</string>
+
+	<string name="search_by_coordinates">Search By Coordinates</string>
+	<string name="coordinate_pair_example">Coordinate Pair Examples</string>
+	<string name="ex_53.5_117.2">With Hyphen: \"53.5,-117.2\"</string>
+	<string name="lat_long_delimited_by_comma">The Latitude and Longitude must be separated by a comma. In addition, a hyphen can be used but is not required. Please see the following examples.</string>
+	<string name="longitude_without_accepted">Longitude Without \'-\' Accepted</string>
+	<string name="ex_53.5_117.2b">Without Hyphen: \"53.5,117.2\"</string>
+	<string name="symbol_is_not_required_for_long">\'-\' symbol is not required for Long</string>
+
 </resources>

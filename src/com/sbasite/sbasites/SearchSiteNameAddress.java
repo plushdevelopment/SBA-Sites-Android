@@ -8,12 +8,14 @@ import android.widget.Button;
 
 public class SearchSiteNameAddress extends Activity{
 	
-	private Button doneButton;
+	// private Button doneButton;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.searchsitenameaddress);
+
+        /*
         this.doneButton = (Button)this.findViewById(R.id.Button01);
         this.doneButton.setOnClickListener(new OnClickListener() {
 
@@ -21,7 +23,7 @@ public class SearchSiteNameAddress extends Activity{
 	            finish();
 			}
         });
-
+		*/
     }
 
 }

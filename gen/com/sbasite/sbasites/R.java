@@ -46,8 +46,8 @@ public final class R {
         public static final int CheckBox05=0x7f06000e;
         public static final int TextView01=0x7f060006;
         public static final int TextView02=0x7f060004;
-        public static final int button1=0x7f060012;
-        public static final int button2=0x7f060014;
+        public static final int button1=0x7f060014;
+        public static final int button2=0x7f060013;
         public static final int button3=0x7f060017;
         public static final int button4=0x7f060019;
         public static final int instructions=0x7f06001d;
@@ -55,9 +55,9 @@ public final class R {
         public static final int list_view=0x7f06001c;
         public static final int map=0x7f060010;
         public static final int searchText=0x7f06000f;
-        public static final int textView1=0x7f060011;
+        public static final int textView1=0x7f060012;
         public static final int textView10=0x7f06001a;
-        public static final int textView2=0x7f060013;
+        public static final int textView2=0x7f060011;
         public static final int textView5=0x7f060015;
         public static final int textView6=0x7f060016;
         public static final int textView8=0x7f060018;
@@ -67,8 +67,9 @@ public final class R {
         public static final int layers=0x7f030001;
         public static final int listview=0x7f030002;
         public static final int main=0x7f030003;
-        public static final int searchsitenameaddress=0x7f030004;
-        public static final int sitedetailactivity=0x7f030005;
+        public static final int searchcoordinates=0x7f030004;
+        public static final int searchsitenameaddress=0x7f030005;
+        public static final int sitedetailactivity=0x7f030006;
     }
     public static final class menu {
         public static final int menu=0x7f050000;
@@ -82,6 +83,7 @@ public final class R {
         public static final int back=0x7f04000b;
         public static final int canada=0x7f040010;
         public static final int central_america=0x7f04000c;
+        public static final int coordinate_pair_example=0x7f040026;
         public static final int coordinates=0x7f040007;
         public static final int current=0x7f040017;
         public static final int current_location=0x7f040015;
@@ -90,6 +92,8 @@ public final class R {
         public static final int done=0x7f04000a;
         public static final int email_support=0x7f040000;
         public static final int enter_site=0x7f040016;
+        public static final int ex_53_5_117_2=0x7f040027;
+        public static final int ex_53_5_117_2b=0x7f04002a;
         public static final int ex_fl=0x7f040020;
         public static final int ex_fl98463_l=0x7f040022;
         public static final int ex_hackberry=0x7f04001d;
@@ -98,12 +102,15 @@ public final class R {
         public static final int information1=0x7f040018;
         public static final int instructions=0x7f040013;
         public static final int instructions2=0x7f040014;
+        public static final int lat_long_delimited_by_comma=0x7f040028;
         public static final int layers=0x7f040012;
         public static final int list_view=0x7f040011;
+        public static final int longitude_without_accepted=0x7f040029;
         public static final int managed=0x7f04000d;
         public static final int new_construction=0x7f04000f;
         public static final int owned=0x7f04000e;
         public static final int partial_site_name_search=0x7f04001c;
+        public static final int search_by_coordinates=0x7f040025;
         public static final int site_detail_activity=0x7f040024;
         public static final int site_id_exact_search=0x7f040023;
         public static final int site_id_examples=0x7f04001f;
@@ -111,5 +118,6 @@ public final class R {
         public static final int site_name_examples=0x7f04001a;
         public static final int site_name_id=0x7f040009;
         public static final int support=0x7f040001;
+        public static final int symbol_is_not_required_for_long=0x7f04002b;
     }
 }
