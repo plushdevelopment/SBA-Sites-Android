@@ -15,6 +15,7 @@ import android.os.Message;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 
 import com.google.android.maps.GeoPoint;
@@ -136,14 +137,21 @@ public class SBAMapActivity extends MapActivity {
 		
 		return(super.onKeyDown(keyCode, event));
 	}
+ 	
+ 	public void userLocationClicked(View view)  
+ 	{
+ 		if (me != null) {
+ 			mapController.setCenter(me.getMyLocation());
+ 			mapController.setZoom(13);
+ 		}
+ 	}  
 
  	protected SBASitesApplication getSBASitesApplication() {
 		return (SBASitesApplication)getApplication();
 	}
  	
 	private GeoPoint getPoint(double lat, double lon) {
-		return(new GeoPoint((int)(lat*1000000.0),
-													(int)(lon*1000000.0)));
+		return(new GeoPoint((int)(lat*1000000.0), (int)(lon*1000000.0)));
 	}
 		
 	private class SitesOverlay extends ItemizedOverlay<OverlayItem> {
