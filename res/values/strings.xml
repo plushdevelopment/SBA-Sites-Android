@@ -26,6 +26,7 @@
     <string name="current">Current</string>
 	<string name="information1">Search Instructions</string>
 	<string name="app_name">SBA Sites</string>
+
 	<string name="site_name_examples">Site Name Examples</string>
 	<string name="ex_shadow">Ex: \"Shadow\"</string>
 	<string name="partial_site_name_search">Partial Site Name Search</string>
@@ -62,4 +63,7 @@
 	<string name="major_city">Major City</string>
 	<string name="ex_miami">Ex: “Miami”</string>
 	<string name="ex_vancouver">Ex: “Vancouver”</string>
+
+	<string name="sba_is_a_leading">SBA is a leading independent owner and operator of wireless communications infrastructure in North and Central America. SBA generates revenue from two primary businesses - site leasing and site development services. The primary focus of the Company is the leasing of antenna space on its multi-tenant towers to a variety of wireless sercice providers under long-term lease contracts.</string>
+
 </resources>
