@@ -44,6 +44,7 @@ public class SBAMapActivity extends MapActivity {
 	private Button btnSearch;
 	private double lat;
 	private double lon;
+	private ArrayList<Site> sites;
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -54,7 +55,7 @@ public class SBAMapActivity extends MapActivity {
 	    menu.findItem(R.id.layers).setIntent(
 	    		new Intent(this, Layers.class));
 	    menu.findItem(R.id.list_view).setIntent(
-	    		new Intent(this, ListView.class));
+	    		new Intent(this, SiteListActivity.class));
 	    return true;
 	}
 	
@@ -62,6 +63,7 @@ public class SBAMapActivity extends MapActivity {
 	public boolean onOptionsItemSelected(MenuItem item){
 		super.onOptionsItemSelected(item);
 		startActivity(item.getIntent());
+		
 		return true;
 	}
 	
@@ -76,6 +78,7 @@ public class SBAMapActivity extends MapActivity {
 		searchText=(EditText)findViewById(R.id.searchText);
 		mapController = map.getController();
 		btnSearch = (Button)findViewById(R.id.SearchButton);
+		
 		geoCoder = new Geocoder(this); //create new geocoder instance
 		btnSearch.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -137,6 +140,7 @@ public class SBAMapActivity extends MapActivity {
         		}
         		if(msg.obj.getClass() == ArrayList.class) {
 					ArrayList<Site> overlays = (ArrayList<Site>)msg.obj;
+					getSBASitesApplication().setCurrentSites(overlays);
         			sitesOverlay.addOverlays(overlays);
         		}
  

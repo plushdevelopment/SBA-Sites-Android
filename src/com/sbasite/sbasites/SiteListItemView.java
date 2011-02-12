@@ -1,18 +1,15 @@
 package com.sbasite.sbasites;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.view.View;
-import android.widget.CheckedTextView;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class SiteListItemView extends LinearLayout {
 	
 	private Site site;
-	private ImageButton iconButton;
-	private TextView siteNameTextView;
+	private Button iconButton;
 
 	public SiteListItemView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -21,18 +18,14 @@ public class SiteListItemView extends LinearLayout {
 	@Override
 	protected void onFinishInflate() {
 		super.onFinishInflate();
-		iconButton = (ImageButton)findViewById(R.id.SiteIconImageButton);
-		siteNameTextView = (TextView)findViewById(R.id.SiteNameTextView);
+		iconButton = (Button)findViewById(R.id.SiteIconImageButton);
 	}
 
 	public void setSite(Site site) {
 		this.site = site;
-		/*
-		checkbox.setText(site.siteName);
-		checkbox.setChecked(true);
-		address1Text.setText(site.siteCode);
-		address1Text.setVisibility(View.VISIBLE);
-		*/
+		Drawable icon = getResources().getDrawable(R.drawable.owned);
+		iconButton.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
+		iconButton.setText(this.site.siteName);
 	}
 
 	public Site getSite() {

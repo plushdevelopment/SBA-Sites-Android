@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class SBASitesApplication extends com.activeandroid.Application {
 
@@ -18,7 +19,7 @@ public class SBASitesApplication extends com.activeandroid.Application {
 	public void onCreate() {
 		super.onCreate();
 		SitesSqliteOpenHelper helper = new SitesSqliteOpenHelper(this);
-		
+		currentSites = new ArrayList<Site>();
 		
         try { helper.createDataBase(); }
         catch (IOException ioe) { throw new Error("Unable to create database"); }
@@ -92,63 +93,13 @@ public class SBASitesApplication extends com.activeandroid.Application {
 	
 	public void setCurrentSites(ArrayList<Site> currentSites) {
 		this.currentSites = currentSites;
+		Log.d("Application - Set Sites", this.currentSites.toString());
 	}
 
 	public ArrayList<Site> getCurrentSites() {
+		Log.d("Application - Get Sites", this.currentSites.toString());
 		return currentSites;
 	}
-	/*
-	public ArrayList<Site> loadSitesForRegion(double minLat, double maxLat, double minLong, double maxLong) {
-		
-		
-		
-		
-	    // Execute query
-		String where = String.format("SITE_LATITUDE > %f AND SITE_LATITUDE < %f AND SITE_LONGITUDE > %f AND SITE_LONGITUDE < %f", minLat, maxLat, minLong, maxLong);
-		Log.d("DB", where);
-		Cursor cursor = database.query(SITES_TABLE, null, where, null, null, null, String.format("%s", SITE_NAME));
-		
-		//  Create ArrayList to hold constructed results
-		ArrayList<Site> sites = new ArrayList<Site>();
-		
-		//  Loop through the results
-		cursor.moveToFirst();
-		Site site;
-		if (!cursor.isAfterLast()) {
-			do {
-				// Initialize site object
-				site = new Site();
-				site.latitude = cursor.getDouble(1);
-				site.longitude = cursor.getDouble(2);
-				site.deleted = cursor.getInt(3);
-				site.address = cursor.getString(4);
-				site.agl = cursor.getString(5);
-				site.bta = cursor.getString(6);
-				site.city = cursor.getString(7);
-				site.contact = cursor.getString(8);
-				site.county = cursor.getString(9);
-				site.email = cursor.getString(10);
-				site.lastUpdated = cursor.getString(11);
-				site.mobileKey = cursor.getString(12);
-				site.mta = cursor.getString(13);
-				site.phone = cursor.getString(14);
-				site.siteCode = cursor.getString(15);
-				//site.siteLayer = cursor.getString(16);
-				site.siteName = cursor.getString(17);
-				site.siteStatus = cursor.getString(18);
-				site.stateProvince = cursor.getString(19);
-				site.structureHeight = cursor.getString(20);
-				site.structureID = cursor.getString(21);
-				site.structureType = cursor.getString(22);
-				site.zip = cursor.getString(23);
-				//  Add site to the array
-				sites.add(site);
-			} while (cursor.moveToNext());
-		}
-		Log.d("Sites", sites.toString());
-		return sites;
-	  }
-	  */
 	
 	public void addSite(Site site) {
 		

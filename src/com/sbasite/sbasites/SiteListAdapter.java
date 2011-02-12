@@ -3,6 +3,7 @@ package com.sbasite.sbasites;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -16,6 +17,7 @@ public class SiteListAdapter extends BaseAdapter {
 		super();
 		this.context = context;
 		this.sites = sites;
+		Log.d("SiteListAdapter", this.sites.toString());
 	}
 
 	public int getCount() {
@@ -30,9 +32,19 @@ public class SiteListAdapter extends BaseAdapter {
 		return index;
 	}
 
-	public View getView(int arg0, View arg1, ViewGroup arg2) {
-		// TODO Auto-generated method stub
-		return null;
+	public View getView(int position, View convertView, ViewGroup parent) {
+		
+		SiteListItemView siteListItemView;
+		if (null == convertView) {
+			siteListItemView = (SiteListItemView)View.inflate(context, R.layout.site_list_item, null);
+		} else {
+			siteListItemView = (SiteListItemView)convertView;
+		}
+		siteListItemView.setSite(sites.get(position));
+		return siteListItemView;
 	}
 
+	public void forceReload() {
+		notifyDataSetChanged();
+	}
 }

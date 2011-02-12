@@ -35,6 +35,7 @@ public class UpdateMapsOverlaysThread implements Runnable {
 		this.context = context;
 		this.mapView = mapView;
 		this.mainThreadMessageHandler = messageHandler;
+		firstUpdate = true;
 	}
  
 	public void run() {
@@ -81,7 +82,7 @@ public class UpdateMapsOverlaysThread implements Runnable {
 		    		Log.d("Sites", sites.toString());
 			    	// Reset
 		    		fireOverlayUpdater = false;
-		    		firstUpdate = true;
+		    		firstUpdate = false;
 		    	}
  
 		    	// Wait until time to fire again
