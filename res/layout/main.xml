@@ -17,9 +17,17 @@
     	</ImageButton>
 		<EditText
 			android:id="@+id/searchText"
-			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:hint="Search" android:layout_gravity="right|center_vertical"/>
+			android:hint="Search" 
+			android:layout_gravity="center_horizontal|center_vertical"
+			android:layout_width="wrap_content"/>
+		<Button
+			android:id="@+id/SearchButton"
+			android:text="Search"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="right|center_vertical">
+			</Button> 
 	</LinearLayout>
 	<com.google.android.maps.MapView
 		android:id="@+id/map"

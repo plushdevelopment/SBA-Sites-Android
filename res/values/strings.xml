@@ -47,5 +47,6 @@
 	<string name="symbol_is_not_required_for_long">\'-\' symbol is not required for Long</string>
 	<string name="site_name">Site Name</string>
 	<string name="userLocationClicked">userLocationClicked</string>
+	<string name="ok">Ok</string>
 
 </resources>

@@ -31,7 +31,7 @@
 		android:layout_width="fill_parent" 
 		android:text="@string/about_sba_communications" 
 		android:gravity="left|center_vertical">
-	</Button>
+	</Button> 
 	<Button android:layout_height="wrap_content" 
 		android:id="@+id/Button05" 
 		android:layout_below="@+id/Button04" 
