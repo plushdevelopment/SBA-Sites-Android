@@ -32,6 +32,7 @@ public final class R {
         public static final int yellow_icon=0x7f020012;
     }
     public static final class id {
+<<<<<<< HEAD
         public static final int Button01=0x7f060000;
         public static final int Button02=0x7f060001;
         public static final int Button03=0x7f060002;
@@ -68,16 +69,65 @@ public final class R {
         public static final int textView5=0x7f060019;
         public static final int textView6=0x7f06001a;
         public static final int textView8=0x7f06001c;
+=======
+        public static final int Button01=0x7f060002;
+        public static final int Button02=0x7f060003;
+        public static final int Button03=0x7f060004;
+        public static final int Button04=0x7f060005;
+        public static final int Button05=0x7f060007;
+        public static final int Button06=0x7f06000a;
+        public static final int Button07=0x7f060009;
+        public static final int Button08=0x7f06000b;
+        public static final int Button10=0x7f060028;
+        public static final int CheckBox01=0x7f06000c;
+        public static final int CheckBox02=0x7f06000d;
+        public static final int CheckBox03=0x7f06000e;
+        public static final int CheckBox04=0x7f06000f;
+        public static final int CheckBox05=0x7f060010;
+        public static final int SiteIconImageButton=0x7f060012;
+        public static final int SiteNameTextView=0x7f060013;
+        public static final int TextView01=0x7f060008;
+        public static final int TextView02=0x7f060006;
+        public static final int TextView03=0x7f060029;
+        public static final int TopLayout=0x7f060011;
+        public static final int button1=0x7f060016;
+        public static final int button2=0x7f060019;
+        public static final int button3=0x7f06001b;
+        public static final int button4=0x7f06001e;
+        public static final int button5=0x7f060021;
+        public static final int button6=0x7f060024;
+        public static final int button7=0x7f060026;
+        public static final int imageView1=0x7f060000;
+        public static final int instructions=0x7f06002c;
+        public static final int layers=0x7f06002a;
+        public static final int list_view=0x7f06002b;
+        public static final int map=0x7f060015;
+        public static final int searchText=0x7f060014;
+        public static final int textView1=0x7f060001;
+        public static final int textView10=0x7f060023;
+        public static final int textView11=0x7f060025;
+        public static final int textView12=0x7f060027;
+        public static final int textView2=0x7f060017;
+        public static final int textView3=0x7f060018;
+        public static final int textView4=0x7f06001a;
+        public static final int textView5=0x7f06001c;
+        public static final int textView6=0x7f06001d;
+        public static final int textView7=0x7f06001f;
+        public static final int textView8=0x7f060020;
+        public static final int textView9=0x7f060022;
+>>>>>>> 05f51f6cfc593a01f23f5f5aefc9f30e5bcb0eae
     }
     public static final class layout {
-        public static final int instructions=0x7f030000;
-        public static final int layers=0x7f030001;
-        public static final int listview=0x7f030002;
-        public static final int main=0x7f030003;
-        public static final int searchcoordinates=0x7f030004;
-        public static final int searchsitenameaddress=0x7f030005;
-        public static final int site_list_item=0x7f030006;
-        public static final int sitedetailactivity=0x7f030007;
+        public static final int aboutsbacommunications=0x7f030000;
+        public static final int instructions=0x7f030001;
+        public static final int layers=0x7f030002;
+        public static final int listview=0x7f030003;
+        public static final int main=0x7f030004;
+        public static final int searchaddress=0x7f030005;
+        public static final int searchcoordinates=0x7f030006;
+        public static final int searchsitenameaddress=0x7f030007;
+        public static final int site_list_item=0x7f030008;
+        public static final int sitedetailactivity=0x7f030009;
     }
     public static final class menu {
         public static final int menu=0x7f050000;
@@ -86,11 +136,15 @@ public final class R {
         public static final int about=0x7f040006;
         public static final int about_sba_communications=0x7f040005;
         public static final int address=0x7f040008;
+        public static final int address_exact_search=0x7f040030;
+        public static final int address_partial_search=0x7f040033;
+        public static final int address_search_with_full_address=0x7f04002e;
         public static final int app_name=0x7f040019;
         public static final int app_version=0x7f040004;
         public static final int back=0x7f04000b;
         public static final int canada=0x7f040010;
         public static final int central_america=0x7f04000c;
+        public static final int city_state_province=0x7f040031;
         public static final int coordinate_pair_example=0x7f040026;
         public static final int coordinates=0x7f040007;
         public static final int current=0x7f040017;
@@ -100,12 +154,19 @@ public final class R {
         public static final int done=0x7f04000a;
         public static final int email_support=0x7f040000;
         public static final int enter_site=0x7f040016;
+        public static final int ex_1430_beechwood=0x7f04002f;
+        public static final int ex_33487=0x7f040038;
         public static final int ex_53_5_117_2=0x7f040027;
         public static final int ex_53_5_117_2b=0x7f04002a;
+        public static final int ex_boca_raton=0x7f040032;
+        public static final int ex_california=0x7f040036;
         public static final int ex_fl=0x7f040020;
         public static final int ex_fl98463_l=0x7f040022;
         public static final int ex_hackberry=0x7f04001d;
+        public static final int ex_lawrenceville_ga=0x7f040034;
+        public static final int ex_miami=0x7f04003a;
         public static final int ex_shadow=0x7f04001b;
+        public static final int ex_vancouver=0x7f04003b;
         public static final int full_site_name_search=0x7f04001e;
         public static final int information1=0x7f040018;
         public static final int instructions=0x7f040013;
@@ -114,11 +175,13 @@ public final class R {
         public static final int layers=0x7f040012;
         public static final int list_view=0x7f040011;
         public static final int longitude_without_accepted=0x7f040029;
+        public static final int major_city=0x7f040039;
         public static final int managed=0x7f04000d;
         public static final int new_construction=0x7f04000f;
         public static final int ok=0x7f04002e;
         public static final int owned=0x7f04000e;
         public static final int partial_site_name_search=0x7f04001c;
+        public static final int sba_is_a_leading=0x7f04003c;
         public static final int search_by_coordinates=0x7f040025;
         public static final int site_detail_activity=0x7f040024;
         public static final int site_id_exact_search=0x7f040023;
@@ -127,8 +190,10 @@ public final class R {
         public static final int site_name=0x7f04002c;
         public static final int site_name_examples=0x7f04001a;
         public static final int site_name_id=0x7f040009;
+        public static final int state_province=0x7f040035;
         public static final int support=0x7f040001;
         public static final int symbol_is_not_required_for_long=0x7f04002b;
         public static final int userLocationClicked=0x7f04002d;
+        public static final int zip_code=0x7f040037;
     }
 }

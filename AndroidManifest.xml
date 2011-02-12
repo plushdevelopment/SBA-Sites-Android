@@ -21,5 +21,9 @@
 		</activity>
 		<activity android:label="@string/coordinates" android:name="SearchCoordinates">
 		</activity>
+		<activity android:label="@string/address" android:name="SearchAddress">
+		</activity>
+		<activity android:label="@string/about_sba_communications" android:name="AboutSbaCommunications">
+		</activity>
 	</application>
 </manifest>

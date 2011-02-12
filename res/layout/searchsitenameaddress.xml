@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:paddingLeft="10dp">
+	android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
 	<TextView android:id="@+id/textView1" 
 		android:layout_width="wrap_content" 
 		android:layout_height="wrap_content" 
@@ -25,8 +25,7 @@
 			android:layout_height="wrap_content" 
 			android:layout_below="@+id/button1" 
 			android:text="@string/partial_site_name_search" 
-			android:paddingLeft="10dp" 
-			android:textSize="14sp">
+			android:paddingLeft="10dp" android:textSize="11sp">
 		</TextView>
 		<Button android:id="@+id/button2" 
 			android:layout_below="@+id/textView2" 
@@ -42,8 +41,7 @@
 			android:layout_height="wrap_content" 
 			android:text="@string/full_site_name_search" 
 			android:layout_below="@+id/button2" 
-			android:paddingLeft="10dp" 
-			android:textSize="14sp">
+			android:paddingLeft="10dp" android:textSize="11sp">
 		</TextView>
 		<TextView android:id="@+id/textView6" 
 			android:layout_width="wrap_content" 
@@ -68,8 +66,7 @@
 			android:layout_height="wrap_content" 
 			android:text="@string/site_id_partial_search" 
 			android:layout_below="@+id/button3" 
-			android:paddingLeft="10dp" 
-			android:textSize="14sp">
+			android:paddingLeft="10dp" android:textSize="11sp">
 		</TextView>
 		<Button android:id="@+id/button4" 
 			android:gravity="left" 
@@ -85,7 +82,6 @@
 			android:layout_height="wrap_content" 
 			android:text="@string/site_id_exact_search" 
 			android:layout_below="@+id/button4" 
-			android:textSize="14sp" 
-			android:paddingLeft="10dp">
+			android:paddingLeft="10dp" android:textSize="11sp">
 		</TextView>
 </RelativeLayout>

@@ -38,6 +38,14 @@ public class Instructions extends Activity implements OnClickListener {
 					Intent searchcoordinatesIntent = new Intent(this, SearchCoordinates.class);
 					startActivity(searchcoordinatesIntent);
 					break;
+				case R.id.Button03:
+					Intent searchaddressIntent = new Intent(this, SearchAddress.class);
+					startActivity(searchaddressIntent);
+					break;
+				case R.id.Button04:
+					Intent aboutsbacommunicationsIntent = new Intent(this, AboutSbaCommunications.class);
+					startActivity(aboutsbacommunicationsIntent);
+					break;
 				case R.id.Button08:
 				Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
 				emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"mobilesupport@sbasite.com"});

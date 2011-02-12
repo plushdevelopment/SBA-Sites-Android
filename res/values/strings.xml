@@ -26,6 +26,7 @@
     <string name="current">Current</string>
 	<string name="information1">Search Instructions</string>
 	<string name="app_name">SBA Sites</string>
+
 	<string name="site_name_examples">Site Name Examples</string>
 	<string name="ex_shadow">Ex: \"Shadow\"</string>
 	<string name="partial_site_name_search">Partial Site Name Search</string>
@@ -40,13 +41,30 @@
 
 	<string name="search_by_coordinates">Search By Coordinates</string>
 	<string name="coordinate_pair_example">Coordinate Pair Examples</string>
-	<string name="ex_53.5_117.2">With Hyphen: \"53.5,-117.2\"</string>
-	<string name="lat_long_delimited_by_comma">The Latitude and Longitude must be separated by a comma. In addition, a hyphen can be used but is not required. Please see the following examples.</string>
+	<string name="ex_53.5_117.2">Ex: “53.5,-117.2”</string>
+	<string name="lat_long_delimited_by_comma">Lat/Long delimited by comma</string>
 	<string name="longitude_without_accepted">Longitude Without \'-\' Accepted</string>
-	<string name="ex_53.5_117.2b">Without Hyphen: \"53.5,117.2\"</string>
+	<string name="ex_53.5_117.2b">Ex: “53.5,117.2”</string>
 	<string name="symbol_is_not_required_for_long">\'-\' symbol is not required for Long</string>
 	<string name="site_name">Site Name</string>
 	<string name="userLocationClicked">userLocationClicked</string>
 	<string name="ok">Ok</string>
+
+	<string name="address_search_with_full_address">Address Search with Full Address</string>
+	<string name="ex_1430_beechwood">Ex: “1430 Beechwood Cir, Lawrenceville, GA…</string>
+	<string name="address_exact_search">Address Exact Search</string>
+	<string name="city_state_province">City, State/Province</string>
+	<string name="ex_boca_raton">Ex: “Boca Raton, FL”</string>
+	<string name="address_partial_search">Address Partial Search</string>
+	<string name="ex_lawrenceville_ga">Ex: “Lawrenceville, GA”</string>
+	<string name="state_province">State/Province</string>
+	<string name="ex_california">Ex: “California”</string>
+	<string name="zip_code">Zip Code</string>
+	<string name="ex_33487">Ex: “33487”</string>
+	<string name="major_city">Major City</string>
+	<string name="ex_miami">Ex: “Miami”</string>
+	<string name="ex_vancouver">Ex: “Vancouver”</string>
+
+	<string name="sba_is_a_leading">SBA is a leading independent owner and operator of wireless communications infrastructure in North and Central America. SBA generates revenue from two primary businesses - site leasing and site development services. The primary focus of the Company is the leasing of antenna space on its multi-tenant towers to a variety of wireless sercice providers under long-term lease contracts.</string>
 
 </resources>
