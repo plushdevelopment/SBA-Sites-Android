@@ -31,6 +31,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.OverlayItem;
 import com.sbasite.sbasites.R;
+import com.sbasite.sbasites.model.Site;
 
 public class SBAMapActivity extends MapActivity {
 	private MapView map;
@@ -44,7 +45,6 @@ public class SBAMapActivity extends MapActivity {
 	private Button btnSearch;
 	private double lat;
 	private double lon;
-	private ArrayList<Site> sites;
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -109,17 +109,18 @@ public class SBAMapActivity extends MapActivity {
 				}
 				catch (Exception e) {
 					//@todo: Show error message
+					e.printStackTrace();
 				}
 
 			}
 		});
 		
-		
-		
 		//mapController.setCenter(getPoint(46.0730555556, -100.546666667)); // Set center to the center of North America
 		mapController.setCenter(getPoint(26.35049, -80.089004)); // Set center to the center of Boca Raton, FL
 		mapController.setZoom(11);
-		map.setBuiltInZoomControls(true);
+		//map.getZoomButtonsController().setAutoDismissed(false);
+		//map.getZoomButtonsController().setVisible(true);
+		
 		map.displayZoomControls(true);
 		
 		Drawable marker=getResources().getDrawable(R.drawable.owned);
@@ -148,7 +149,7 @@ public class SBAMapActivity extends MapActivity {
  
         };
 		
-		//updateMapOverlaysThread is declared as a member variable 
+     // updateMapOverlaysThread is declared as a member variable 
 		updateMapOverlaysThread = new UpdateMapsOverlaysThread(this, map, messageHandler, this.getSBASitesApplication());
 				new Thread(updateMapOverlaysThread).start();
 		
@@ -159,6 +160,7 @@ public class SBAMapActivity extends MapActivity {
 		super.onResume();
 		me.enableMyLocation();
 		me.enableCompass();
+		updateMapOverlaysThread.setEnabled(true);
 	}
 	
 	@Override
@@ -166,6 +168,7 @@ public class SBAMapActivity extends MapActivity {
 		super.onPause();
 		me.disableMyLocation();
 		me.disableCompass();
+		updateMapOverlaysThread.setEnabled(false);
 	}		
 	
  	@Override

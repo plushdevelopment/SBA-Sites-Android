@@ -1,5 +1,7 @@
 package com.sbasite.sbasites;
 
+import com.sbasite.sbasites.model.Site;
+
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;

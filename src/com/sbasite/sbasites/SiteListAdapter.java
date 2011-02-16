@@ -2,6 +2,8 @@ package com.sbasite.sbasites;
 
 import java.util.ArrayList;
 
+import com.sbasite.sbasites.model.Site;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.View;

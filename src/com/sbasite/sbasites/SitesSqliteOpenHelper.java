@@ -79,13 +79,10 @@ public class SitesSqliteOpenHelper extends SQLiteOpenHelper {
     		//By calling this method and empty database will be created into the default system path
             //of your application so we are gonna be able to overwrite that database with our database.
     		this.getReadableDatabase();
-    	
         	try {
- 
     			copyDataBase();
- 
     		} catch (IOException e) {
- 
+    			e.printStackTrace();
         		throw new Error("Error copying database");
  
         	}
@@ -105,15 +102,11 @@ public class SitesSqliteOpenHelper extends SQLiteOpenHelper {
     		String myPath = DB_PATH + DB_NAME2;
     		checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
     	}catch(SQLiteException e){
- 
-    		//database does't exist yet.
- 
+    		e.printStackTrace();
     	}
  
     	if(checkDB != null){
- 
     		checkDB.close();
- 
     	}
  
     	return checkDB != null ? true : false;

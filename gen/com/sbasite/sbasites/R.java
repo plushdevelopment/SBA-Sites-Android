@@ -11,25 +11,26 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int blue_icon=0x7f020000;
-        public static final int canada=0x7f020001;
-        public static final int central_america=0x7f020002;
-        public static final int cw=0x7f020003;
-        public static final int disabled=0x7f020004;
-        public static final int hot_pink_icon=0x7f020005;
-        public static final int icon=0x7f020006;
-        public static final int icon_ipad=0x7f020007;
-        public static final int light_blue_icon=0x7f020008;
-        public static final int light_green_icon=0x7f020009;
-        public static final int location=0x7f02000a;
-        public static final int managed=0x7f02000b;
-        public static final int marker=0x7f02000c;
-        public static final int new_construction=0x7f02000d;
-        public static final int owned=0x7f02000e;
-        public static final int purple_icon=0x7f02000f;
-        public static final int turquoise_icon=0x7f020010;
-        public static final int welcome_instructions=0x7f020011;
-        public static final int yellow_icon=0x7f020012;
+        public static final int android_background=0x7f020000;
+        public static final int blue_icon=0x7f020001;
+        public static final int canada=0x7f020002;
+        public static final int central_america=0x7f020003;
+        public static final int cw=0x7f020004;
+        public static final int disabled=0x7f020005;
+        public static final int hot_pink_icon=0x7f020006;
+        public static final int icon=0x7f020007;
+        public static final int icon_ipad=0x7f020008;
+        public static final int light_blue_icon=0x7f020009;
+        public static final int light_green_icon=0x7f02000a;
+        public static final int location=0x7f02000b;
+        public static final int managed=0x7f02000c;
+        public static final int marker=0x7f02000d;
+        public static final int new_construction=0x7f02000e;
+        public static final int owned=0x7f02000f;
+        public static final int purple_icon=0x7f020010;
+        public static final int turquoise_icon=0x7f020011;
+        public static final int welcome_instructions=0x7f020012;
+        public static final int yellow_icon=0x7f020013;
     }
     public static final class id {
         public static final int Button01=0x7f060002;

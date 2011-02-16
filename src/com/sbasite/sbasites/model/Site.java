@@ -1,7 +1,6 @@
-package com.sbasite.sbasites;
+package com.sbasite.sbasites.model;
 
 import java.util.ArrayList;
-
 import android.content.Context;
 
 import com.activeandroid.ActiveRecordBase;
@@ -83,7 +82,11 @@ public class Site extends ActiveRecordBase<Site> {
     public String zip;
     
 	public static ArrayList<Site> loadSitesForRegion(Context context, double minLat, double maxLat, double minLong, double maxLong) {
-		return Site.query(context, Site.class, new String[] { "SITE_NAME", "SITE_LATITUDE, SITE_LONGITUDE"}, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong, null);
+		return Site.query(context, Site.class, new String[] { "SITE_NAME", "SITE_LATITUDE, SITE_LONGITUDE"}, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong, "SITE_NAME");
+	}
+	
+	public static Site siteForMobileKey(Context context, String mobileKey) {
+		return Site.querySingle(context, Site.class, null, String.format("SITE_MOBILEKEY = '%s'", mobileKey), null); 
 	}
 	
 }

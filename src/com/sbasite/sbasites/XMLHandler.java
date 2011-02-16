@@ -4,6 +4,9 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.sbasite.sbasites.model.Site;
+import com.sbasite.sbasites.model.SiteLayer;
+
 
 import android.content.Context;
 import android.util.Log;
@@ -41,6 +44,7 @@ public class XMLHandler extends DefaultHandler{
 	public Site mySite;
 	public Context context;
 	public SBASitesApplication delegate;
+	
 
 	// ===========================================================
 	// Methods
@@ -126,8 +130,16 @@ public class XMLHandler extends DefaultHandler{
 	public void endElement(String namespaceURI, String localName, String qName)
 	throws SAXException {
 		if (localName.equals("Site")) {
-			mySite.save();
-			//delegate.addSite(null);
+			
+			Site aSite = Site.siteForMobileKey(context, mySite.mobileKey);
+			if (aSite == null) {
+				mySite.save();
+			} else if (mySite.deleted == 1) {
+				aSite.delete();
+			} else {
+				aSite.delete();
+				mySite.save();
+			}
 		}else if (localName.equals("TotalRecordCount")) {
 			this.inTotalRecordCountTag = false;
 		}else if (localName.equals("AGL")) {
@@ -183,62 +195,67 @@ public class XMLHandler extends DefaultHandler{
 	 * <tag>characters</tag> */
 	@Override
 	public void characters(char ch[], int start, int length) {
-		Log.v("XMLHandler", (new String(ch, start, length)));
 		if(this.inTotalRecordCountTag){
 			delegate.totalRecordsCount = Integer.parseInt(new String(ch, start, length));
+			/*
 		}else if(this.inAddress1Tag){
-			//mySite.address = new String(ch, start, length);
+			mySite.address = new String(ch, start, length);
 		}else if(this.inAGLTag){
-			//mySite.agl = new String(ch, start, length);
+			mySite.agl = new String(ch, start, length);
 		}else if(this.inBTATag){
-			//mySite.bta = new String(ch, start, length);
+			mySite.bta = new String(ch, start, length);
 		}else if(this.inCityTag){
-			//mySite.city = new String(ch, start, length);
+			mySite.city = new String(ch, start, length);
 		}else if(this.inContactTag){
-			//mySite.contact = new String(ch, start, length);
+			mySite.contact = new String(ch, start, length);
 		}else if(this.inCountyTag){
-			//mySite.county = new String(ch, start, length);
+			mySite.county = new String(ch, start, length);
+			*/
 		}else if(this.inDeletedTag){
-			//mySite.deleted = Integer.parseInt(new String(ch, start, length));
+			mySite.deleted = Integer.parseInt(new String(ch, start, length));
+			/*
 		}else if(this.inEmailTag){
-			//mySite.email = new String(ch, start, length);
+			mySite.email = new String(ch, start, length);
 		}else if(this.inLastUpdatedTag){
-			//mySite.lastUpdated = new String(ch, start, length);
+			mySite.lastUpdated = new String(ch, start, length);
+			*/
 		}else if(this.inLatitudeTag){
 			mySite.latitude = Double.parseDouble(new String(ch, start, length));
 		}else if(this.inLongitudeTag){
 			mySite.longitude = Double.parseDouble(new String(ch, start, length));
 		}else if(this.inMobileKeyTag){
 			mySite.mobileKey = new String(ch, start, length);
+			/*
 		}else if(this.inMTATag){
-			//mySite.mta = new String(ch, start, length);
+			mySite.mta = new String(ch, start, length);
 		}else if(this.inPhoneTag){
-			//mySite.phone = new String(ch, start, length);
+			mySite.phone = new String(ch, start, length);
+			*/
 		}else if(this.inSiteCodeTag){
 			mySite.siteCode = new String(ch, start, length);
 		}else if(this.inSiteNameTag){
 			mySite.siteName = new String(ch, start, length);
+			/*
 		}else if(this.inSiteStatusTag){
-			//mySite.siteStatus = new String(ch, start, length);
+			mySite.siteStatus = new String(ch, start, length);
 		}else if(this.inStateTag){
-			//mySite.stateProvince = new String(ch, start, length);
+			mySite.stateProvince = new String(ch, start, length);
 		}else if(this.inStructureHeightTag){
-			//mySite.structureHeight = new String(ch, start, length);
+			mySite.structureHeight = new String(ch, start, length);
 		}else if(this.inStructureIDTag){
-			//mySite.structureID = new String(ch, start, length);
+			mySite.structureID = new String(ch, start, length);
 		}else if(this.inStructureTypeTag){
-			//mySite.structureType = new String(ch, start, length);
+			mySite.structureType = new String(ch, start, length);
 		}else if(this.inZipTag){
-			//mySite.zip = new String(ch, start, length);
-		}else if(this.inLayerTag){
-			//mySite.siteLayer = new String(ch, start, length);
+			mySite.zip = new String(ch, start, length);
+			*/
+		}else if(this.inLayerTag) {
+			SiteLayer layer = SiteLayer.layerForName(context, new String(ch, start, length));
+			if (layer == null) {
+				layer = new SiteLayer(context, new String(ch, start, length));
+				layer.save();
+			}
+			mySite.siteLayer = layer;
 		}
 	}
-	
-	/*
-	private SBASitesApplication getSBASitesApplication() {
-		SBASitesApplication app = (SBASitesApplication)getApplication();
-		return app;
-	}
-	*/
 }

@@ -1,5 +1,7 @@
 package com.sbasite.sbasites;
 
+import com.sbasite.sbasites.model.Site;
+
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;

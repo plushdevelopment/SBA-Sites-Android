@@ -2,6 +2,8 @@ package com.sbasite.sbasites;
 
 import java.util.ArrayList;
 
+import com.sbasite.sbasites.model.Site;
+
 import android.app.ListActivity;
 import android.location.Address;
 

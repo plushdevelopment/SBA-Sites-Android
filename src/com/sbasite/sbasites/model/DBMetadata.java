@@ -1,6 +1,4 @@
-package com.sbasite.sbasites;
-
-import java.sql.Date;
+package com.sbasite.sbasites.model;
 
 import android.content.Context;
 
@@ -14,7 +12,7 @@ public class DBMetadata extends ActiveRecordBase<DBMetadata> {
 	public DBMetadata(Context context) { super(context); }
 	  
 	@Column(name = "LAST_UPDATE")
-	public Date lastUpdate;
+	public String lastUpdate;
 	
 	@Column(name = "SKIP")
 	public int skip;

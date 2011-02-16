@@ -9,6 +9,7 @@ import android.util.Log;
  
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
+import com.sbasite.sbasites.model.Site;
  
 public class UpdateMapsOverlaysThread implements Runnable {
  
@@ -47,13 +48,13 @@ public class UpdateMapsOverlaysThread implements Runnable {
 		while(!interrupted) {
  
 			if(enabled) {
-				Log.v(TAG, "zoomLevel: " + zoomLevel + " map zoomLevel: " + mapView.getZoomLevel());
+				//Log.v(TAG, "zoomLevel: " + zoomLevel + " map zoomLevel: " + mapView.getZoomLevel());
 				if(zoomLevel !=  mapView.getZoomLevel() ){
 		    		zoomLevel = mapView.getZoomLevel();
 		    		fireOverlayUpdater = true;
 		    	} 
  
-				Log.v(TAG, "mapCenter: " + mapCenter + " map mapCenter: " + mapView.getMapCenter());
+				//Log.v(TAG, "mapCenter: " + mapCenter + " map mapCenter: " + mapView.getMapCenter());
 				if(mapCenter == null || DistanceCalculator.calculateDistance(mapCenter, mapView.getMapCenter()) > DISTANCE_CHANGE) {
 		    		mapCenter = mapView.getMapCenter();
 		    		fireOverlayUpdater = true;
