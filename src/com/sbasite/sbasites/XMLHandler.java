@@ -9,7 +9,6 @@ import com.sbasite.sbasites.model.SiteLayer;
 
 
 import android.content.Context;
-import android.util.Log;
  
 public class XMLHandler extends DefaultHandler{
 	
@@ -17,29 +16,31 @@ public class XMLHandler extends DefaultHandler{
 	// Fields
 	// ===========================================================
 	private boolean inTotalRecordCountTag = false;
+	private boolean inDeletedTag = false;
+	private boolean inLayerTag = false;
+	private boolean inLatitudeTag = false;
+	private boolean inLongitudeTag = false;
+	private boolean inMobileKeyTag = false;
+	private boolean inSiteCodeTag = false;
+	private boolean inSiteNameTag = false;
+	/*
 	private boolean inAGLTag = false;
 	private boolean inAddress1Tag = false;
 	private boolean inBTATag = false;
 	private boolean inCityTag = false;
 	private boolean inContactTag = false;
 	private boolean inCountyTag = false;
-	private boolean inDeletedTag = false;
 	private boolean inEmailTag = false;
 	private boolean inLastUpdatedTag = false;
-	private boolean inLayerTag = false;
-	private boolean inLatitudeTag = false;
-	private boolean inLongitudeTag = false;
 	private boolean inMTATag = false;
-	private boolean inMobileKeyTag = false;
 	private boolean inPhoneTag = false;
-	private boolean inSiteCodeTag = false;
-	private boolean inSiteNameTag = false;
 	private boolean inSiteStatusTag = false;
 	private boolean inStateTag = false;
 	private boolean inStructureHeightTag = false;
 	private boolean inStructureIDTag = false;
 	private boolean inStructureTypeTag = false;
 	private boolean inZipTag = false;
+	*/
 	
 	public Site mySite;
 	public Context context;
@@ -61,7 +62,7 @@ public class XMLHandler extends DefaultHandler{
 
 	@Override
 	public void endDocument() throws SAXException {
-		// Nothing to do
+		delegate.didEndDocument();
 	}
 
 	/** Gets be called on opening tags like:
@@ -75,6 +76,21 @@ public class XMLHandler extends DefaultHandler{
 			this.mySite = new Site(this.context);
 		}else if (localName.equals("TotalRecordCount")) {
 			this.inTotalRecordCountTag = true;
+		}else if (localName.equals("Deleted")) {
+			this.inDeletedTag = true;
+		}else if (localName.equals("Latitude")) {
+			this.inLatitudeTag = true;
+		}else if (localName.equals("Layer")) {
+			this.inLayerTag = true;
+		}else if (localName.equals("Longitude")) {
+			this.inLongitudeTag = true;
+		}else if (localName.equals("MobileKey")) {
+			this.inMobileKeyTag = true;
+		}else if (localName.equals("SiteCode")) {
+			this.inSiteCodeTag = true;
+		}else if (localName.equals("SiteName")) {
+			this.inSiteNameTag = true;
+			/*
 		}else if (localName.equals("AGL")) {
 			this.inAGLTag = true;
 		}else if (localName.equals("Address1")) {
@@ -87,28 +103,14 @@ public class XMLHandler extends DefaultHandler{
 			this.inContactTag = true;
 		}else if (localName.equals("County")) {
 			this.inCountyTag = true;
-		}else if (localName.equals("Deleted")) {
-			this.inDeletedTag = true;
 		}else if (localName.equals("Email")) {
 			this.inEmailTag = true;
 		}else if (localName.equals("LastUpdated")) {
 			this.inLastUpdatedTag = true;
-		}else if (localName.equals("Latitude")) {
-			this.inLatitudeTag = true;
-		}else if (localName.equals("Layer")) {
-			this.inLayerTag = true;
-		}else if (localName.equals("Longitude")) {
-			this.inLongitudeTag = true;
-		}else if (localName.equals("MobileKey")) {
-			this.inMobileKeyTag = true;
 		}else if (localName.equals("MTA")) {
 			this.inMTATag = true;
 		}else if (localName.equals("Phone")) {
 			this.inPhoneTag = true;
-		}else if (localName.equals("SiteCode")) {
-			this.inSiteCodeTag = true;
-		}else if (localName.equals("SiteName")) {
-			this.inSiteNameTag = true;
 		}else if (localName.equals("SiteStatus")) {
 			this.inSiteStatusTag = true;
 		}else if (localName.equals("State")) {
@@ -121,6 +123,7 @@ public class XMLHandler extends DefaultHandler{
 			this.inStructureTypeTag = true;
 		}else if (localName.equals("Zip")) {
 			this.inZipTag = true;
+			*/
 		}
 	}
 
@@ -130,9 +133,11 @@ public class XMLHandler extends DefaultHandler{
 	public void endElement(String namespaceURI, String localName, String qName)
 	throws SAXException {
 		if (localName.equals("Site")) {
-			
+			mySite.save();
+			mySite = null;
+			/*
 			Site aSite = Site.siteForMobileKey(context, mySite.mobileKey);
-			if (aSite == null) {
+			if ((aSite == null) && (mySite.deleted != 1)) {
 				mySite.save();
 			} else if (mySite.deleted == 1) {
 				aSite.delete();
@@ -140,8 +145,24 @@ public class XMLHandler extends DefaultHandler{
 				aSite.delete();
 				mySite.save();
 			}
+			*/
 		}else if (localName.equals("TotalRecordCount")) {
 			this.inTotalRecordCountTag = false;
+		}else if (localName.equals("Deleted")) {
+			this.inDeletedTag = false;
+		}else if (localName.equals("Latitude")) {
+			this.inLatitudeTag = false;
+		}else if (localName.equals("Layer")) {
+			this.inLayerTag = false;
+		}else if (localName.equals("Longitude")) {
+			this.inLongitudeTag = false;
+		}else if (localName.equals("MobileKey")) {
+			this.inMobileKeyTag = false;
+		}else if (localName.equals("SiteCode")) {
+			this.inSiteCodeTag = false;
+		}else if (localName.equals("SiteName")) {
+			this.inSiteNameTag = false;
+			/*
 		}else if (localName.equals("AGL")) {
 			this.inAGLTag = false;
 		}else if (localName.equals("Address1")) {
@@ -154,28 +175,14 @@ public class XMLHandler extends DefaultHandler{
 			this.inContactTag = false;
 		}else if (localName.equals("County")) {
 			this.inCountyTag = false;
-		}else if (localName.equals("Deleted")) {
-			this.inDeletedTag = false;
 		}else if (localName.equals("Email")) {
 			this.inEmailTag = false;
 		}else if (localName.equals("LastUpdated")) {
 			this.inLastUpdatedTag = false;
-		}else if (localName.equals("Latitude")) {
-			this.inLatitudeTag = false;
-		}else if (localName.equals("Layer")) {
-			this.inLayerTag = false;
-		}else if (localName.equals("Longitude")) {
-			this.inLongitudeTag = false;
-		}else if (localName.equals("MobileKey")) {
-			this.inMobileKeyTag = false;
 		}else if (localName.equals("MTA")) {
 			this.inMTATag = false;
 		}else if (localName.equals("Phone")) {
 			this.inPhoneTag = false;
-		}else if (localName.equals("SiteCode")) {
-			this.inSiteCodeTag = false;
-		}else if (localName.equals("SiteName")) {
-			this.inSiteNameTag = false;
 		}else if (localName.equals("SiteStatus")) {
 			this.inSiteStatusTag = false;
 		}else if (localName.equals("State")) {
@@ -188,6 +195,7 @@ public class XMLHandler extends DefaultHandler{
 			this.inStructureTypeTag = false;
 		}else if (localName.equals("Zip")) {
 			this.inZipTag = false;
+			*/
 		}
 	}
 
@@ -197,6 +205,25 @@ public class XMLHandler extends DefaultHandler{
 	public void characters(char ch[], int start, int length) {
 		if(this.inTotalRecordCountTag){
 			delegate.totalRecordsCount = Integer.parseInt(new String(ch, start, length));
+		}else if(this.inDeletedTag){
+			mySite.deleted = Integer.parseInt(new String(ch, start, length));
+		}else if(this.inLatitudeTag){
+			mySite.latitude = Double.parseDouble(new String(ch, start, length));
+		}else if(this.inLongitudeTag){
+			mySite.longitude = Double.parseDouble(new String(ch, start, length));
+		}else if(this.inMobileKeyTag){
+			mySite.mobileKey = new String(ch, start, length);
+		}else if(this.inSiteCodeTag){
+			mySite.siteCode = new String(ch, start, length);
+		}else if(this.inSiteNameTag){
+			mySite.siteName = new String(ch, start, length);
+		}else if(this.inLayerTag) {
+			//SiteLayer layer = SiteLayer.layerForName(context, new String(ch, start, length));
+			//if (layer == null) {
+				//layer = new SiteLayer(context, new String(ch, start, length));
+				//layer.save();
+			//}
+			mySite.siteLayer = new String(ch, start, length);
 			/*
 		}else if(this.inAddress1Tag){
 			mySite.address = new String(ch, start, length);
@@ -210,32 +237,14 @@ public class XMLHandler extends DefaultHandler{
 			mySite.contact = new String(ch, start, length);
 		}else if(this.inCountyTag){
 			mySite.county = new String(ch, start, length);
-			*/
-		}else if(this.inDeletedTag){
-			mySite.deleted = Integer.parseInt(new String(ch, start, length));
-			/*
 		}else if(this.inEmailTag){
 			mySite.email = new String(ch, start, length);
 		}else if(this.inLastUpdatedTag){
 			mySite.lastUpdated = new String(ch, start, length);
-			*/
-		}else if(this.inLatitudeTag){
-			mySite.latitude = Double.parseDouble(new String(ch, start, length));
-		}else if(this.inLongitudeTag){
-			mySite.longitude = Double.parseDouble(new String(ch, start, length));
-		}else if(this.inMobileKeyTag){
-			mySite.mobileKey = new String(ch, start, length);
-			/*
 		}else if(this.inMTATag){
 			mySite.mta = new String(ch, start, length);
 		}else if(this.inPhoneTag){
 			mySite.phone = new String(ch, start, length);
-			*/
-		}else if(this.inSiteCodeTag){
-			mySite.siteCode = new String(ch, start, length);
-		}else if(this.inSiteNameTag){
-			mySite.siteName = new String(ch, start, length);
-			/*
 		}else if(this.inSiteStatusTag){
 			mySite.siteStatus = new String(ch, start, length);
 		}else if(this.inStateTag){
@@ -248,14 +257,7 @@ public class XMLHandler extends DefaultHandler{
 			mySite.structureType = new String(ch, start, length);
 		}else if(this.inZipTag){
 			mySite.zip = new String(ch, start, length);
-			*/
-		}else if(this.inLayerTag) {
-			SiteLayer layer = SiteLayer.layerForName(context, new String(ch, start, length));
-			if (layer == null) {
-				layer = new SiteLayer(context, new String(ch, start, length));
-				layer.save();
-			}
-			mySite.siteLayer = layer;
+		*/
 		}
 	}
 }

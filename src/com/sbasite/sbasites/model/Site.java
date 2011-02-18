@@ -21,6 +21,19 @@ public class Site extends ActiveRecordBase<Site> {
 	@Column(name = "SITE_DELETED")
 	public int deleted;
 	
+	@Column(name = "SITE_MOBILEKEY")
+	public String mobileKey;
+	
+	@Column(name = "SITE_CODE")
+	public String siteCode;
+	
+	@Column(name = "SITE_LAYER")
+	public String siteLayer;
+
+	@Column(name = "SITE_NAME")
+	public String siteName;
+	
+	/*
 	@Column(name = "SITE_ADDRESS")
 	public String address;
 	
@@ -45,23 +58,11 @@ public class Site extends ActiveRecordBase<Site> {
 	@Column(name = "SITE_LASTUPDATED")
 	public String lastUpdated;
 	
-	@Column(name = "SITE_MOBILEKEY")
-	public String mobileKey;
-	
 	@Column(name = "SITE_MTA")
 	public String mta;
 	
 	@Column(name = "SITE_PHONE")
 	public String phone;
-	
-	@Column(name = "SITE_CODE")
-	public String siteCode;
-	
-	@Column(name = "SITE_LAYER")
-	public SiteLayer siteLayer;
-	
-	@Column(name = "SITE_NAME")
-	public String siteName;
 	
 	@Column(name = "SITE_STATUS")
 	public String siteStatus;
@@ -80,6 +81,7 @@ public class Site extends ActiveRecordBase<Site> {
 	
 	@Column(name = "SITE_ZIP")
     public String zip;
+    */
     
 	public static ArrayList<Site> loadSitesForRegion(Context context, double minLat, double maxLat, double minLong, double maxLong) {
 		return Site.query(context, Site.class, new String[] { "SITE_NAME", "SITE_LATITUDE, SITE_LONGITUDE"}, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong, "SITE_NAME");
@@ -89,4 +91,11 @@ public class Site extends ActiveRecordBase<Site> {
 		return Site.querySingle(context, Site.class, null, String.format("SITE_MOBILEKEY = '%s'", mobileKey), null); 
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return siteName + " " + mobileKey;
+	}
 }

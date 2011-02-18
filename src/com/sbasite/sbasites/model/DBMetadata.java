@@ -19,5 +19,4 @@ public class DBMetadata extends ActiveRecordBase<DBMetadata> {
 	
 	@Column(name = "TAKE")
 	public int take;
-
 }

@@ -32,6 +32,7 @@ import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.OverlayItem;
 import com.sbasite.sbasites.R;
 import com.sbasite.sbasites.model.Site;
+import com.sbasite.sbasites.model.SiteLayer;
 
 public class SBAMapActivity extends MapActivity {
 	private MapView map;
@@ -78,7 +79,7 @@ public class SBAMapActivity extends MapActivity {
 		searchText=(EditText)findViewById(R.id.searchText);
 		mapController = map.getController();
 		btnSearch = (Button)findViewById(R.id.SearchButton);
-		
+		/*
 		geoCoder = new Geocoder(this); //create new geocoder instance
 		btnSearch.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -114,25 +115,30 @@ public class SBAMapActivity extends MapActivity {
 
 			}
 		});
-		
+		*/
 		//mapController.setCenter(getPoint(46.0730555556, -100.546666667)); // Set center to the center of North America
 		mapController.setCenter(getPoint(26.35049, -80.089004)); // Set center to the center of Boca Raton, FL
 		mapController.setZoom(11);
 		//map.getZoomButtonsController().setAutoDismissed(false);
 		//map.getZoomButtonsController().setVisible(true);
 		
-		map.displayZoomControls(true);
+		//map.displayZoomControls(true);
 		
-		Drawable marker=getResources().getDrawable(R.drawable.owned);
-
-		marker.setBounds(0, 0, marker.getIntrinsicWidth(),
-														marker.getIntrinsicHeight());
-		sitesOverlay = new SitesOverlay(marker);
-		map.getOverlays().add(sitesOverlay);
-		
+		ArrayList<SiteLayer> layers = SiteLayer.layers(this);
+		Drawable marker;
+		/*
+		for (SiteLayer siteLayer : layers) {
+			marker=getResources().getDrawable(siteLayer.getPinIcon());
+			marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
+			SiteItemizedOverlay overlay = new SiteItemizedOverlay(marker);
+			map.getOverlays().add(overlay);
+		}
+		*/
 		me=new MyLocationOverlay(this, map);
 		map.getOverlays().add(me);
-		
+		//me.enableMyLocation();
+		//me.enableCompass();
+		/*
         messageHandler = new Handler() {
 			public void handleMessage(Message msg) {
         		if(msg.obj.getClass() == OverlayItem.class) {
@@ -152,23 +158,18 @@ public class SBAMapActivity extends MapActivity {
      // updateMapOverlaysThread is declared as a member variable 
 		updateMapOverlaysThread = new UpdateMapsOverlaysThread(this, map, messageHandler, this.getSBASitesApplication());
 				new Thread(updateMapOverlaysThread).start();
-		
+		*/
 	}
 	
 	@Override
 	public void onResume() {
 		super.onResume();
-		me.enableMyLocation();
-		me.enableCompass();
-		updateMapOverlaysThread.setEnabled(true);
+		
 	}
 	
 	@Override
 	public void onPause() {
 		super.onPause();
-		me.disableMyLocation();
-		me.disableCompass();
-		updateMapOverlaysThread.setEnabled(false);
 	}		
 	
  	@Override
