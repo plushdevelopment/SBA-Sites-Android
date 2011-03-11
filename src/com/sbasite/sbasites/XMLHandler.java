@@ -12,6 +12,13 @@ import android.content.Context;
  
 public class XMLHandler extends DefaultHandler{
 	
+	
+	
+	public interface XMLHandlerDelegate {
+		public void didEndDocument();
+		public void setTotalRecordsCount(int totalRecordsCount);
+	}
+
 	// ===========================================================
 	// Fields
 	// ===========================================================
@@ -23,7 +30,6 @@ public class XMLHandler extends DefaultHandler{
 	private boolean inMobileKeyTag = false;
 	private boolean inSiteCodeTag = false;
 	private boolean inSiteNameTag = false;
-	/*
 	private boolean inAGLTag = false;
 	private boolean inAddress1Tag = false;
 	private boolean inBTATag = false;
@@ -40,19 +46,25 @@ public class XMLHandler extends DefaultHandler{
 	private boolean inStructureIDTag = false;
 	private boolean inStructureTypeTag = false;
 	private boolean inZipTag = false;
-	*/
 	
 	public Site mySite;
 	public Context context;
-	public SBASitesApplication delegate;
+	public XMLHandlerDelegate delegate;
 	
 
 	// ===========================================================
 	// Methods
 	// ===========================================================
+	public XMLHandler(Context context, XMLHandlerDelegate delegate) { 
+		super();
+		this.context = context;
+		this.delegate = delegate;
+	}
+	
 	public XMLHandler(Context context) { 
 		super();
 		this.context = context;
+		this.delegate = null;
 	}
 	
 	@Override
@@ -62,7 +74,9 @@ public class XMLHandler extends DefaultHandler{
 
 	@Override
 	public void endDocument() throws SAXException {
-		delegate.didEndDocument();
+		if (null != delegate) {
+			delegate.didEndDocument();
+		}
 	}
 
 	/** Gets be called on opening tags like:
@@ -90,7 +104,6 @@ public class XMLHandler extends DefaultHandler{
 			this.inSiteCodeTag = true;
 		}else if (localName.equals("SiteName")) {
 			this.inSiteNameTag = true;
-			/*
 		}else if (localName.equals("AGL")) {
 			this.inAGLTag = true;
 		}else if (localName.equals("Address1")) {
@@ -123,7 +136,6 @@ public class XMLHandler extends DefaultHandler{
 			this.inStructureTypeTag = true;
 		}else if (localName.equals("Zip")) {
 			this.inZipTag = true;
-			*/
 		}
 	}
 
@@ -133,19 +145,11 @@ public class XMLHandler extends DefaultHandler{
 	public void endElement(String namespaceURI, String localName, String qName)
 	throws SAXException {
 		if (localName.equals("Site")) {
-			mySite.save();
-			mySite = null;
-			/*
-			Site aSite = Site.siteForMobileKey(context, mySite.mobileKey);
-			if ((aSite == null) && (mySite.deleted != 1)) {
-				mySite.save();
-			} else if (mySite.deleted == 1) {
-				aSite.delete();
-			} else {
-				aSite.delete();
+			//Site.siteForMobileKey(context, mySite.mobileKey).delete();
+			if (mySite.deleted == 0) {
 				mySite.save();
 			}
-			*/
+			mySite = null;
 		}else if (localName.equals("TotalRecordCount")) {
 			this.inTotalRecordCountTag = false;
 		}else if (localName.equals("Deleted")) {
@@ -162,7 +166,6 @@ public class XMLHandler extends DefaultHandler{
 			this.inSiteCodeTag = false;
 		}else if (localName.equals("SiteName")) {
 			this.inSiteNameTag = false;
-			/*
 		}else if (localName.equals("AGL")) {
 			this.inAGLTag = false;
 		}else if (localName.equals("Address1")) {
@@ -195,7 +198,6 @@ public class XMLHandler extends DefaultHandler{
 			this.inStructureTypeTag = false;
 		}else if (localName.equals("Zip")) {
 			this.inZipTag = false;
-			*/
 		}
 	}
 
@@ -204,7 +206,7 @@ public class XMLHandler extends DefaultHandler{
 	@Override
 	public void characters(char ch[], int start, int length) {
 		if(this.inTotalRecordCountTag){
-			delegate.totalRecordsCount = Integer.parseInt(new String(ch, start, length));
+			delegate.setTotalRecordsCount(Integer.parseInt(new String(ch, start, length)));
 		}else if(this.inDeletedTag){
 			mySite.deleted = Integer.parseInt(new String(ch, start, length));
 		}else if(this.inLatitudeTag){
@@ -218,13 +220,12 @@ public class XMLHandler extends DefaultHandler{
 		}else if(this.inSiteNameTag){
 			mySite.siteName = new String(ch, start, length);
 		}else if(this.inLayerTag) {
-			//SiteLayer layer = SiteLayer.layerForName(context, new String(ch, start, length));
-			//if (layer == null) {
-				//layer = new SiteLayer(context, new String(ch, start, length));
-				//layer.save();
-			//}
+			/*SiteLayer layer = SiteLayer.layerForName(context, new String(ch, start, length));
+			if (layer == null) {
+				layer = new SiteLayer(context, new String(ch, start, length));
+				layer.save();
+			}*/
 			mySite.siteLayer = new String(ch, start, length);
-			/*
 		}else if(this.inAddress1Tag){
 			mySite.address = new String(ch, start, length);
 		}else if(this.inAGLTag){
@@ -257,7 +258,6 @@ public class XMLHandler extends DefaultHandler{
 			mySite.structureType = new String(ch, start, length);
 		}else if(this.inZipTag){
 			mySite.zip = new String(ch, start, length);
-		*/
 		}
 	}
 }

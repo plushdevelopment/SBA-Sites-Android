@@ -33,7 +33,6 @@ public class Site extends ActiveRecordBase<Site> {
 	@Column(name = "SITE_NAME")
 	public String siteName;
 	
-	/*
 	@Column(name = "SITE_ADDRESS")
 	public String address;
 	
@@ -81,7 +80,6 @@ public class Site extends ActiveRecordBase<Site> {
 	
 	@Column(name = "SITE_ZIP")
     public String zip;
-    */
     
 	public static ArrayList<Site> loadSitesForRegion(Context context, double minLat, double maxLat, double minLong, double maxLong) {
 		return Site.query(context, Site.class, new String[] { "SITE_NAME", "SITE_LATITUDE, SITE_LONGITUDE"}, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong, "SITE_NAME");
@@ -91,11 +89,20 @@ public class Site extends ActiveRecordBase<Site> {
 		return Site.querySingle(context, Site.class, null, String.format("SITE_MOBILEKEY = '%s'", mobileKey), null); 
 	}
 	
+	public static Site siteForName(Context context, String siteName) {
+		return Site.querySingle(context, Site.class, null, String.format("SITE_NAME = '%s'", siteName), null); 
+	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return siteName + " " + mobileKey;
+	}
+
+	public static ArrayList<Site> sitesForSearchText(Context context, String addressInput) {
+		// SELECT * FROM SITES WHERE SITE_NAME LIKE '%a%' OR SITE_CODE LIKE '%a%'
+		return Site.query(context, Site.class, new String[] { "SITE_NAME", "SITE_LATITUDE, SITE_LONGITUDE"}, "SITE_NAME LIKE '%" + addressInput + "%' OR SITE_CODE LIKE '%" + addressInput + "%'", "SITE_NAME");
 	}
 }

@@ -6,22 +6,27 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -37,6 +42,7 @@ import com.sbasite.sbasites.model.SiteLayer;
 public class SBAMapActivity extends MapActivity {
 	private MapView map;
 	private EditText searchText;
+	private ImageView welcomeImageView;
 	private MyLocationOverlay me;
 	private MapController mapController;
 	private Handler messageHandler;
@@ -55,7 +61,7 @@ public class SBAMapActivity extends MapActivity {
 	    		new Intent(this, Instructions.class));
 	    menu.findItem(R.id.layers).setIntent(
 	    		new Intent(this, Layers.class));
-	    menu.findItem(R.id.list_view).setIntent(
+		menu.findItem(R.id.list_view).setIntent(
 	    		new Intent(this, SiteListActivity.class));
 	    return true;
 	}
@@ -63,7 +69,16 @@ public class SBAMapActivity extends MapActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item){
 		super.onOptionsItemSelected(item);
-		startActivity(item.getIntent());
+		
+		if (item.getItemId() == R.id.list_view) {
+			final int result=1;
+			startActivityForResult(item.getIntent(), result);
+		} else if (item.getItemId() == R.id.layers) {
+			final int result=2;
+			startActivityForResult(item.getIntent(), result);
+		} else {
+			startActivity(item.getIntent());
+		}
 		
 		return true;
 	}
@@ -76,13 +91,28 @@ public class SBAMapActivity extends MapActivity {
 		setContentView(R.layout.main);
 		// Assign ivars to elements listed in main.xml
 		map=(MapView)findViewById(R.id.map);
-		searchText=(EditText)findViewById(R.id.searchText);
+		map.setClickable(false);
 		mapController = map.getController();
+		
+		welcomeImageView=(ImageView)findViewById(R.id.imageView1);
+		welcomeImageView.setVisibility(View.VISIBLE);
+		
 		btnSearch = (Button)findViewById(R.id.SearchButton);
-		/*
+		searchText=(EditText)findViewById(R.id.searchText);
+		
 		geoCoder = new Geocoder(this); //create new geocoder instance
 		btnSearch.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
+				//Intent searchIntent = new Intent(SBAMapActivity.this, SearchListActivity.class);
+				//searchIntent.putExtra("search_text", searchText.getText().toString());
+				//startActivity(searchIntent);
+				searchText.setText("");
+				searchText.setHint("Search");
+				welcomeImageView.setVisibility(View.GONE);
+				map.setClickable(true);
+				
 				String addressInput = searchText.getText().toString(); //Get input text
 
 				try {
@@ -112,43 +142,51 @@ public class SBAMapActivity extends MapActivity {
 					//@todo: Show error message
 					e.printStackTrace();
 				}
-
 			}
 		});
-		*/
-		//mapController.setCenter(getPoint(46.0730555556, -100.546666667)); // Set center to the center of North America
-		mapController.setCenter(getPoint(26.35049, -80.089004)); // Set center to the center of Boca Raton, FL
-		mapController.setZoom(11);
-		//map.getZoomButtonsController().setAutoDismissed(false);
-		//map.getZoomButtonsController().setVisible(true);
 		
-		//map.displayZoomControls(true);
+		mapController.setCenter(getPoint(46.0730555556, -100.546666667)); // Set center to the center of North America
+		//mapController.setCenter(getPoint(26.35049, -80.089004)); // Set center to the center of Boca Raton, FL
+		mapController.setZoom(4);
+		
+		map.displayZoomControls(true);
+		map.setSatellite(true);
 		
 		ArrayList<SiteLayer> layers = SiteLayer.layers(this);
 		Drawable marker;
-		/*
+		ArrayList<SitesOverlay> overlays = new ArrayList<SBAMapActivity.SitesOverlay>();
+		Drawable masterMarker = getResources().getDrawable(R.drawable.owned);
+		masterMarker.setBounds(0, 0, masterMarker.getIntrinsicWidth(), masterMarker.getIntrinsicHeight());
+		final SitesOverlay masterOverlay = new SitesOverlay(masterMarker);
+		map.getOverlays().add(masterOverlay);
+		
 		for (SiteLayer siteLayer : layers) {
 			marker=getResources().getDrawable(siteLayer.getPinIcon());
 			marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
-			SiteItemizedOverlay overlay = new SiteItemizedOverlay(marker);
-			map.getOverlays().add(overlay);
+			SitesOverlay sitesOverlay = new SitesOverlay(marker);
+			overlays.add(sitesOverlay);
 		}
-		*/
+		for (SitesOverlay anOverlay : overlays) {
+			map.getOverlays().add(anOverlay);
+		}
 		me=new MyLocationOverlay(this, map);
 		map.getOverlays().add(me);
-		//me.enableMyLocation();
-		//me.enableCompass();
-		/*
+		me.enableMyLocation();
+		me.enableCompass();
+		
         messageHandler = new Handler() {
 			public void handleMessage(Message msg) {
+				if (map.getZoomLevel() < 11) {
+					mapController.setZoom(11);
+				}
         		if(msg.obj.getClass() == OverlayItem.class) {
         			OverlayItem overlayItem = (OverlayItem)msg.obj;
-        			sitesOverlay.addOverlay(overlayItem);
+        			masterOverlay.addOverlay(overlayItem);
         		}
         		if(msg.obj.getClass() == ArrayList.class) {
 					ArrayList<Site> overlays = (ArrayList<Site>)msg.obj;
 					getSBASitesApplication().setCurrentSites(overlays);
-        			sitesOverlay.addOverlays(overlays);
+        			masterOverlay.addOverlays(overlays);
         		}
  
             }
@@ -158,7 +196,6 @@ public class SBAMapActivity extends MapActivity {
      // updateMapOverlaysThread is declared as a member variable 
 		updateMapOverlaysThread = new UpdateMapsOverlaysThread(this, map, messageHandler, this.getSBASitesApplication());
 				new Thread(updateMapOverlaysThread).start();
-		*/
 	}
 	
 	@Override
@@ -184,12 +221,28 @@ public class SBAMapActivity extends MapActivity {
 			return(true);
 		}
 		else if (keyCode == KeyEvent.KEYCODE_Z) {
+			InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
 			map.displayZoomControls(true);
 			return(true);
 		}
 		
 		return(super.onKeyDown(keyCode, event));
 	}
+ 	
+ 	@Override
+    public void onActivityResult(int requestCode,int resultCode,Intent data)
+    {
+     super.onActivityResult(requestCode, resultCode, data);
+     if (requestCode == 1) {
+    	 String latString=data.getStringExtra("Latitude");
+    	 String longString=data.getStringExtra("Longitude");
+    	 navigateToLocation(Double.valueOf(latString), Double.valueOf(longString), map);
+     } else if (requestCode == 2) {
+
+     }
+     
+    }
  	
  	 /**
  	  * Navigates a given MapView to the specified Longitude and Latitude
@@ -199,14 +252,19 @@ public class SBAMapActivity extends MapActivity {
  	    mv.displayZoomControls(true); //display Zoom (seems that it doesn't work yet)
  	    MapController mc = mv.getController();
  	    mc.animateTo(p); //move map to the given point
- 	    int zoomlevel = mv.getMaxZoomLevel(); //detect maximum zoom level
- 	    mc.setZoom(zoomlevel - 1); //zoom
- 	    mv.setSatellite(false); //display only "normal" mapview	
+ 	    //int zoomlevel = mv.getMaxZoomLevel(); //detect maximum zoom level
+ 	    mc.setZoom(11); //zoom
+ 	    //mv.setSatellite(false); //display only "normal" mapview	
  	  }
  	
  	public void userLocationClicked(View view)  
  	{
+ 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
+		
  		if (me != null) {
+ 			welcomeImageView.setVisibility(View.GONE);
+			map.setClickable(true);
  			mapController.setCenter(me.getMyLocation());
  			mapController.setZoom(13);
  		}
@@ -265,14 +323,21 @@ public class SBAMapActivity extends MapActivity {
  		
 		@Override
 		  protected boolean onTap(int i) {
+			
+			InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
+			
 		   OverlayItem item = items.get(i);
 		   AlertDialog.Builder dialog = new AlertDialog.Builder(SBAMapActivity.this);
 		   dialog.setTitle(item.getTitle());
 		   dialog.setMessage(item.getSnippet());
+		   final String mobileKey = Site.siteForName(getApplicationContext(), item.getTitle()).mobileKey;
 		   dialog.setPositiveButton("Load", new DialogInterface.OnClickListener() {
 		    public void onClick(DialogInterface dialog, int Click) {
-		     Intent layersIntent = new Intent(SBAMapActivity.this, SiteDetailActivity.class);
-		     startActivity(layersIntent);    }
+		     Intent intent = new Intent(SBAMapActivity.this, SiteDetailActivity.class);
+		     intent.putExtra("SiteName", mobileKey);
+		     startActivity(intent);
+		     }
 		   });
 		   dialog.show();
 		   return true;

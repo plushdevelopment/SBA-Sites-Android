@@ -6,6 +6,7 @@ import com.sbasite.sbasites.R;
 import com.sbasite.sbasites.model.Site;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,11 +18,12 @@ public class SiteListActivity extends ListActivity {
 
 	private Button doneButton;
 	private SiteListAdapter listAdapter;
-
+	private ArrayList<Site> sites;
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ArrayList<Site> sites = getSBASitesApplication().getCurrentSites();
+        sites = getSBASitesApplication().getCurrentSites();
         Log.d("SiteListActivity", sites.toString());
         listAdapter = new SiteListAdapter(this, sites);
         setContentView(R.layout.listview);
@@ -36,6 +38,11 @@ public class SiteListActivity extends ListActivity {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
+		Intent intent=new Intent();
+	    intent.putExtra("Latitude", sites.get(position).latitude);
+	    intent.putExtra("Longitude", sites.get(position).longitude);
+	    setResult(RESULT_OK, intent);
+	    finish();
 	}
 
 	private void setUpViews() {

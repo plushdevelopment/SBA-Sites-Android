@@ -1,38 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:orientation="horizontal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
 		android:layout_width="fill_parent"
-		android:id="@+id/TopLayout" android:layout_height="wrap_content">
-		<ImageButton
-    		android:layout_width="wrap_content"  
-        	android:layout_height="wrap_content"  
-        	android:id="@+id/SiteIconImageButton" 
-        	android:layout_toLeftOf="@+id/SiteNameTextView"
-        	android:src="@drawable/location" 
-        	android:layout_gravity="left|center_vertical" 
-        	android:onClick="@string/userLocationClicked">
-    	</ImageButton>
-		<EditText
-			android:id="@+id/searchText"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_horizontal|center_vertical" android:layout_width="wrap_content" android:hint="Search                 "/>
-		<Button
-			android:id="@+id/SearchButton"
-			android:text="Search"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="right|center_vertical">
-			</Button> 
-	</LinearLayout>
-	<com.google.android.maps.MapView
+		android:layout_height="fill_parent">
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:orientation="horizontal"
+			android:layout_width="fill_parent"
+			android:id="@+id/TopLayout" 
+			android:layout_height="wrap_content">
+			<ImageButton
+    			android:layout_width="wrap_content"  
+        		android:layout_height="wrap_content"  
+        		android:id="@+id/SiteIconImageButton" 
+        		android:layout_toLeftOf="@+id/SiteNameTextView"
+	        	android:src="@drawable/location" 
+    	    	android:layout_gravity="left|center_vertical" 
+        		android:onClick="@string/userLocationClicked">
+    		</ImageButton>
+			<EditText
+				android:id="@+id/searchText"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_horizontal|center_vertical"
+				android:layout_width="wrap_content"
+				 android:hint="Search"
+				android:layout_weight="1.0"/>
+			<Button
+				android:id="@+id/SearchButton"
+				android:text="Search"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="right|center_vertical">
+				</Button> 
+		</LinearLayout>
+		<FrameLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/frameLayout1">
+			<com.google.android.maps.MapView
 		android:id="@+id/map"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:apiKey="0rpLA5b4fBX8iWpkbDyBNQWPYdYsOGdiNyEi__g"
-		android:clickable="true" 
-		android:layout_below="@+id/TopLayout"/>
-    
-</RelativeLayout>
+		android:clickable="true"></com.google.android.maps.MapView>
+			<ImageView android:src="@drawable/welcome_instructions" android:layout_gravity="center_vertical|center_horizontal" android:layout_height="fill_parent" android:id="@+id/imageView1" android:layout_width="fill_parent" android:visibility="visible"></ImageView>
+		</FrameLayout>
+</LinearLayout>
