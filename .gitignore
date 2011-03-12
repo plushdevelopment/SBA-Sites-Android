@@ -17,3 +17,6 @@ xcuserdata
 .svn
 CVS
 .classpath
+
+/bin/SBASites-Android.apk
+/bin/resources.ap_
