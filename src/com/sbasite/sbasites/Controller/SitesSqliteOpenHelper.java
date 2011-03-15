@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.sbasite.sbasites;
+package com.sbasite.sbasites.Controller;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

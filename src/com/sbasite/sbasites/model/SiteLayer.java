@@ -23,7 +23,9 @@ public class SiteLayer extends ActiveRecordBase<SiteLayer> {
 		this.name = name;
 	}
 	
-	
+	public static final void initialize(Context context) {
+		
+	}
 	
 	@Column(name = "NAME")
 	public String name;

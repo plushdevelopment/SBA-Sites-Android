@@ -67,4 +67,15 @@
 
 	<string name="sba_is_a_leading">SBA is a leading independent owner and operator of wireless communications infrastructure in North and Central America. SBA generates revenue from two primary businesses - site leasing and site development services. The primary focus of the Company is the leasing of antenna space on its multi-tenant towers to a variety of wireless sercice providers under long-term lease contracts.</string>
 
+	<string name="LABEL_LAYER">Layer:</string>
+
+	<string name="LABEL_STATUS">Status:</string>
+
+	<string name="LABEL_COORDINATES">Coordinates:</string>
+	<string name="LABEL_TYPE">Type:</string>
+	<string name="LABEL_HEIGHT">Height(ft):</string>
+	<string name="LABEL_AGL">Grd Elev:</string>
+	<string name="LABEL_MTA">MTA:</string>
+	<string name="LABEL_BTA">BTA:</string>
+
 </resources>

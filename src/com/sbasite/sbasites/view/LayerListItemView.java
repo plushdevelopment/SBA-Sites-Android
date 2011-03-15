@@ -1,5 +1,8 @@
-package com.sbasite.sbasites;
+package com.sbasite.sbasites.view;
 
+import com.sbasite.sbasites.R;
+import com.sbasite.sbasites.R.drawable;
+import com.sbasite.sbasites.R.id;
 import com.sbasite.sbasites.model.SiteLayer;
 
 import android.content.Context;

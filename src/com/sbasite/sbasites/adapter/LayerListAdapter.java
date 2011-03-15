@@ -2,9 +2,9 @@ package com.sbasite.sbasites.adapter;
 
 import java.util.ArrayList;
 
-import com.sbasite.sbasites.LayerListItemView;
 import com.sbasite.sbasites.R;
 import com.sbasite.sbasites.model.SiteLayer;
+import com.sbasite.sbasites.view.LayerListItemView;
 
 import android.content.Context;
 import android.util.Log;

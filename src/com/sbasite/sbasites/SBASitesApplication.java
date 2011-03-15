@@ -1,30 +1,17 @@
 package com.sbasite.sbasites;
 
 import java.io.IOException;
-import java.net.URL;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
-
+import com.sbasite.sbasites.Controller.SitesSqliteOpenHelper;
 import com.sbasite.sbasites.XMLHandler.XMLHandlerDelegate;
 import com.sbasite.sbasites.model.DBMetadata;
-import com.sbasite.sbasites.model.SearchResult;
 import com.sbasite.sbasites.model.Site;
-import com.sbasite.sbasites.model.SiteLayer;
-
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 public class SBASitesApplication extends com.activeandroid.Application implements XMLHandlerDelegate {
 
-	public ArrayList<Site> currentSites;
+	public ArrayList<Site> currentSites = new ArrayList<Site>();
 	public SQLiteDatabase database;
 	public DBMetadata metadata;
 	public String lastUpdate;
@@ -45,21 +32,7 @@ public class SBASitesApplication extends com.activeandroid.Application implement
  
         try { database = helper.openDataBase(); }
         catch (SQLException sqle) { throw sqle; }
-		
-        /*
-        metadata = DBMetadata.last(this, DBMetadata.class);
         
-        if (metadata == null) {
-			metadata = new DBMetadata(this);
-			metadata.skip = 0;
-			metadata.take = 1;
-			metadata.lastUpdate = "2008-09-24T15:05:04";
-			metadata.save();
-		}
-        */
-        // TODO 
-		// Do something with this array initially
-		currentSites = new ArrayList<Site>();
         /*
 		try {
             // Create a URL we want to load some xml-data from.

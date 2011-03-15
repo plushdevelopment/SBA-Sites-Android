@@ -30,5 +30,6 @@
 		<activity android:label="@string/about_sba_communications" android:name="AboutSbaCommunications">
 		</activity>
 		<activity android:label="Search" android:name=".SearchListActivity"></activity>
+		<activity android:name=".Activity.SiteImageViewActivity" android:label="Site Image"></activity>
 	</application>
 </manifest>

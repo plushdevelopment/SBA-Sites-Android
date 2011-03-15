@@ -17,6 +17,7 @@ import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -110,8 +111,7 @@ public class SBAMapActivity extends MapActivity {
 				//startActivity(searchIntent);
 				searchText.setText("");
 				searchText.setHint("Search");
-				welcomeImageView.setVisibility(View.GONE);
-				map.setClickable(true);
+				
 				
 				String addressInput = searchText.getText().toString(); //Get input text
 
@@ -231,18 +231,20 @@ public class SBAMapActivity extends MapActivity {
 	}
  	
  	@Override
-    public void onActivityResult(int requestCode,int resultCode,Intent data)
-    {
-     super.onActivityResult(requestCode, resultCode, data);
-     if (requestCode == 1) {
-    	 String latString=data.getStringExtra("Latitude");
-    	 String longString=data.getStringExtra("Longitude");
-    	 navigateToLocation(Double.valueOf(latString), Double.valueOf(longString), map);
-     } else if (requestCode == 2) {
+    public void onActivityResult(int requestCode,int resultCode,Intent data) 
+ 	{
+ 		super.onActivityResult(requestCode, resultCode, data);
+ 		welcomeImageView.setVisibility(View.GONE);
+ 		map.setClickable(true);
+ 		if (requestCode == 1) {
+ 			String latString=data.getStringExtra("Latitude");
+ 			String longString=data.getStringExtra("Longitude");
+ 			navigateToLocation(Double.valueOf(latString), Double.valueOf(longString), map);
+ 		} else if (requestCode == 2) {
 
-     }
-     
-    }
+ 		}
+
+ 	}
  	
  	 /**
  	  * Navigates a given MapView to the specified Longitude and Latitude
@@ -263,10 +265,32 @@ public class SBAMapActivity extends MapActivity {
 		imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
 		
  		if (me != null) {
- 			welcomeImageView.setVisibility(View.GONE);
-			map.setClickable(true);
- 			mapController.setCenter(me.getMyLocation());
- 			mapController.setZoom(13);
+ 			GeoPoint location = me.getMyLocation();
+ 			if (null == location) {
+ 				
+ 				location = getPoint(26.35049, -80.089004);
+ 				welcomeImageView.setVisibility(View.GONE);
+ 				map.setClickable(true);
+ 				mapController.setCenter(location);
+ 				mapController.setZoom(13);
+ 				
+ 				/*
+ 				AlertDialog.Builder dialog = new AlertDialog.Builder(SBAMapActivity.this);
+ 				dialog.setTitle("Location Error");
+ 				dialog.setMessage("Your location could not be found");
+ 				dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+ 					public void onClick(DialogInterface dialog, int Click) {
+ 						dialog.dismiss();
+ 					}
+ 				});
+ 				dialog.show();
+ 				*/
+ 			} else {
+ 				welcomeImageView.setVisibility(View.GONE);
+ 				map.setClickable(true);
+ 				mapController.setCenter(location);
+ 				mapController.setZoom(13);
+ 			}
  		}
  	}  
 
@@ -298,7 +322,7 @@ public class SBAMapActivity extends MapActivity {
 			items.removeAll(items);
 			for (int i = 0; i < overlays.size(); i++) {
 				Site site = overlays.get(i);
-				OverlayItem overlayItem = new OverlayItem(this.getPoint(site.latitude, site.longitude), site.siteName, site.siteCode);
+				OverlayItem overlayItem = new OverlayItem(this.getPoint(site.latitude, site.longitude), site.siteName, site.mobileKey);
 				items.add(overlayItem);
 			}
 		    populate();
@@ -327,15 +351,15 @@ public class SBAMapActivity extends MapActivity {
 			InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 			imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
 			
-		   OverlayItem item = items.get(i);
+		   final OverlayItem item = items.get(i);
 		   AlertDialog.Builder dialog = new AlertDialog.Builder(SBAMapActivity.this);
 		   dialog.setTitle(item.getTitle());
 		   dialog.setMessage(item.getSnippet());
-		   final String mobileKey = Site.siteForName(getApplicationContext(), item.getTitle()).mobileKey;
 		   dialog.setPositiveButton("Load", new DialogInterface.OnClickListener() {
 		    public void onClick(DialogInterface dialog, int Click) {
+		    	Log.d("Overlay Tapped", item.getSnippet());
 		     Intent intent = new Intent(SBAMapActivity.this, SiteDetailActivity.class);
-		     intent.putExtra("SiteName", mobileKey);
+		     intent.putExtra("MobileKey", item.getSnippet());
 		     startActivity(intent);
 		     }
 		   });

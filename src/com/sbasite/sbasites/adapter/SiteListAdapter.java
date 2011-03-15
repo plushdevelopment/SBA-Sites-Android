@@ -1,7 +1,10 @@
-package com.sbasite.sbasites;
+package com.sbasite.sbasites.adapter;
 
 import java.util.ArrayList;
 
+import com.sbasite.sbasites.R;
+import com.sbasite.sbasites.SiteListItemView;
+import com.sbasite.sbasites.R.layout;
 import com.sbasite.sbasites.model.Site;
 
 import android.content.Context;

@@ -77,12 +77,11 @@ public class Site extends ActiveRecordBase<Site> {
 	
 	@Column(name = "SITE_STRUCTURETYPE")
 	public String structureType;
-	
 	@Column(name = "SITE_ZIP")
     public String zip;
     
 	public static ArrayList<Site> loadSitesForRegion(Context context, double minLat, double maxLat, double minLong, double maxLong) {
-		return Site.query(context, Site.class, new String[] { "SITE_NAME", "SITE_LATITUDE, SITE_LONGITUDE"}, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong, "SITE_NAME");
+		return Site.query(context, Site.class, null, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong, "SITE_NAME");
 	}
 	
 	public static Site siteForMobileKey(Context context, String mobileKey) {
@@ -93,16 +92,51 @@ public class Site extends ActiveRecordBase<Site> {
 		return Site.querySingle(context, Site.class, null, String.format("SITE_NAME = '%s'", siteName), null); 
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return siteName + " " + mobileKey;
-	}
-
 	public static ArrayList<Site> sitesForSearchText(Context context, String addressInput) {
 		// SELECT * FROM SITES WHERE SITE_NAME LIKE '%a%' OR SITE_CODE LIKE '%a%'
-		return Site.query(context, Site.class, new String[] { "SITE_NAME", "SITE_LATITUDE, SITE_LONGITUDE"}, "SITE_NAME LIKE '%" + addressInput + "%' OR SITE_CODE LIKE '%" + addressInput + "%'", "SITE_NAME");
+		return Site.query(context, Site.class, null, "SITE_NAME LIKE '%" + addressInput + "%' OR SITE_CODE LIKE '%" + addressInput + "%'", "SITE_NAME");
 	}
+
+	public boolean detailsLoaded() {
+		if (null == address) { 
+			return false;
+		} else if (agl == null) {
+			return false;
+		} else if (bta == null) {
+			return false;
+		} else if (city == null) {
+			return false;
+		} else if (contact == null) {
+			return false;
+		} else if (county == null) {
+			return false;
+		} else if (email == null) {
+			return false;
+		} else if (lastUpdated == null) {
+			return false;
+		} else if (mta == null) {
+			return false;
+		} else if (phone == null) {
+			return false;
+		} else if (siteStatus == null) {
+			return false;
+		} else if (stateProvince == null) {
+			return false;
+		} else if (structureHeight == null) {
+			return false;
+		} else if (structureID == null) {
+			return false;
+		} else if (structureType == null) {
+			return false;
+		} else if (zip == null) {
+			return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return mobileKey + siteCode + siteLayer + siteStatus;
+	}
+	
 }

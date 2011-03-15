@@ -3,6 +3,7 @@ package com.sbasite.sbasites;
 import java.util.ArrayList;
 
 import com.sbasite.sbasites.R;
+import com.sbasite.sbasites.adapter.SiteListAdapter;
 import com.sbasite.sbasites.model.Site;
 
 import android.app.ListActivity;
