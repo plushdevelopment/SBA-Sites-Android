@@ -32,6 +32,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.google.android.maps.GeoPoint;
@@ -56,7 +57,6 @@ public class SBAMapActivity extends MapActivity {
 	private static final String TAG = SBAMapActivity.class.getSimpleName();
 	private MapView mapView;
 	private MapController mapController;
-	private OverlayManager overlayManager;
 	private EditText searchText;
 	private ImageView welcomeImageView;
 	private MyLocationOverlay me;
@@ -64,6 +64,8 @@ public class SBAMapActivity extends MapActivity {
 	private UpdateMapsOverlaysThread updateMapOverlaysThread;
 	private List<Overlay> mapOverlays;
 	private Button btnSearch;
+	private LayerItemizedOverlay itemizedOverlay;
+	Drawable marker;
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -101,61 +103,6 @@ public class SBAMapActivity extends MapActivity {
 		super.onCreate(savedInstanceState);
 		setupViews();	
 	}
-	
-	@Override
-	public void onWindowFocusChanged(boolean b) {
-		for (SiteLayer layer : getSBASitesApplication().getLayers()) {
-			createOverlay(layer);
-		}
-	}
-	
-	private void createOverlay(final SiteLayer layer) {
-			/*
-			Drawable drawable = getResources().getDrawable(layer.getPinIcon());
-			LayerItemizedOverlay itemizedOverlay = new LayerItemizedOverlay(drawable, mapView);
-			mapOverlays.add(itemizedOverlay);
-			*/
-		
-			//animation will be rendered to this ImageView
-			ImageView loaderanim = (ImageView) findViewById(R.id.loader);
-			
-			ManagedOverlay managedOverlay = overlayManager.createOverlay(layer.name, getResources().getDrawable(layer.getPinIcon()));
-
-			// default built-in animation
-			managedOverlay.enableLazyLoadAnimation(loaderanim);
-			// custom animation
-			// managedOverlay.enableLazyLoadAnimation(loaderanim).setAnimationDrawable((AnimationDrawable)getResources().getDrawable(R.anim.myanim));
-
-			managedOverlay.setLazyLoadCallback(new LazyLoadCallback() {
-				
-				public List<ManagedOverlayItem> lazyload(GeoPoint topLeft, GeoPoint bottomRight, ManagedOverlay overlay) throws LazyLoadException {
-					List<ManagedOverlayItem> items = new LinkedList<ManagedOverlayItem>();
-					try {
-						double latSpan = ((mapView.getLatitudeSpan() / 1000000.0)/2.0);
-			    		double longSpan = ((mapView.getLongitudeSpan() / 1000000.0)/2.0);
-			    		double latCenter = (mapView.getMapCenter().getLatitudeE6()/1000000.0);
-			    		double longCenter = (mapView.getMapCenter().getLongitudeE6()/1000000.0);
-			    		double maxLat = (latCenter + latSpan);
-			    		double minLat = (latCenter -  latSpan);
-			    		double maxLong = (longCenter + longSpan);
-			    		double minLong = (longCenter - longSpan);
-			    		List<Site> sites = Site.loadSitesForRegionInLayer(getApplicationContext(), minLat, maxLat, minLong, maxLong, layer.name);
-						//List<Site> sites = Site.findMarker(topLeft, bottomRight, overlay.getZoomlevel());
-						for (int i = 0; i < sites.size(); i++) {
-							Site site = sites.get(i);
-							ManagedOverlayItem item = new ManagedOverlayItem(site.getPoint(), site.siteName, site.siteCode);
-							items.add(item);
-						}
-						// lets simulate a latency
-						TimeUnit.SECONDS.sleep(1);
-					} catch (Exception e) {
-						throw new LazyLoadException(e.getMessage());
-					}
-					return items;
-				}
-			});
-			overlayManager.populate();
-	}
 
 	private void setupViews() {
 		// Inflate your view
@@ -163,10 +110,18 @@ public class SBAMapActivity extends MapActivity {
 		// Assign ivars to elements listed in main.xml
 		mapView=(MapView)findViewById(R.id.map);
 		mapView.setClickable(false);
+		mapView.setBuiltInZoomControls(true);
+		mapView.setSatellite(true);
 		mapController = mapView.getController();
 		mapOverlays = mapView.getOverlays();
-		
-		overlayManager = new OverlayManager(getApplication(), mapView);
+		marker = this.getResources().getDrawable(R.drawable.yellow_icon);
+		marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
+		itemizedOverlay = new LayerItemizedOverlay(marker, mapView);
+		mapView.getOverlays().add(itemizedOverlay);
+		me=new MyLocationOverlay(this, mapView);
+		mapOverlays.add(me);
+		me.enableMyLocation();
+		me.enableCompass();
 		
 		mapController.setCenter(getPoint(46.0730555556, -100.546666667)); // Set center to the center of North America
 		mapController.setZoom(4);
@@ -176,27 +131,6 @@ public class SBAMapActivity extends MapActivity {
 		
 		btnSearch = (Button)findViewById(R.id.SearchButton);
 		btnSearch.setEnabled(true);
-		
-		searchText=(EditText)findViewById(R.id.searchText);
-		
-		/*
-		searchText.setOnKeyListener(new OnKeyListener() {
-			public boolean onKey(View view, int keyCode, KeyEvent event) {
-				Log.d(TAG, String.format("keyCode == %d", keyCode));
-				//final int action = event.getAction();
-				boolean ret = false;
-				if (keyCode == KeyEvent.KEYCODE_MENU) {
-					
-				} else if (keyCode == KeyEvent.KEYCODE_ENTER) {
-					if (searchText.getTextSize() > 0.0) {
-						startSearch();
-					}
-				}
-				return ret;
-			}
-		});
-		*/
-		
 		btnSearch.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if (searchText.getTextSize() > 0.0) {
@@ -204,140 +138,53 @@ public class SBAMapActivity extends MapActivity {
 				}
 			}
 		});
-		/*
-		Drawable marker;
 		
-		//ArrayList<SitesOverlay> overlays = new ArrayList<SBAMapActivity.SitesOverlay>();
-		//Drawable masterMarker = getResources().getDrawable(R.drawable.owned);
-		//masterMarker.setBounds(0, 0, masterMarker.getIntrinsicWidth(), masterMarker.getIntrinsicHeight());
-		//final SitesOverlay masterOverlay = new SitesOverlay(masterMarker);
-		//map.getOverlays().add(masterOverlay);
+		searchText=(EditText)findViewById(R.id.searchText);
 		
-		for (SiteLayer siteLayer : getSBASitesApplication().getLayers()) {
-			marker=getResources().getDrawable(siteLayer.getPinIcon());
-			marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
-			LayerItemizedOverlay sitesOverlay = new LayerItemizedOverlay(marker, mapView);
-			overlays.add(sitesOverlay);
-		}
-		for (Overlay anOverlay : overlays) {
-			mapView.getOverlays().add(anOverlay);
-		}
-		*/
-		me=new MyLocationOverlay(this, mapView);
-		mapOverlays.add(me);
-		me.enableMyLocation();
-		me.enableCompass();
-		/*
 		messageHandler = new Handler() {
 			public void handleMessage(Message msg) {
-				if (msg.what == 1) {
-					double latSpan = ((mapView.getLatitudeSpan() / 1000000.0)/2.0);
-		    		double longSpan = ((mapView.getLongitudeSpan() / 1000000.0)/2.0);
-		    		double latCenter = (mapView.getMapCenter().getLatitudeE6()/1000000.0);
-		    		double longCenter = (mapView.getMapCenter().getLongitudeE6()/1000000.0);
-		    		double maxLat = (latCenter + latSpan);
-		    		double minLat = (latCenter -  latSpan);
-		    		double maxLong = (longCenter + longSpan);
-		    		double minLong = (longCenter - longSpan);
-		    		for (SiteLayer layer : getSBASitesApplication().getLayers()) {
-		    			ArrayList<Site> sites = Site.loadSitesForRegionInLayer(getApplicationContext(), minLat, maxLat, minLong, maxLong, layer.name);
-		    			if (!sites.isEmpty()) {
-		    				LayerItemizedOverlay overlay = (LayerItemizedOverlay)mapOverlays.get(getSBASitesApplication().getLayers().indexOf(layer));
-		    				overlay.addOverlay()
-			    		}
-		    		}
+				if (welcomeImageView.getVisibility() == View.GONE) {
+					if (mapView.getZoomLevel() < 13) {
+						mapView.getController().setZoom(13);
+					} else if (msg.what == 1) {
+						double latSpan = ((mapView.getLatitudeSpan() / 1000000.0)/2.0);
+						double longSpan = ((mapView.getLongitudeSpan() / 1000000.0)/2.0);
+						double latCenter = (mapView.getMapCenter().getLatitudeE6()/1000000.0);
+						double longCenter = (mapView.getMapCenter().getLongitudeE6()/1000000.0);
+						double maxLat = (latCenter + latSpan);
+						double minLat = (latCenter -  latSpan);
+						double maxLong = (longCenter + longSpan);
+						double minLong = (longCenter - longSpan);
+						itemizedOverlay.removeAllItems();
+						ArrayList<Site> sites = Site.loadSitesForRegion(getApplicationContext(), minLat, maxLat, minLong, maxLong);
+						if (!sites.isEmpty()) {
+							for (Site site : sites) {
+								itemizedOverlay.addOverlay(new SiteOverlayItem(site));
+							}
+						}
+					}
 				}
-				if (mapView.getZoomLevel() < 11) {
-					mapView.getController().setZoom(11);
-				}
-        		
-        		if(msg.obj.getClass() == ArrayList.class) {
-					ArrayList<Site> overlays = (ArrayList<Site>)msg.obj;
-					getSBASitesApplication().setCurrentSites(overlays);
-        			//masterOverlay.addOverlays(overlays);
-        		}
             }
         };
         
 		updateMapOverlaysThread = new UpdateMapsOverlaysThread(this, mapView, messageHandler, this.getSBASitesApplication());
 				new Thread(updateMapOverlaysThread).start();
-				*/
 	}
 
 	protected void startSearch() {
-		
 		String addressInput = searchText.getText().toString(); //Get input text
-		
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
-		
 		Intent searchIntent = new Intent(SBAMapActivity.this, SearchListActivity.class);
 		searchIntent.putExtra("search_text", addressInput);
 		startActivity(searchIntent);
-
 		searchText.setText("");
 		searchText.setHint("Search");
-		/*
-		try {
-
-			List<Address> foundAdresses = geoCoder.getFromLocationName(addressInput, 1); //Search addresses
-			if (foundAdresses.size() == 0) { //if no address found, display an error
-				Dialog locationError = new AlertDialog.Builder(SBAMapActivity.this)
-				.setIcon(0)
-				.setTitle("Error")
-				.setPositiveButton(R.string.ok, null)
-				.setMessage("Sorry, your address doesn't exist.")
-				.create();
-				locationError.show(); 
-			}
-			else { //else display address on map
-				for (int i = 0; i < foundAdresses.size(); ++i) {
-					//Save results as Longitude and Latitude
-					//@todo: if more than one result, then show a select-list
-					Address x = foundAdresses.get(i);
-					lat = x.getLatitude();
-					lon = x.getLongitude();
-				}
-				navigateToLocation((lat * 1000000), (lon * 1000000), map); //display the found address
-			}
-		}
-		catch (Exception e) {
-			//@todo: Show error message
-			e.printStackTrace();
-		}
-		*/
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		
-	}
-	
-	@Override
-	public void onPause() {
-		super.onPause();
-	}		
+	}	
 	
  	@Override
 	protected boolean isRouteDisplayed() {
 		return(false);
-	}
- 	
- 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_S) {
-			mapView.setSatellite(!mapView.isSatellite());
-			return(true);
-		}
-		else if (keyCode == KeyEvent.KEYCODE_Z) {
-			InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-			imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
-			mapView.displayZoomControls(true);
-			return(true);
-		}
-		
-		return(super.onKeyDown(keyCode, event));
 	}
  	
  	@Override
@@ -353,19 +200,15 @@ public class SBAMapActivity extends MapActivity {
  		} else if (requestCode == 2) {
 
  		}
-
  	}
  	
- 	 /**
- 	  * Navigates a given MapView to the specified Longitude and Latitude
- 	  */
  	  public static void navigateToLocation (double latitude, double longitude, MapView mv) {
  	    GeoPoint p = new GeoPoint((int) latitude, (int) longitude); //new GeoPoint
  	    mv.displayZoomControls(true); //display Zoom (seems that it doesn't work yet)
  	    MapController mc = mv.getController();
  	    mc.animateTo(p); //move map to the given point
  	    //int zoomlevel = mv.getMaxZoomLevel(); //detect maximum zoom level
- 	    mc.setZoom(11); //zoom
+ 	    mc.setZoom(15); //zoom
  	    //mv.setSatellite(false); //display only "normal" mapview	
  	  }
  	
@@ -402,7 +245,7 @@ public class SBAMapActivity extends MapActivity {
 	private GeoPoint getPoint(double lat, double lon) {
 		return(new GeoPoint((int)(lat*1000000.0), (int)(lon*1000000.0)));
 	}
-		
+	/*	
 	private class SitesOverlay extends ItemizedOverlay<OverlayItem> {
 		private List<OverlayItem> items=new ArrayList<OverlayItem>();
 		private Drawable marker=null;
@@ -473,4 +316,5 @@ public class SBAMapActivity extends MapActivity {
 			return(items.size());
 		}
 	}
+	*/
 }
