@@ -144,6 +144,7 @@ public class SBAMapActivity extends MapActivity {
 		messageHandler = new Handler() {
 			public void handleMessage(Message msg) {
 				if (welcomeImageView.getVisibility() == View.GONE) {
+					
 					if (mapView.getZoomLevel() < 13) {
 						mapView.getController().setZoom(13);
 					} else if (msg.what == 1) {
@@ -155,20 +156,23 @@ public class SBAMapActivity extends MapActivity {
 						double minLat = (latCenter -  latSpan);
 						double maxLong = (longCenter + longSpan);
 						double minLong = (longCenter - longSpan);
-						itemizedOverlay.removeAllItems();
+						//itemizedOverlay.removeAllItems();
 						ArrayList<Site> sites = Site.loadSitesForRegion(getApplicationContext(), minLat, maxLat, minLong, maxLong);
 						if (!sites.isEmpty()) {
+							itemizedOverlay.addOverlays(sites);
+							/*
 							for (Site site : sites) {
 								itemizedOverlay.addOverlay(new SiteOverlayItem(site));
 							}
+							*/
 						}
 					}
 				}
             }
         };
         
-		updateMapOverlaysThread = new UpdateMapsOverlaysThread(this, mapView, messageHandler, this.getSBASitesApplication());
-				new Thread(updateMapOverlaysThread).start();
+		updateMapOverlaysThread = new UpdateMapsOverlaysThread(mapView, messageHandler);
+		new Thread(updateMapOverlaysThread).start();
 	}
 
 	protected void startSearch() {

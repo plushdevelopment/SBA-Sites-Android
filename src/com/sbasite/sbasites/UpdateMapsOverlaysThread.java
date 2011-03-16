@@ -24,7 +24,6 @@ public class UpdateMapsOverlaysThread implements Runnable {
  
 	private int zoomLevel = 0;
 	private Handler mainThreadMessageHandler = null;
-	private Context context = null;
 	private MapView mapView = null;
 	private GeoPoint mapCenter = null;
  
@@ -32,8 +31,7 @@ public class UpdateMapsOverlaysThread implements Runnable {
 	 * @param context
 	 * @param mapView
 	 */
-	public UpdateMapsOverlaysThread(Context context, MapView mapView, Handler messageHandler, SBASitesApplication application) {
-		this.context = context;
+	public UpdateMapsOverlaysThread(MapView mapView, Handler messageHandler) {
 		this.mapView = mapView;
 		this.mainThreadMessageHandler = messageHandler;
 		firstUpdate = true;
