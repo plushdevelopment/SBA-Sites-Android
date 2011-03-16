@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 public class SearchListItemView extends LinearLayout {
-	
+	private static final String TAG = SearchListItemView.class.getSimpleName();
 	private SearchResult result;
 	private Button resultButton;
 
@@ -27,17 +27,11 @@ public class SearchListItemView extends LinearLayout {
 		this.result = result;
 		Drawable icon = getResources().getDrawable(R.drawable.cw);
 		resultButton.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
-		resultButton.setText(this.result.title);
+		resultButton.setText(result.title);
 	}
 
 	public SearchResult getResult() {
 		return result;
 	}
-
-	public void setResult(SearchResult result) {
-		this.result = result;
-	}
-
-	
 
 }

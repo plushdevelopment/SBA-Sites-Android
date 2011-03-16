@@ -7,12 +7,13 @@ import com.sbasite.sbasites.view.SearchListItemView;
 import com.sbasite.sbasites.model.SearchResult;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 public class SearchResultListAdapter extends BaseAdapter {
-	
+	private static final String TAG = SearchResultListAdapter.class.getSimpleName();
 	private Context context;
 	private ArrayList<SearchResult> results;
 	
@@ -27,25 +28,25 @@ public class SearchResultListAdapter extends BaseAdapter {
 		return results.size();
 	}
 
-	public Object getItem(int index) {
+	public SearchResult getItem(int index) {
 		return (null == results) ? null : results.get(index);
 	}
 
 	public long getItemId(int index) {
 		return index;
 	}
-
 	
 	 public View getView(int position, View convertView, ViewGroup parent) {
-		
-		SearchListItemView SearchListItemView;
+		 
+		SearchListItemView searchListItemView;
 		if (null == convertView) {
-			SearchListItemView = (SearchListItemView)View.inflate(context, R.layout.search_result_list_item, null);
+			searchListItemView = (SearchListItemView)View.inflate(context, R.layout.search_result_list_item, null);
 		} else {
-			SearchListItemView = (SearchListItemView)convertView;
+			searchListItemView = (SearchListItemView)convertView;
 		}
-		SearchListItemView.setResult(results.get(position));
-		return SearchListItemView;
+		searchListItemView.setSearchResult(results.get(position));
+		Log.d(TAG, searchListItemView.getResult().toString());
+		return searchListItemView;
 	}
 
 	 public void forceReload() {

@@ -3,14 +3,14 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
-	<Button android:layout_height="wrap_content"
- 		android:id="@+id/Button30"
- 		android:layout_width="fill_parent"
- 		android:text="@string/done" 
- 		android:layout_alignParentBottom="true"/>
 	<ListView
 		android:id="@id/android:list"
 		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_above="@id/Button30"/>
+		android:layout_above="@+id/Button30"
+		android:layout_height="fill_parent"/>
+	<Button android:layout_height="wrap_content"
+ 		android:id="@+id/Button30"
+ 		android:layout_width="fill_parent"
+ 		android:layout_alignParentBottom="true"
+ 		android:text="@string/LABEL_CANCEL"/>
 </RelativeLayout>

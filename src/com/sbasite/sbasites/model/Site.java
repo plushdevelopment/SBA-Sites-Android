@@ -94,7 +94,7 @@ public class Site extends ActiveRecordBase<Site> {
 	
 	public static ArrayList<Site> sitesForSearchText(Context context, String addressInput) {
 		// SELECT * FROM SITES WHERE SITE_NAME LIKE '%a%' OR SITE_CODE LIKE '%a%'
-		return Site.query(context, Site.class, null, "SITE_NAME LIKE '%" + addressInput + "%' OR SITE_CODE LIKE '%" + addressInput + "%'", "SITE_NAME");
+		return Site.query(context, Site.class, null, "SITE_NAME LIKE '%" + addressInput + "%' OR SITE_CODE LIKE '%" + addressInput + "%'", "SITE_NAME", "10");
 	}
 
 	public boolean detailsLoaded() {

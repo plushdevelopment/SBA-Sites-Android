@@ -77,5 +77,6 @@
 	<string name="LABEL_AGL">Grd Elev:</string>
 	<string name="LABEL_MTA">MTA:</string>
 	<string name="LABEL_BTA">BTA:</string>
+	<string name="LABEL_CANCEL">Cancel</string>
 
 </resources>

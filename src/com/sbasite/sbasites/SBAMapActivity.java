@@ -24,10 +24,13 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -39,8 +42,11 @@ import com.google.android.maps.OverlayItem;
 import com.sbasite.sbasites.R;
 import com.sbasite.sbasites.model.Site;
 import com.sbasite.sbasites.model.SiteLayer;
+import com.sbasite.sbasites.tasks.LoadSiteDetailsAsyncTask;
 
 public class SBAMapActivity extends MapActivity {
+	
+	private static final String TAG = SBAMapActivity.class.getSimpleName();
 	private MapView map;
 	private EditText searchText;
 	private ImageView welcomeImageView;
@@ -88,91 +94,12 @@ public class SBAMapActivity extends MapActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		// Call super always
 		super.onCreate(savedInstanceState);
-		// Inflate your view
-		setContentView(R.layout.main);
-		// Assign ivars to elements listed in main.xml
-		map=(MapView)findViewById(R.id.map);
-		map.setClickable(false);
-		mapController = map.getController();
 		
-		welcomeImageView=(ImageView)findViewById(R.id.imageView1);
-		welcomeImageView.setVisibility(View.VISIBLE);
+		setupViews();
 		
-		btnSearch = (Button)findViewById(R.id.SearchButton);
-		searchText=(EditText)findViewById(R.id.searchText);
+		
 		
 		geoCoder = new Geocoder(this); //create new geocoder instance
-		btnSearch.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
-				//Intent searchIntent = new Intent(SBAMapActivity.this, SearchListActivity.class);
-				//searchIntent.putExtra("search_text", searchText.getText().toString());
-				//startActivity(searchIntent);
-				searchText.setText("");
-				searchText.setHint("Search");
-				
-				
-				String addressInput = searchText.getText().toString(); //Get input text
-
-				try {
-
-					List<Address> foundAdresses = geoCoder.getFromLocationName(addressInput, 1); //Search addresses
-					if (foundAdresses.size() == 0) { //if no address found, display an error
-						Dialog locationError = new AlertDialog.Builder(SBAMapActivity.this)
-						.setIcon(0)
-						.setTitle("Error")
-						.setPositiveButton(R.string.ok, null)
-						.setMessage("Sorry, your address doesn't exist.")
-						.create();
-						locationError.show(); 
-					}
-					else { //else display address on map
-						for (int i = 0; i < foundAdresses.size(); ++i) {
-							//Save results as Longitude and Latitude
-							//@todo: if more than one result, then show a select-list
-							Address x = foundAdresses.get(i);
-							lat = x.getLatitude();
-							lon = x.getLongitude();
-						}
-						navigateToLocation((lat * 1000000), (lon * 1000000), map); //display the found address
-					}
-				}
-				catch (Exception e) {
-					//@todo: Show error message
-					e.printStackTrace();
-				}
-			}
-		});
-		
-		mapController.setCenter(getPoint(46.0730555556, -100.546666667)); // Set center to the center of North America
-		//mapController.setCenter(getPoint(26.35049, -80.089004)); // Set center to the center of Boca Raton, FL
-		mapController.setZoom(4);
-		
-		map.displayZoomControls(true);
-		map.setSatellite(true);
-		
-		ArrayList<SiteLayer> layers = SiteLayer.layers(this);
-		Drawable marker;
-		ArrayList<SitesOverlay> overlays = new ArrayList<SBAMapActivity.SitesOverlay>();
-		Drawable masterMarker = getResources().getDrawable(R.drawable.owned);
-		masterMarker.setBounds(0, 0, masterMarker.getIntrinsicWidth(), masterMarker.getIntrinsicHeight());
-		final SitesOverlay masterOverlay = new SitesOverlay(masterMarker);
-		map.getOverlays().add(masterOverlay);
-		
-		for (SiteLayer siteLayer : layers) {
-			marker=getResources().getDrawable(siteLayer.getPinIcon());
-			marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
-			SitesOverlay sitesOverlay = new SitesOverlay(marker);
-			overlays.add(sitesOverlay);
-		}
-		for (SitesOverlay anOverlay : overlays) {
-			map.getOverlays().add(anOverlay);
-		}
-		me=new MyLocationOverlay(this, map);
-		map.getOverlays().add(me);
-		me.enableMyLocation();
-		me.enableCompass();
 		
         messageHandler = new Handler() {
 			public void handleMessage(Message msg) {
@@ -198,6 +125,116 @@ public class SBAMapActivity extends MapActivity {
 				new Thread(updateMapOverlaysThread).start();
 	}
 	
+	private void setupViews() {
+		// Inflate your view
+		setContentView(R.layout.main);
+		// Assign ivars to elements listed in main.xml
+		map=(MapView)findViewById(R.id.map);
+		map.setClickable(false);
+		map.getController().setCenter(getPoint(46.0730555556, -100.546666667)); // Set center to the center of North America
+		map.getController().setZoom(4);
+		map.displayZoomControls(true);
+		map.setSatellite(true);
+		
+		welcomeImageView=(ImageView)findViewById(R.id.imageView1);
+		welcomeImageView.setVisibility(View.VISIBLE);
+		
+		btnSearch = (Button)findViewById(R.id.SearchButton);
+		btnSearch.setEnabled(true);
+		searchText=(EditText)findViewById(R.id.searchText);
+		/*
+		searchText.setOnKeyListener(new OnKeyListener() {
+			public boolean onKey(View view, int keyCode, KeyEvent event) {
+				Log.d(TAG, String.format("keyCode == %d", keyCode));
+				//final int action = event.getAction();
+				boolean ret = false;
+				if (keyCode == KeyEvent.KEYCODE_MENU) {
+					
+				} else if (keyCode == KeyEvent.KEYCODE_ENTER) {
+					if (searchText.getTextSize() > 0.0) {
+						startSearch();
+					}
+				}
+				return ret;
+			}
+		});
+		*/
+		
+		btnSearch.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				if (searchText.getTextSize() > 0.0) {
+					startSearch();
+				}
+			}
+		});
+		
+		ArrayList<SiteLayer> layers = SiteLayer.layers(this);
+		Drawable marker;
+		ArrayList<SitesOverlay> overlays = new ArrayList<SBAMapActivity.SitesOverlay>();
+		Drawable masterMarker = getResources().getDrawable(R.drawable.owned);
+		masterMarker.setBounds(0, 0, masterMarker.getIntrinsicWidth(), masterMarker.getIntrinsicHeight());
+		final SitesOverlay masterOverlay = new SitesOverlay(masterMarker);
+		map.getOverlays().add(masterOverlay);
+		
+		for (SiteLayer siteLayer : layers) {
+			marker=getResources().getDrawable(siteLayer.getPinIcon());
+			marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
+			SitesOverlay sitesOverlay = new SitesOverlay(marker);
+			overlays.add(sitesOverlay);
+		}
+		for (SitesOverlay anOverlay : overlays) {
+			map.getOverlays().add(anOverlay);
+		}
+		me=new MyLocationOverlay(this, map);
+		map.getOverlays().add(me);
+		me.enableMyLocation();
+		me.enableCompass();
+	}
+
+	protected void startSearch() {
+		
+		String addressInput = searchText.getText().toString(); //Get input text
+		
+		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
+		
+		Intent searchIntent = new Intent(SBAMapActivity.this, SearchListActivity.class);
+		searchIntent.putExtra("search_text", addressInput);
+		startActivity(searchIntent);
+
+		searchText.setText("");
+		searchText.setHint("Search");
+		/*
+		try {
+
+			List<Address> foundAdresses = geoCoder.getFromLocationName(addressInput, 1); //Search addresses
+			if (foundAdresses.size() == 0) { //if no address found, display an error
+				Dialog locationError = new AlertDialog.Builder(SBAMapActivity.this)
+				.setIcon(0)
+				.setTitle("Error")
+				.setPositiveButton(R.string.ok, null)
+				.setMessage("Sorry, your address doesn't exist.")
+				.create();
+				locationError.show(); 
+			}
+			else { //else display address on map
+				for (int i = 0; i < foundAdresses.size(); ++i) {
+					//Save results as Longitude and Latitude
+					//@todo: if more than one result, then show a select-list
+					Address x = foundAdresses.get(i);
+					lat = x.getLatitude();
+					lon = x.getLongitude();
+				}
+				navigateToLocation((lat * 1000000), (lon * 1000000), map); //display the found address
+			}
+		}
+		catch (Exception e) {
+			//@todo: Show error message
+			e.printStackTrace();
+		}
+		*/
+	}
+
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -267,14 +304,6 @@ public class SBAMapActivity extends MapActivity {
  		if (me != null) {
  			GeoPoint location = me.getMyLocation();
  			if (null == location) {
- 				
- 				location = getPoint(26.35049, -80.089004);
- 				welcomeImageView.setVisibility(View.GONE);
- 				map.setClickable(true);
- 				mapController.setCenter(location);
- 				mapController.setZoom(13);
- 				
- 				/*
  				AlertDialog.Builder dialog = new AlertDialog.Builder(SBAMapActivity.this);
  				dialog.setTitle("Location Error");
  				dialog.setMessage("Your location could not be found");
@@ -284,12 +313,11 @@ public class SBAMapActivity extends MapActivity {
  					}
  				});
  				dialog.show();
- 				*/
  			} else {
  				welcomeImageView.setVisibility(View.GONE);
  				map.setClickable(true);
- 				mapController.setCenter(location);
- 				mapController.setZoom(13);
+ 				map.getController().setCenter(location);
+ 				map.getController().setZoom(13);
  			}
  		}
  	}  
