@@ -63,24 +63,16 @@ public class UpdateMapsOverlaysThread implements Runnable {
 		    	if(fireOverlayUpdater || firstUpdate) {
  
 		    		Log.d(TAG, "Need to update overlays");
- 
-		    		double latSpan = ((mapView.getLatitudeSpan() / 1000000.0)/2.0);
-		    		double longSpan = ((mapView.getLongitudeSpan() / 1000000.0)/2.0);
-		    		double latCenter = (mapView.getMapCenter().getLatitudeE6()/1000000.0);
-		    		double longCenter = (mapView.getMapCenter().getLongitudeE6()/1000000.0);
-		    		double maxLat = (latCenter + latSpan);
-		    		double minLat = (latCenter -  latSpan);
-		    		double maxLong = (longCenter + longSpan);
-		    		double minLong = (longCenter - longSpan);
-		    		ArrayList<Site> sites = Site.loadSitesForRegion(this.context, minLat, maxLat, minLong, maxLong);
-		    		if(!sites.isEmpty()) {
+		    		
+		    		//if(!sites.isEmpty()) {
 		    			// Send the overlays to the UI Thread
 		    			Message message = mainThreadMessageHandler.obtainMessage();
-		    			message.obj = sites;
+		    			message.what = 1;
+		    			//message.obj = sites;
 		    			mainThreadMessageHandler.sendMessage(message);
-		    		}
+		    		//}
 		    		
-		    		Log.d("Sites", sites.toString());
+		    		//Log.d("Sites", sites.toString());
 			    	// Reset
 		    		fireOverlayUpdater = false;
 		    		firstUpdate = false;

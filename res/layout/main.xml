@@ -40,5 +40,19 @@
 		android:apiKey="0rpLA5b4fBX8iWpkbDyBNQWPYdYsOGdiNyEi__g"
 		android:clickable="true"></com.google.android.maps.MapView>
 			<ImageView android:src="@drawable/welcome_instructions" android:layout_gravity="center_vertical|center_horizontal" android:layout_height="fill_parent" android:id="@+id/imageView1" android:layout_width="fill_parent" android:visibility="visible"></ImageView>
+		<LinearLayout android:id="@+id/bar" 
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:paddingRight="15px"
+			android:paddingBottom="15px"
+			android:layout_gravity="top|right">
+			<ImageView android:id="@+id/loader" 
+				android:visibility="invisible"
+				android:layout_width="25px"
+				android:layout_height="26px" 
+				android:layout_alignParentBottom="true"
+				android:layout_alignParentRight="true" />
+		</LinearLayout>
 		</FrameLayout>
+		
 </LinearLayout>

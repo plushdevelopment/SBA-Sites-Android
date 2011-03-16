@@ -23,8 +23,17 @@ public class SiteLayer extends ActiveRecordBase<SiteLayer> {
 		this.name = name;
 	}
 	
-	public static final void initialize(Context context) {
-		
+	public static void initialize(Context context) {
+		SiteLayer canada = new SiteLayer(context, "Canada");
+		canada.save();
+		SiteLayer newConstruction = new SiteLayer(context, "New Construction");
+		newConstruction.save();
+		SiteLayer latAm = new SiteLayer(context, "Central America");
+		latAm.save();
+		SiteLayer managed = new SiteLayer(context, "Managed");
+		managed.save();
+		SiteLayer owned = new SiteLayer(context, "Owned");
+		owned.save();
 	}
 	
 	@Column(name = "NAME")
@@ -45,11 +54,8 @@ public class SiteLayer extends ActiveRecordBase<SiteLayer> {
 		} else {
 			iconID = R.drawable.yellow_icon;
 		}
-		
 		return iconID;
 	}
-
-	
 
 	public static ArrayList<SiteLayer> layers(Context context) {
 		return SiteLayer.query(context, SiteLayer.class);

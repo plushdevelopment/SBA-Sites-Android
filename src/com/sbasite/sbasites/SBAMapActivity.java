@@ -2,7 +2,9 @@
 package com.sbasite.sbasites;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -38,27 +40,30 @@ import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
+import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 import com.sbasite.sbasites.R;
+import com.sbasite.sbasites.ItemizedOverlay.LayerItemizedOverlay;
 import com.sbasite.sbasites.model.Site;
 import com.sbasite.sbasites.model.SiteLayer;
 import com.sbasite.sbasites.tasks.LoadSiteDetailsAsyncTask;
 
+import de.android1.overlaymanager.*;
+import de.android1.overlaymanager.lazyload.*;
+
 public class SBAMapActivity extends MapActivity {
 	
 	private static final String TAG = SBAMapActivity.class.getSimpleName();
-	private MapView map;
+	private MapView mapView;
+	private MapController mapController;
+	private OverlayManager overlayManager;
 	private EditText searchText;
 	private ImageView welcomeImageView;
 	private MyLocationOverlay me;
-	private MapController mapController;
 	private Handler messageHandler;
 	private UpdateMapsOverlaysThread updateMapOverlaysThread;
-	private SitesOverlay sitesOverlay;
-	private Geocoder geoCoder;
+	private List<Overlay> mapOverlays;
 	private Button btnSearch;
-	private double lat;
-	private double lon;
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -94,54 +99,86 @@ public class SBAMapActivity extends MapActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		// Call super always
 		super.onCreate(savedInstanceState);
-		
-		setupViews();
-		
-		
-		
-		geoCoder = new Geocoder(this); //create new geocoder instance
-		
-        messageHandler = new Handler() {
-			public void handleMessage(Message msg) {
-				if (map.getZoomLevel() < 11) {
-					mapController.setZoom(11);
-				}
-        		if(msg.obj.getClass() == OverlayItem.class) {
-        			OverlayItem overlayItem = (OverlayItem)msg.obj;
-        			masterOverlay.addOverlay(overlayItem);
-        		}
-        		if(msg.obj.getClass() == ArrayList.class) {
-					ArrayList<Site> overlays = (ArrayList<Site>)msg.obj;
-					getSBASitesApplication().setCurrentSites(overlays);
-        			masterOverlay.addOverlays(overlays);
-        		}
- 
-            }
- 
-        };
-		
-     // updateMapOverlaysThread is declared as a member variable 
-		updateMapOverlaysThread = new UpdateMapsOverlaysThread(this, map, messageHandler, this.getSBASitesApplication());
-				new Thread(updateMapOverlaysThread).start();
+		setupViews();	
 	}
 	
+	@Override
+	public void onWindowFocusChanged(boolean b) {
+		for (SiteLayer layer : getSBASitesApplication().getLayers()) {
+			createOverlay(layer);
+		}
+	}
+	
+	private void createOverlay(final SiteLayer layer) {
+			/*
+			Drawable drawable = getResources().getDrawable(layer.getPinIcon());
+			LayerItemizedOverlay itemizedOverlay = new LayerItemizedOverlay(drawable, mapView);
+			mapOverlays.add(itemizedOverlay);
+			*/
+		
+			//animation will be rendered to this ImageView
+			ImageView loaderanim = (ImageView) findViewById(R.id.loader);
+			
+			ManagedOverlay managedOverlay = overlayManager.createOverlay(layer.name, getResources().getDrawable(layer.getPinIcon()));
+
+			// default built-in animation
+			managedOverlay.enableLazyLoadAnimation(loaderanim);
+			// custom animation
+			// managedOverlay.enableLazyLoadAnimation(loaderanim).setAnimationDrawable((AnimationDrawable)getResources().getDrawable(R.anim.myanim));
+
+			managedOverlay.setLazyLoadCallback(new LazyLoadCallback() {
+				
+				public List<ManagedOverlayItem> lazyload(GeoPoint topLeft, GeoPoint bottomRight, ManagedOverlay overlay) throws LazyLoadException {
+					List<ManagedOverlayItem> items = new LinkedList<ManagedOverlayItem>();
+					try {
+						double latSpan = ((mapView.getLatitudeSpan() / 1000000.0)/2.0);
+			    		double longSpan = ((mapView.getLongitudeSpan() / 1000000.0)/2.0);
+			    		double latCenter = (mapView.getMapCenter().getLatitudeE6()/1000000.0);
+			    		double longCenter = (mapView.getMapCenter().getLongitudeE6()/1000000.0);
+			    		double maxLat = (latCenter + latSpan);
+			    		double minLat = (latCenter -  latSpan);
+			    		double maxLong = (longCenter + longSpan);
+			    		double minLong = (longCenter - longSpan);
+			    		List<Site> sites = Site.loadSitesForRegionInLayer(getApplicationContext(), minLat, maxLat, minLong, maxLong, layer.name);
+						//List<Site> sites = Site.findMarker(topLeft, bottomRight, overlay.getZoomlevel());
+						for (int i = 0; i < sites.size(); i++) {
+							Site site = sites.get(i);
+							ManagedOverlayItem item = new ManagedOverlayItem(site.getPoint(), site.siteName, site.siteCode);
+							items.add(item);
+						}
+						// lets simulate a latency
+						TimeUnit.SECONDS.sleep(1);
+					} catch (Exception e) {
+						throw new LazyLoadException(e.getMessage());
+					}
+					return items;
+				}
+			});
+			overlayManager.populate();
+	}
+
 	private void setupViews() {
 		// Inflate your view
 		setContentView(R.layout.main);
 		// Assign ivars to elements listed in main.xml
-		map=(MapView)findViewById(R.id.map);
-		map.setClickable(false);
-		map.getController().setCenter(getPoint(46.0730555556, -100.546666667)); // Set center to the center of North America
-		map.getController().setZoom(4);
-		map.displayZoomControls(true);
-		map.setSatellite(true);
+		mapView=(MapView)findViewById(R.id.map);
+		mapView.setClickable(false);
+		mapController = mapView.getController();
+		mapOverlays = mapView.getOverlays();
+		
+		overlayManager = new OverlayManager(getApplication(), mapView);
+		
+		mapController.setCenter(getPoint(46.0730555556, -100.546666667)); // Set center to the center of North America
+		mapController.setZoom(4);
 		
 		welcomeImageView=(ImageView)findViewById(R.id.imageView1);
 		welcomeImageView.setVisibility(View.VISIBLE);
 		
 		btnSearch = (Button)findViewById(R.id.SearchButton);
 		btnSearch.setEnabled(true);
+		
 		searchText=(EditText)findViewById(R.id.searchText);
+		
 		/*
 		searchText.setOnKeyListener(new OnKeyListener() {
 			public boolean onKey(View view, int keyCode, KeyEvent event) {
@@ -167,28 +204,64 @@ public class SBAMapActivity extends MapActivity {
 				}
 			}
 		});
-		
-		ArrayList<SiteLayer> layers = SiteLayer.layers(this);
+		/*
 		Drawable marker;
-		ArrayList<SitesOverlay> overlays = new ArrayList<SBAMapActivity.SitesOverlay>();
-		Drawable masterMarker = getResources().getDrawable(R.drawable.owned);
-		masterMarker.setBounds(0, 0, masterMarker.getIntrinsicWidth(), masterMarker.getIntrinsicHeight());
-		final SitesOverlay masterOverlay = new SitesOverlay(masterMarker);
-		map.getOverlays().add(masterOverlay);
 		
-		for (SiteLayer siteLayer : layers) {
+		//ArrayList<SitesOverlay> overlays = new ArrayList<SBAMapActivity.SitesOverlay>();
+		//Drawable masterMarker = getResources().getDrawable(R.drawable.owned);
+		//masterMarker.setBounds(0, 0, masterMarker.getIntrinsicWidth(), masterMarker.getIntrinsicHeight());
+		//final SitesOverlay masterOverlay = new SitesOverlay(masterMarker);
+		//map.getOverlays().add(masterOverlay);
+		
+		for (SiteLayer siteLayer : getSBASitesApplication().getLayers()) {
 			marker=getResources().getDrawable(siteLayer.getPinIcon());
 			marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
-			SitesOverlay sitesOverlay = new SitesOverlay(marker);
+			LayerItemizedOverlay sitesOverlay = new LayerItemizedOverlay(marker, mapView);
 			overlays.add(sitesOverlay);
 		}
-		for (SitesOverlay anOverlay : overlays) {
-			map.getOverlays().add(anOverlay);
+		for (Overlay anOverlay : overlays) {
+			mapView.getOverlays().add(anOverlay);
 		}
-		me=new MyLocationOverlay(this, map);
-		map.getOverlays().add(me);
+		*/
+		me=new MyLocationOverlay(this, mapView);
+		mapOverlays.add(me);
 		me.enableMyLocation();
 		me.enableCompass();
+		/*
+		messageHandler = new Handler() {
+			public void handleMessage(Message msg) {
+				if (msg.what == 1) {
+					double latSpan = ((mapView.getLatitudeSpan() / 1000000.0)/2.0);
+		    		double longSpan = ((mapView.getLongitudeSpan() / 1000000.0)/2.0);
+		    		double latCenter = (mapView.getMapCenter().getLatitudeE6()/1000000.0);
+		    		double longCenter = (mapView.getMapCenter().getLongitudeE6()/1000000.0);
+		    		double maxLat = (latCenter + latSpan);
+		    		double minLat = (latCenter -  latSpan);
+		    		double maxLong = (longCenter + longSpan);
+		    		double minLong = (longCenter - longSpan);
+		    		for (SiteLayer layer : getSBASitesApplication().getLayers()) {
+		    			ArrayList<Site> sites = Site.loadSitesForRegionInLayer(getApplicationContext(), minLat, maxLat, minLong, maxLong, layer.name);
+		    			if (!sites.isEmpty()) {
+		    				LayerItemizedOverlay overlay = (LayerItemizedOverlay)mapOverlays.get(getSBASitesApplication().getLayers().indexOf(layer));
+		    				overlay.addOverlay()
+			    		}
+		    		}
+				}
+				if (mapView.getZoomLevel() < 11) {
+					mapView.getController().setZoom(11);
+				}
+        		
+        		if(msg.obj.getClass() == ArrayList.class) {
+					ArrayList<Site> overlays = (ArrayList<Site>)msg.obj;
+					getSBASitesApplication().setCurrentSites(overlays);
+        			//masterOverlay.addOverlays(overlays);
+        		}
+            }
+        };
+        
+		updateMapOverlaysThread = new UpdateMapsOverlaysThread(this, mapView, messageHandler, this.getSBASitesApplication());
+				new Thread(updateMapOverlaysThread).start();
+				*/
 	}
 
 	protected void startSearch() {
@@ -254,13 +327,13 @@ public class SBAMapActivity extends MapActivity {
  	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_S) {
-			map.setSatellite(!map.isSatellite());
+			mapView.setSatellite(!mapView.isSatellite());
 			return(true);
 		}
 		else if (keyCode == KeyEvent.KEYCODE_Z) {
 			InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 			imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
-			map.displayZoomControls(true);
+			mapView.displayZoomControls(true);
 			return(true);
 		}
 		
@@ -272,11 +345,11 @@ public class SBAMapActivity extends MapActivity {
  	{
  		super.onActivityResult(requestCode, resultCode, data);
  		welcomeImageView.setVisibility(View.GONE);
- 		map.setClickable(true);
+ 		mapView.setClickable(true);
  		if (requestCode == 1) {
  			String latString=data.getStringExtra("Latitude");
  			String longString=data.getStringExtra("Longitude");
- 			navigateToLocation(Double.valueOf(latString), Double.valueOf(longString), map);
+ 			navigateToLocation(Double.valueOf(latString), Double.valueOf(longString), mapView);
  		} else if (requestCode == 2) {
 
  		}
@@ -315,9 +388,9 @@ public class SBAMapActivity extends MapActivity {
  				dialog.show();
  			} else {
  				welcomeImageView.setVisibility(View.GONE);
- 				map.setClickable(true);
- 				map.getController().setCenter(location);
- 				map.getController().setZoom(13);
+ 				mapView.setClickable(true);
+ 				mapView.getController().setCenter(location);
+ 				mapView.getController().setZoom(13);
  			}
  		}
  	}  

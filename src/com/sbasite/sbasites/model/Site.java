@@ -1,11 +1,14 @@
 package com.sbasite.sbasites.model;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 
 import com.activeandroid.ActiveRecordBase;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.google.android.maps.GeoPoint;
 
 @Table(name = "SITES")	
 public class Site extends ActiveRecordBase<Site> {
@@ -137,6 +140,22 @@ public class Site extends ActiveRecordBase<Site> {
 	@Override
 	public String toString() {
 		return mobileKey + siteCode + siteLayer + siteStatus;
+	}
+
+	public static List<Site> loadSitesForRegionInLayer(
+			Context context, double minLat, double maxLat,
+			double minLong, double maxLong, String name) {
+		return Site.query(context, Site.class, null, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong + " AND SITE_LAYER = '" + name + "'", "SITE_NAME");
+	}
+
+	public static List<Site> sitesForRegion(GeoPoint topLeft,
+			GeoPoint bottomRight, int zoomlevel) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public GeoPoint getPoint() {
+		return(new GeoPoint((int)(latitude*1000000.0), (int)(longitude*1000000.0)));
 	}
 	
 }
