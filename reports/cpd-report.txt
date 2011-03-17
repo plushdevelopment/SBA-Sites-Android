@@ -1,0 +1,492 @@
+Found a 16 line (165 tokens) duplication in the following files: 
+Starting at line 84 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/SiteDetailsFeedParser.java
+Starting at line 143 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/SiteDetailsFeedParser.java
+
+								site = Site.siteForMobileKey(context, currentSite.get(SITEMOBILEKEY));
+								site.address = currentSite.get(SITEADRESS);
+								site.agl = currentSite.get(SITEADRESS);
+								site.bta = currentSite.get(SITEADRESS);
+								site.city = currentSite.get(SITEADRESS);
+								site.contact = currentSite.get(SITEADRESS);
+								site.email = currentSite.get(SITEADRESS);
+								site.structureHeight = currentSite.get(SITEHEIGHT);
+								site.structureID = currentSite.get(SITEID);
+								site.lastUpdated = currentSite.get(SITELASTUPDATED);
+								site.mta = currentSite.get(SITEMTA);
+								site.phone = currentSite.get(SITEPHONE);
+								site.stateProvince = currentSite.get(SITESTATE);
+								site.siteStatus = currentSite.get(SITESTATUS);
+								site.structureType = currentSite.get(SITETYPE);
+								site.zip = currentSite.get(SITEZIP);
+=====================================================================
+Found a 13 line (83 tokens) duplication in the following files: 
+Starting at line 29 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/SiteDetailsFeedParser.java
+Starting at line 26 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/NewSitesFeedParser.java
+
+			Site currentSite = null;
+			boolean done = false;
+			while (eventType != XmlPullParser.END_DOCUMENT && !done){
+				String name = null;
+				switch (eventType){
+					case XmlPullParser.START_DOCUMENT:
+						break;
+					case XmlPullParser.START_TAG:
+						name = parser.getName();
+						if (name.equalsIgnoreCase(TOTALRECORDSCOUNT)){
+							total = Integer.parseInt(parser.nextText());
+						}else if (name.equalsIgnoreCase(SITE)){
+							currentSite = new Site(context);
+=====================================================================
+Found a 14 line (80 tokens) duplication in the following files: 
+Starting at line 25 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/SiteDetailsFeedParser.java
+Starting at line 118 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/SiteDetailsFeedParser.java
+
+		try {
+			// auto-detect the encoding from the stream
+			parser.setInput(this.getInputStream(), null);
+			int eventType = parser.getEventType();
+			HashMap<String,String> currentSite = null;
+			boolean done = false;
+			while (eventType != XmlPullParser.END_DOCUMENT && !done){
+				String name = null;
+				switch (eventType){
+					case XmlPullParser.START_DOCUMENT:
+						break;
+					case XmlPullParser.START_TAG:
+						name = parser.getName();
+						if (name.equalsIgnoreCase(SITE)){
+=====================================================================
+Found a 17 line (70 tokens) duplication in the following files: 
+Starting at line 46 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/SiteListActivity.java
+Starting at line 39 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/Layers.java
+
+		super.onListItemClick(l, v, position, id);
+	}
+
+	private void setUpViews() {
+		this.doneButton = (Button)this.findViewById(R.id.Button01);
+        this.doneButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+	            finish();
+			}
+        });
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		listAdapter.forceReload();
+	}
+=====================================================================
+Found a 14 line (60 tokens) duplication in the following files: 
+Starting at line 159 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/SiteDetailsFeedParser.java
+Starting at line 65 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/NewSitesFeedParser.java
+
+								currentSite.save();
+							}
+						} else if (name.equalsIgnoreCase(SITES)){
+							done = true;
+						}
+						break;
+				}
+				eventType = parser.next();
+			}
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage(), e);
+			throw new RuntimeException(e);
+		}
+		return total;
+=====================================================================
+Found a 15 line (59 tokens) duplication in the following files: 
+Starting at line 99 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/SiteDetailsFeedParser.java
+Starting at line 65 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/NewSitesFeedParser.java
+
+								currentSite.save();
+							}
+						} else if (name.equalsIgnoreCase(SITES)){
+							done = true;
+						}
+						break;
+				}
+				eventType = parser.next();
+			}
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage(), e);
+			throw new RuntimeException(e);
+		}
+		return total;
+	}
+=====================================================================
+Found a 14 line (57 tokens) duplication in the following files: 
+Starting at line 99 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/SiteDetailsFeedParser.java
+Starting at line 159 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/SiteDetailsFeedParser.java
+
+								site.save();
+							}
+						} else if (name.equalsIgnoreCase(SITES)){
+							done = true;
+						}
+						break;
+				}
+				eventType = parser.next();
+			}
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage(), e);
+			throw new RuntimeException(e);
+		}
+		return site;
+=====================================================================
+Found a 11 line (55 tokens) duplication in the following files: 
+Starting at line 18 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/SiteDetailsFeedParser.java
+Starting at line 15 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/NewSitesFeedParser.java
+
+	public NewSitesFeedParser(Context context, String feedUrl) {
+		super(context, feedUrl);
+	}
+
+	public int parse() {
+		XmlPullParser parser = Xml.newPullParser();
+		int total = 0;
+		try {
+			// auto-detect the encoding from the stream
+			parser.setInput(this.getInputStream(), null);
+			int eventType = parser.getEventType();
+=====================================================================
+Found a 13 line (54 tokens) duplication in the following files: 
+Starting at line 46 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/SearchListActivity.java
+Starting at line 31 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/Layers.java
+
+    }
+
+	/* (non-Javadoc)
+	 * @see android.app.ListActivity#onListItemClick(android.widget.ListView, android.view.View, int, long)
+	 */
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		// TODO Auto-generated method stub
+		super.onListItemClick(l, v, position, id);
+	}
+
+	private void setUpViews() {
+		this.doneButton = (Button)this.findViewById(R.id.Button01);
+=====================================================================
+Found a 10 line (52 tokens) duplication in the following files: 
+Starting at line 122 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/SiteDetailsFeedParser.java
+Starting at line 26 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/NewSitesFeedParser.java
+
+			Site currentSite = null;
+			boolean done = false;
+			while (eventType != XmlPullParser.END_DOCUMENT && !done){
+				String name = null;
+				switch (eventType){
+					case XmlPullParser.START_DOCUMENT:
+						break;
+					case XmlPullParser.START_TAG:
+						name = parser.getName();
+						if (name.equalsIgnoreCase(TOTALRECORDSCOUNT)){
+=====================================================================
+Found a 7 line (50 tokens) duplication in the following files: 
+Starting at line 43 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/SiteDetailsFeedParser.java
+Starting at line 135 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/SiteDetailsFeedParser.java
+
+							currentSite.put(name, textValue);
+						}
+						break;
+					case XmlPullParser.END_TAG:
+						name = parser.getName();
+						if (name.equalsIgnoreCase(SITE) && currentSite != null){
+							if (currentSite.containsKey(SITEMOBILEKEY) && (null != currentSite.get(SITEMOBILEKEY))) {
+=====================================================================
+Found a 13 line (48 tokens) duplication in the following files: 
+Starting at line 29 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/SiteListActivity.java
+Starting at line 27 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/Layers.java
+
+        listAdapter = new LayerListAdapter(this, layers);
+        setContentView(R.layout.listview);
+        setListAdapter(listAdapter);
+        setUpViews();
+    }
+
+	/* (non-Javadoc)
+	 * @see android.app.ListActivity#onListItemClick(android.widget.ListView, android.view.View, int, long)
+	 */
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		// TODO Auto-generated method stub
+		super.onListItemClick(l, v, position, id);
+=====================================================================
+Found a 8 line (48 tokens) duplication in the following files: 
+Starting at line 23 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/tasks/BaseSitesFeedParserTask.java
+Starting at line 21 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/BaseFeedParser.java
+
+	static final String SITE = "Site";
+	static final  String SITENAME = "SiteName";
+	static final  String SITECODE = "SiteCode";
+	static final  String SITEMOBILEKEY = "MobileKey";
+	static final  String SITELAYER = "Layer";
+	static final  String SITELATITUDE = "Latitude";
+	static final  String SITELONGITUDE = "Longitude";
+	static final  String SITEDELETED = "Deleted";
+=====================================================================
+Found a 10 line (45 tokens) duplication in the following files: 
+Starting at line 108 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/tasks/LoadSearchResultsAsyncTask.java
+Starting at line 138 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/tasks/LoadSearchResultsAsyncTask.java
+
+		ArrayList<Site> sites = Site.sitesForSearchText(context, addressInput);
+		
+		for (Site site : sites) {
+			SearchResult result = new SearchResult(site);
+			results.add(result);
+		}
+		return results;
+	}
+
+	private ArrayList<SearchResult> searchForCoordinates(String addressInput) {
+=====================================================================
+Found a 9 line (40 tokens) duplication in the following files: 
+Starting at line 147 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/SiteDetailActivity.java
+Starting at line 42 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/Activity/SiteImageViewActivity.java
+
+			String urlString = String.format("http://map.sbasite.com/Mobile/GetImage?SiteCode=%s&width=600&height=600", siteCode);
+			URL requestURL = new URL(urlString);
+			new LoadImageAsyncTask(this).execute(requestURL);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void imageLoading() {
+=====================================================================
+Found a 8 line (39 tokens) duplication in the following files: 
+Starting at line 18 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/view/LayerListItemView.java
+Starting at line 16 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/SiteListItemView.java
+
+	public SiteListItemView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+	}
+
+	@Override
+	protected void onFinishInflate() {
+		super.onFinishInflate();
+		iconButton = (Button)findViewById(R.id.SiteIconImageButton);
+=====================================================================
+Found a 7 line (38 tokens) duplication in the following files: 
+Starting at line 79 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/SiteDetailActivity.java
+Starting at line 51 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/Instructions.java
+
+				emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"mobilesupport@sbasite.com"});
+				emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "SBA Sites Support Request");
+				emailIntent.setType("text/plain");
+				startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+				finish();
+				};
+			}
+=====================================================================
+Found a 78 line (38 tokens) duplication in the following files: 
+Starting at line 48 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/model/SearchResult.java
+Starting at line 224 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/SBAMapActivity.java
+
+	}
+ 	
+	private GeoPoint getPoint(double lat, double lon) {
+		return(new GeoPoint((int)(lat*1000000.0), (int)(lon*1000000.0)));
+	}
+	/*	
+	private class SitesOverlay extends ItemizedOverlay<OverlayItem> {
+		private List<OverlayItem> items=new ArrayList<OverlayItem>();
+		private Drawable marker=null;
+		
+		public SitesOverlay(Drawable marker) {
+			super(marker);
+			this.marker=marker;
+			
+			populate();
+		}
+		
+		public void addOverlay(OverlayItem overlay) {
+		    items.add(overlay);
+		    populate();
+		}
+		
+		public void addOverlays(ArrayList<Site> overlays) {
+			items.removeAll(items);
+			for (int i = 0; i < overlays.size(); i++) {
+				Site site = overlays.get(i);
+				OverlayItem overlayItem = new OverlayItem(this.getPoint(site.latitude, site.longitude), site.siteName, site.mobileKey);
+				items.add(overlayItem);
+			}
+		    populate();
+		}
+		
+		private GeoPoint getPoint(double lat, double lon) {
+			return(new GeoPoint((int)(lat*1000000.0), (int)(lon*1000000.0)));
+		}
+
+		@Override
+		protected OverlayItem createItem(int i) {
+			return(items.get(i));
+		}
+		
+		@Override
+		public void draw(Canvas canvas, MapView mapView,
+											boolean shadow) {
+			super.draw(canvas, mapView, shadow);
+			
+			boundCenterBottom(marker);
+		}
+ 		
+		@Override
+		  protected boolean onTap(int i) {
+			
+			InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
+			
+		   final OverlayItem item = items.get(i);
+		   AlertDialog.Builder dialog = new AlertDialog.Builder(SBAMapActivity.this);
+		   dialog.setTitle(item.getTitle());
+		   dialog.setMessage(item.getSnippet());
+		   dialog.setPositiveButton("Load", new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int Click) {
+		    	Log.d("Overlay Tapped", item.getSnippet());
+		     Intent intent = new Intent(SBAMapActivity.this, SiteDetailActivity.class);
+		     intent.putExtra("MobileKey", item.getSnippet());
+		     startActivity(intent);
+		     }
+		   });
+		   dialog.show();
+		   return true;
+		  }
+		
+		@Override
+		public int size() {
+			return(items.size());
+		}
+	}
+	*/
+}
+=====================================================================
+Found a 3 line (33 tokens) duplication in the following files: 
+Starting at line 30 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/view/LayerListItemView.java
+Starting at line 28 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/SiteListItemView.java
+
+		Drawable icon = getResources().getDrawable(R.drawable.owned);
+		iconButton.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
+		iconButton.setText(this.site.siteName);
+=====================================================================
+Found a 6 line (32 tokens) duplication in the following files: 
+Starting at line 33 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/SiteListActivity.java
+Starting at line 46 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/SearchListActivity.java
+
+	}
+	
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		// TODO Auto-generated method stub
+		super.onListItemClick(l, v, position, id);
+=====================================================================
+Found a 2 line (31 tokens) duplication in the following files: 
+Starting at line 78 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/SiteDetailActivity.java
+Starting at line 50 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/Instructions.java
+
+				Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+				emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"mobilesupport@sbasite.com"});
+=====================================================================
+Found a 8 line (31 tokens) duplication in the following files: 
+Starting at line 33 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/adapter/SiteListAdapter.java
+Starting at line 32 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/adapter/SearchResultListAdapter.java
+Starting at line 32 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/adapter/LayerListAdapter.java
+
+		return (null == layers) ? null : layers.get(index);
+	}
+
+	public long getItemId(int index) {
+		return index;
+	}
+
+	public View getView(int position, View convertView, ViewGroup parent) {
+=====================================================================
+Found a 3 line (30 tokens) duplication in the following files: 
+Starting at line 40 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/SiteDetailsFeedParser.java
+Starting at line 131 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/SiteDetailsFeedParser.java
+
+						if (name.equalsIgnoreCase(SITE)){
+							currentSite = new HashMap<String,String>();
+						} else if (currentSite != null){
+=====================================================================
+Found a 2 line (30 tokens) duplication in the following files: 
+Starting at line 86 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/model/Site.java
+Starting at line 147 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/model/Site.java
+
+			double minLong, double maxLong, String name) {
+		return Site.query(context, Site.class, null, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong + " AND SITE_LAYER = '" + name + "'", "SITE_NAME");
+=====================================================================
+Found a 5 line (28 tokens) duplication in the following files: 
+Starting at line 78 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/SiteDetailsFeedParser.java
+Starting at line 55 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/NewSitesFeedParser.java
+
+						}
+						break;
+					case XmlPullParser.END_TAG:
+						name = parser.getName();
+						if (name.equalsIgnoreCase(SITE) && currentSite != null){
+=====================================================================
+Found a 7 line (28 tokens) duplication in the following files: 
+Starting at line 16 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/view/SearchListItemView.java
+Starting at line 18 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/view/LayerListItemView.java
+
+	public LayerListItemView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+	}
+
+	@Override
+	protected void onFinishInflate() {
+		super.onFinishInflate();
+=====================================================================
+Found a 7 line (27 tokens) duplication in the following files: 
+Starting at line 50 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/SiteListActivity.java
+Starting at line 56 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/SearchListActivity.java
+
+		this.doneButton = (Button)this.findViewById(R.id.Button30);
+        this.doneButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+	            finish();
+			}
+        });		
+	}
+=====================================================================
+Found a 6 line (25 tokens) duplication in the following files: 
+Starting at line 9 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/SearchSiteNameAddress.java
+Starting at line 9 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/SearchCoordinates.java
+Starting at line 9 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/SearchAddress.java
+Starting at line 6 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/AboutSbaCommunications.java
+
+public class AboutSbaCommunications extends Activity{
+	
+	@Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.aboutsbacommunications);
+=====================================================================
+Found a 5 line (25 tokens) duplication in the following files: 
+Starting at line 52 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/model/SiteLayer.java
+Starting at line 42 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/SiteOverlayItem.java
+
+		} else if (site.siteLayer.matches("Owned")) {
+			iconID = R.drawable.owned;
+		} else {
+			iconID = R.drawable.yellow_icon;
+		}
+=====================================================================
+Found a 9 line (25 tokens) duplication in the following files: 
+Starting at line 56 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/tasks/BaseSitesFeedParserTask.java
+Starting at line 51 of /Users/rosschapman/Code/Android Projects/SBASites-Android/src/com/sbasite/sbasites/XML/BaseFeedParser.java
+
+			this.feedUrl = new URL(feedUrl);
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	protected InputStream getInputStream() {
+		try {
+			return feedUrl.openConnection().getInputStream();

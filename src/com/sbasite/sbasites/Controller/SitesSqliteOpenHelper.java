@@ -20,7 +20,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class SitesSqliteOpenHelper extends SQLiteOpenHelper {
 	//The Android's default system path of your application database.
-    private static String DB_PATH = "/data/data/com.sbasite.sbasites/databases/";
+    public static final String DB_PATH = "/data/data/com.sbasite.sbasites/databases/";
 	public static final int VERSION = 1;
 	public static final String DB_NAME1 = "Application.mp3";
 	public static final String DB_NAME2 = "Application.db";
@@ -83,7 +83,7 @@ public class SitesSqliteOpenHelper extends SQLiteOpenHelper {
     			copyDataBase();
     		} catch (IOException e) {
     			e.printStackTrace();
-        		throw new Error("Error copying database");
+        		//throw new Error("Error copying database");
  
         	}
     	}

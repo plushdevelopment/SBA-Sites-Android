@@ -8,6 +8,7 @@ import com.sbasite.sbasites.tasks.LoadSearchResultsAsyncTask.LoadSearchResults;
 import com.sbasite.sbasites.tasks.LoadSearchResultsAsyncTask.LoadSearchResultsResponder;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -17,6 +18,7 @@ import android.widget.ListView;
 
 public class SearchListActivity extends ListActivity implements LoadSearchResultsResponder {
 	private static final String TAG = SearchListActivity.class.getSimpleName();
+	public static final String SEARCH_RESULT = "search_result";
 	private Button doneButton;
 	private SearchResultListAdapter listAdapter;
 	public String searchString;
@@ -49,6 +51,13 @@ public class SearchListActivity extends ListActivity implements LoadSearchResult
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
+		SearchResult result = listAdapter.getItem(position); 
+		if (null != result) {
+			Intent intent = new Intent();
+			intent.putExtra(SEARCH_RESULT, result);
+			setResult(RESULT_OK, intent);
+		}
+		finish();
 	}
 
 	private void setUpViews() {

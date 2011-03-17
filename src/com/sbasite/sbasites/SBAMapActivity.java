@@ -2,59 +2,39 @@
 package com.sbasite.sbasites;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.location.Address;
-import android.location.Geocoder;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.TextView.OnEditorActionListener;
-
 import com.google.android.maps.GeoPoint;
-import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
-import com.google.android.maps.OverlayItem;
 import com.sbasite.sbasites.R;
 import com.sbasite.sbasites.ItemizedOverlay.LayerItemizedOverlay;
+import com.sbasite.sbasites.model.SearchResult;
 import com.sbasite.sbasites.model.Site;
-import com.sbasite.sbasites.model.SiteLayer;
-import com.sbasite.sbasites.tasks.LoadSiteDetailsAsyncTask;
-
-import de.android1.overlaymanager.*;
-import de.android1.overlaymanager.lazyload.*;
 
 public class SBAMapActivity extends MapActivity {
 	
 	private static final String TAG = SBAMapActivity.class.getSimpleName();
+	protected static final int CHOOSE_SEARCH_RESULT = 1;
+	protected static final int CHOOSE_SITE_RESULT = 2;
 	private MapView mapView;
 	private MapController mapController;
 	private EditText searchText;
@@ -194,15 +174,13 @@ public class SBAMapActivity extends MapActivity {
  	@Override
     public void onActivityResult(int requestCode,int resultCode,Intent data) 
  	{
- 		super.onActivityResult(requestCode, resultCode, data);
- 		welcomeImageView.setVisibility(View.GONE);
- 		mapView.setClickable(true);
- 		if (requestCode == 1) {
- 			String latString=data.getStringExtra("Latitude");
- 			String longString=data.getStringExtra("Longitude");
- 			navigateToLocation(Double.valueOf(latString), Double.valueOf(longString), mapView);
- 		} else if (requestCode == 2) {
-
+ 		if (CHOOSE_SEARCH_RESULT == requestCode && RESULT_OK == resultCode) {
+ 			SearchResult result = data.getParcelableExtra(SearchListActivity.SEARCH_RESULT);
+ 	 		welcomeImageView.setVisibility(View.GONE);
+ 	 		mapView.setClickable(true);
+ 	 		navigateToLocation(result.coordinates.getLatitudeE6(), result.coordinates.getLongitudeE6(), mapView);
+ 		} else {
+ 			super.onActivityResult(requestCode, resultCode, data);
  		}
  	}
  	
