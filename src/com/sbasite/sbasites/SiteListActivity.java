@@ -17,6 +17,7 @@ import android.widget.ListView;
 
 public class SiteListActivity extends ListActivity {
 
+	private static final String TAG = SiteListActivity.class.getSimpleName();
 	private Button doneButton;
 	private SiteListAdapter listAdapter;
 	private ArrayList<Site> sites;
@@ -39,11 +40,15 @@ public class SiteListActivity extends ListActivity {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
-		Intent intent=new Intent();
-	    intent.putExtra("Latitude", sites.get(position).latitude);
-	    intent.putExtra("Longitude", sites.get(position).longitude);
-	    setResult(RESULT_OK, intent);
-	    finish();
+		Site site = listAdapter.getItem(position);
+		Log.d(TAG, site.toString());
+	    if (null != site) {
+			Intent intent = new Intent();
+			intent.putExtra("MobileKey", site.mobileKey);
+			setResult(RESULT_OK, intent);
+		}
+		finish();
+	    
 	}
 
 	private void setUpViews() {

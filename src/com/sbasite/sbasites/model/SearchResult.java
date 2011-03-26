@@ -27,14 +27,14 @@ public class SearchResult implements Parcelable {
 		super();
 		this.type = RESULT_SITE;
 		this.title = site.siteName + " " + site.siteCode;
-		this.coordinates = getPoint(site.latitude, site.longitude);
+		this.coordinates = getPoint(site.latitude*1000000.0, site.longitude*1000000.0);
 	}
 	
 	public SearchResult(Address address) {
 		super();
 		this.type = RESULT_ADDRESS;
 		this.title = address.getAddressLine(0);
-		this.coordinates = getPoint(address.getLatitude(), address.getLongitude());
+		this.coordinates = getPoint(address.getLatitude()*1000000.0, address.getLongitude()*1000000.0);
 	}
 
 	public SearchResult(Double latitude, Double longitude) {
@@ -53,7 +53,7 @@ public class SearchResult implements Parcelable {
 	}
 	
 	private GeoPoint getPoint(double lat, double lon) {
-		return(new GeoPoint((int)(lat*1000000.0), (int)(lon*1000000.0)));
+		return(new GeoPoint((int)(lat), (int)(lon)));
 	}
 	
 	public SearchResult(Parcel in) {
@@ -75,4 +75,14 @@ public class SearchResult implements Parcelable {
 		dest.writeDouble(coordinates.getLatitudeE6());
 		dest.writeDouble(coordinates.getLongitudeE6());
 	}
+	
+	public static final Parcelable.Creator<SearchResult> CREATOR = new Parcelable.Creator<SearchResult>() {
+		public SearchResult createFromParcel(Parcel in) {
+			return new SearchResult(in);
+		}
+
+		public SearchResult[] newArray(int size) {
+			return new SearchResult[size];
+		}
+	};
 }

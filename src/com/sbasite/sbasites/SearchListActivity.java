@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 public class SearchListActivity extends ListActivity implements LoadSearchResultsResponder {
+
 	private static final String TAG = SearchListActivity.class.getSimpleName();
 	public static final String SEARCH_RESULT = "search_result";
 	private Button doneButton;
@@ -81,10 +82,11 @@ public class SearchListActivity extends ListActivity implements LoadSearchResult
 
 	public void searchResultsLoaded(LoadSearchResults results) {
 		ArrayList<SearchResult> searchResults = results.searchResults;
-		listAdapter = new SearchResultListAdapter(getApplicationContext(), searchResults);
+		listAdapter = new SearchResultListAdapter(this, searchResults);
 		setListAdapter(listAdapter);
 		setProgressBarIndeterminateVisibility(false);
 		progressDialog.dismiss();
+		listAdapter.forceReload();
 	}
 
 }

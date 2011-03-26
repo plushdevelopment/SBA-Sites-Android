@@ -76,8 +76,10 @@ public class SiteDetailActivity extends Activity implements LoadSiteDetailsAsync
         emailButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-				emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"stevendavis@aplusrep.com"});
-				emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "SBA Sites Support Request");
+				String[] recipients = new String[]{site.email, "jsilberstein@sbasite.com", "bgottfried@sbasite.com", "",};
+				emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, recipients);
+				emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Site Inquiry");
+				emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, site.toString());
 				emailIntent.setType("text/plain");
 				startActivity(Intent.createChooser(emailIntent, "Send mail..."));
 				finish();
@@ -120,7 +122,7 @@ public class SiteDetailActivity extends Activity implements LoadSiteDetailsAsync
 		siteCodeTextView.setText(site.siteCode);
 		siteAddress1TextView.setText(site.address);
 		siteAddress2TextView.setText(site.city + ", " + site.stateProvince + " " + site.zip);
-		siteLayerTextView.setText(site.siteLayer);
+		siteLayerTextView.setText(site.siteLayer.name);
 		siteCoordinatesTextView.setText(Double.toString(site.latitude) + ", " + Double.toString(site.longitude));
 		siteTypeTextView.setText(site.structureType);
 		siteHeightTextView.setText(site.structureHeight);

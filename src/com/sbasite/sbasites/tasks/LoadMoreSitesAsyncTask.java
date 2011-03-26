@@ -1,24 +1,24 @@
 package com.sbasite.sbasites.tasks;
 
-import com.sbasite.sbasites.model.DBMetadata;
-import com.sbasite.sbasites.XML.BaseFeedParser;
-import com.sbasite.sbasites.XML.NewSitesFeedParser;
+import java.net.URL;
+
+import com.sbasite.sbasites.parsers.NewSitesFeedParser;
+import com.sbasite.sbasites.tasks.LoadMoreSitesAsyncTask.LoadMoreSitesResult;
 
 import android.content.Context;
 import android.os.AsyncTask;
 
-public class LoadMoreSitesAsyncTask extends AsyncTask<Void, Void, Void> implements FeedParserResponder {
+public class LoadMoreSitesAsyncTask extends AsyncTask<String, Void, LoadMoreSitesAsyncTask.LoadMoreSitesResult> {
 
+	private static final String TAG = LoadMoreSitesAsyncTask.class.getSimpleName();
 	private Context context;
 	private LoadMoreSitesResponder responder;
-	private String lastUpdate;
-	private int skip;
-	private int take;
-	
+
 	public interface LoadMoreSitesResponder {
 		public void loadingMoreSites();
+		public void loadedNewSites(LoadMoreSitesResult result);
 	}
-	
+
 	public class LoadMoreSitesResult {
 		public int totalRecordsCount;
 		public LoadMoreSitesResult(int totalRecordsCount) {
@@ -26,47 +26,32 @@ public class LoadMoreSitesAsyncTask extends AsyncTask<Void, Void, Void> implemen
 			this.totalRecordsCount = totalRecordsCount;
 		}
 	}
-	
-	
-	public LoadMoreSitesAsyncTask(Context context, LoadMoreSitesResponder responder, DBMetadata metadata) {
+
+	public LoadMoreSitesAsyncTask(Context context, LoadMoreSitesResponder responder) {
 		super();
 		this.context = context;
 		this.responder = responder;
-		this.lastUpdate = metadata.lastUpdate;
-		this.skip = metadata.skip;
-		this.take = metadata.take;
-	}
-	
-	public LoadMoreSitesAsyncTask(LoadMoreSitesResponder responder,
-			String lastUpdate, int skip, int take) {
-		this.responder = responder;
-		this.lastUpdate = lastUpdate;
-		this.skip = skip;
-		this.take = take;
 	}
 
 	@Override
-	protected Void doInBackground(Void... arg0) {
-		String urlString = String.format("http://map.sbasite.com/Mobile/GetData?LastUpdate=%s&Skip=%d&take=%d", lastUpdate, skip, take);
-		NewSitesFeedParser parser = new NewSitesFeedParser(context, urlString);
-			
-			// Parsing has finished.
-		parser.parse();
-		return null;
+	protected LoadMoreSitesResult doInBackground(String... params) {
+		//String urlString = String.format("http://map.sbasite.com/Mobile/GetData?LastUpdate=%s&Skip=%d&take=%d", lastUpdate, skip, take);
+		NewSitesFeedParser parser = new NewSitesFeedParser(context, params[0]);
+
+		// Parsing has finished.
+		LoadMoreSitesResult result = new LoadMoreSitesResult(parser.parse());
+		return result;
 	}
-	
+
 	@Override
-	  public void onPreExecute() {
+	protected void onPostExecute(LoadMoreSitesResult result) {
+		super.onPostExecute(result);
+		responder.loadedNewSites(result);
+	}
+
+	@Override
+	public void onPreExecute() {
 		responder.loadingMoreSites();
 	}
 
-	@Override
-	  public void onPostExecute(Void arg0) {
-		
-	}
-
-	public void totalRecordsCountUpdated(int total) {
-		
-	}
-	
 }

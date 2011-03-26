@@ -5,8 +5,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import com.sbasite.sbasites.XML.FeedParserInterface;
 import com.sbasite.sbasites.model.Site;
+import com.sbasite.sbasites.parsers.FeedParserInterface;
 
 import android.os.AsyncTask;
 

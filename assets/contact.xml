@@ -1,0 +1,8 @@
+<LinearLayout orientation="1" layout_height="-2" paddingTop="resource_id:0xa01" background="resource_id:0x7f020008" clickable="true" layout_marginBottom="resource_id:0xa01" layout_width="-1" paddingBottom="resource_id:0xa01" paddingLeft="resource_id:0x1401" paddingRight="resource_id:0x1401">
+<LinearLayout orientation="0" layout_height="-2" layout_width="-1">
+<TextView text="Name " textColor="-16777216" textStyle="1" layout_marginRight="resource_id:0xf01" layout_height="-2" layout_width="-2">
+</TextView>
+<TextView id="resource_id:0x7f060005" textColor="-16777216" layout_height="-2" layout_width="-2">
+</TextView>
+</LinearLayout>
+</LinearLayout>

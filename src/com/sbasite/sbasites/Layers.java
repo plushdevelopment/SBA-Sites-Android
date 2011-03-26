@@ -16,16 +16,18 @@ import android.widget.ListView;
 
 public class Layers extends ListActivity {
 
+	private static final String TAG = Layers.class.getSimpleName();
 	private Button doneButton;
 	private LayerListAdapter listAdapter;
+	private ArrayList<SiteLayer> layers;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ArrayList<SiteLayer> layers = SiteLayer.layers(getApplicationContext());
-        Log.d("SiteListActivity", layers.toString());
+        layers = getSBASitesApplication().getLayers();
+        Log.d("Layers", layers.toString());
         listAdapter = new LayerListAdapter(this, layers);
-        setContentView(R.layout.listview);
+        setContentView(R.layout.layers);
         setListAdapter(listAdapter);
         setUpViews();
     }
@@ -35,8 +37,13 @@ public class Layers extends ListActivity {
 	 */
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
+		SiteLayer layer = listAdapter.getItem(position);
+		Log.d(TAG, layer.toString());
+		if (null != layer) {
+			layer.activated = !layer.activated;
+		}
+		listAdapter.forceReload();
 	}
 
 	private void setUpViews() {
@@ -52,6 +59,10 @@ public class Layers extends ListActivity {
 	protected void onResume() {
 		super.onResume();
 		listAdapter.forceReload();
+	}
+	
+	protected SBASitesApplication getSBASitesApplication() {
+		return (SBASitesApplication)getApplication();
 	}
 	
 }

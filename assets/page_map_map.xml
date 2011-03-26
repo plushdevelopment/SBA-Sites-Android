@@ -1,0 +1,16 @@
+<RelativeLayout id="resource_id:0x7f060019" layout_height="-1" layout_width="-1">
+<com.google.android.maps.MapView clickable="true" id="resource_id:0x7f060009" layout_height="-1" layout_width="-1" apiKey="0e04WZz7mFHLgMYMteA_zjZihSNaPrBx6N-KINw">
+</com.google.android.maps.MapView>
+<LinearLayout id="resource_id:0x7f06001a" orientation="1" layout_centerInParent="true" layout_height="-2" layout_width="-2" gravity="17">
+<ProgressBar id="resource_id:0x7f06001b" max="100" layout_height="resource_id:0xf01" style="resource_id:0x1010078" progressDrawable="resource_id:0x7f020000" visibility="0" layout_centerInParent="true" layout_width="resource_id:0x7801">
+</ProgressBar>
+<TextView id="resource_id:0x7f06001c" text="Loading..." textColor="-16777216" textStyle="1" layout_height="-2" layout_width="-2">
+</TextView>
+</LinearLayout>
+<LinearLayout id="resource_id:0x7f06001d" layout_height="-2" paddingTop="resource_id:0x501" visibility="2" background="-16777216" layout_centerHorizontal="true" layout_alignParentBottom="true" layout_marginBottom="resource_id:0xa01" layout_width="-2" paddingBottom="resource_id:0x501" paddingLeft="resource_id:0x501" paddingRight="resource_id:0x501">
+<TextView id="resource_id:0x7f060007" text="Location Where" layout_height="-2" layout_width="-2">
+</TextView>
+<Button id="resource_id:0x7f060008" text="View" layout_height="resource_id:0x2801" layout_width="-2" layout_marginLeft="resource_id:0xa01">
+</Button>
+</LinearLayout>
+</RelativeLayout>

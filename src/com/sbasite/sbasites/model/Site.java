@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.activeandroid.ActiveRecordBase;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.google.android.maps.GeoPoint;
+import com.sbasite.sbasites.R;
 
 @Table(name = "SITES")	
 public class Site extends ActiveRecordBase<Site> {
@@ -31,7 +35,7 @@ public class Site extends ActiveRecordBase<Site> {
 	public String siteCode;
 	
 	@Column(name = "SITE_LAYER")
-	public String siteLayer;
+	public SiteLayer siteLayer;
 
 	@Column(name = "SITE_NAME")
 	public String siteName;
@@ -91,6 +95,10 @@ public class Site extends ActiveRecordBase<Site> {
 		return Site.querySingle(context, Site.class, null, String.format("SITE_MOBILEKEY = '%s'", mobileKey), null); 
 	}
 	
+	public static int deleteSiteForMobileKey(Context context, String mobileKey) {
+		return Site.delete(context, Site.class, String.format("SITE_MOBILEKEY = '%s'", mobileKey)); 
+	}
+	
 	public static Site siteForName(Context context, String siteName) {
 		return Site.querySingle(context, Site.class, null, String.format("SITE_NAME = '%s'", siteName), null); 
 	}
@@ -139,23 +147,56 @@ public class Site extends ActiveRecordBase<Site> {
 	
 	@Override
 	public String toString() {
-		return mobileKey + siteCode + siteLayer + siteStatus;
+		String description = 	"\n\n\n" +
+								"Name: " + siteName + "\n" + 
+								"Code: " + siteCode + "\n" + 
+								"Layer: " + siteLayer.name + "\n" + 
+								"Status: " + siteStatus + "\n" + 
+								"Address: " + address + "\n" + 
+								"City: " + city + "\n" + 
+								"County: " + county + "\n" + 
+								"State/Province: " + stateProvince + "\n" + 
+								"Zip: " + zip + "\n" + 
+								"Latitude: " + Double.toString(latitude) + "\n" +
+								"Longitude: " + Double.toString(longitude) + "\n" +
+								"Structure ID: " + structureID + "\n" +
+								"Structure Type: " + structureType + "\n" +
+								"Height(ft): " + structureHeight + "\n" +
+								"Grd Elev: " + agl + "\n" +
+								"BTA: " + bta + "\n" +
+								"MTA: " + mta + "\n" +
+								"Contact: " + contact + "\n" +
+								"Phone" + phone + "\n" +
+								"Email: " + email + "\n";
+		return description;
 	}
 
-	public static List<Site> loadSitesForRegionInLayer(
+	public static ArrayList<Site> loadSitesForRegionInLayer(
 			Context context, double minLat, double maxLat,
-			double minLong, double maxLong, String name) {
-		return Site.query(context, Site.class, null, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong + " AND SITE_LAYER = '" + name + "'", "SITE_NAME");
+			double minLong, double maxLong, SiteLayer layer) {
+		return Site.query(context, Site.class, null, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong + " AND SITE_LAYER = " + layer.getId(), "SITE_NAME");
 	}
 
-	public static List<Site> sitesForRegion(GeoPoint topLeft,
-			GeoPoint bottomRight, int zoomlevel) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	public GeoPoint getPoint() {
 		return(new GeoPoint((int)(latitude*1000000.0), (int)(longitude*1000000.0)));
+	}
+	
+	public int getPinIcon() {
+		int iconID;
+		if (siteLayer.name.matches("Canada")) {
+			iconID = R.drawable.canada;
+		} else if (siteLayer.name.matches("New Construction")) {
+			iconID = R.drawable.new_construction;
+		} else if (siteLayer.name.matches("Central America")) {
+			iconID = R.drawable.central_america;
+		} else if (siteLayer.name.matches("Managed")) {
+			iconID = R.drawable.managed;
+		} else if (siteLayer.name.matches("Owned")) {
+			iconID = R.drawable.owned;
+		} else {
+			iconID = R.drawable.yellow_icon;
+		}
+		return iconID;
 	}
 	
 }

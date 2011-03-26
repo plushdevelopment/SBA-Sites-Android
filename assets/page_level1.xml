@@ -1,0 +1,22 @@
+<LinearLayout orientation="1" layout_height="-1" layout_width="-1">
+<LinearLayout orientation="0" layout_height="resource_id:0x3401" layout_width="-1" paddingTop="resource_id:0x501" background="resource_id:0x7f020007" gravity="112">
+<RelativeLayout layout_height="-2" layout_width="-2">
+<Button id="resource_id:0x7f06000f" layout_height="-2" layout_width="resource_id:0x3701">
+</Button>
+<ImageView id="resource_id:0x7f060010" layout_centerInParent="true" src="resource_id:0x7f02001b" layout_height="-2" layout_width="-2">
+</ImageView>
+<ProgressBar id="resource_id:0x7f060011" layout_centerInParent="true" layout_height="resource_id:0x1e01" layout_width="resource_id:0x1e01" visibility="1">
+</ProgressBar>
+</RelativeLayout>
+<EditText id="resource_id:0x7f060012" layout_gravity="119" hint="Keyword" layout_weight="resource_id:0x3f800000" layout_height="-2" layout_width="-2" singleLine="true">
+</EditText>
+<RelativeLayout layout_height="-2" layout_width="-2">
+<Button id="resource_id:0x7f060013" layout_gravity="119" layout_height="-2" layout_width="resource_id:0x4601">
+</Button>
+<ProgressBar id="resource_id:0x7f060014" layout_centerInParent="true" layout_height="resource_id:0x1e01" layout_width="resource_id:0x1e01" visibility="1">
+</ProgressBar>
+<TextView id="resource_id:0x7f060015" layout_centerInParent="true" text="Search" textColor="-16777216" layout_height="-2" layout_width="-2">
+</TextView>
+</RelativeLayout>
+</LinearLayout>
+</LinearLayout>

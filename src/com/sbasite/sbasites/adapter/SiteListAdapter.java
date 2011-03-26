@@ -3,8 +3,7 @@ package com.sbasite.sbasites.adapter;
 import java.util.ArrayList;
 
 import com.sbasite.sbasites.R;
-import com.sbasite.sbasites.SiteListItemView;
-import com.sbasite.sbasites.R.layout;
+import com.sbasite.sbasites.layouts.SiteListItem;
 import com.sbasite.sbasites.model.Site;
 
 import android.content.Context;
@@ -39,14 +38,14 @@ public class SiteListAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		
-		SiteListItemView siteListItemView;
+		SiteListItem siteListItem;
 		if (null == convertView) {
-			siteListItemView = (SiteListItemView)View.inflate(context, R.layout.site_list_item, null);
+			siteListItem = (SiteListItem)View.inflate(context, R.layout.site_list_item, null);
 		} else {
-			siteListItemView = (SiteListItemView)convertView;
+			siteListItem = (SiteListItem)convertView;
 		}
-		siteListItemView.setSite(sites.get(position));
-		return siteListItemView;
+		siteListItem.setSite(sites.get(position));
+		return siteListItem;
 	}
 
 	public void forceReload() {

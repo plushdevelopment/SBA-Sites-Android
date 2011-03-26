@@ -9,8 +9,8 @@ import com.sbasite.sbasites.SearchListActivity;
 import com.sbasite.sbasites.model.DBMetadata;
 import com.sbasite.sbasites.model.SearchResult;
 import com.sbasite.sbasites.model.Site;
-import com.sbasite.sbasites.XML.BaseFeedParser;
-import com.sbasite.sbasites.XML.NewSitesFeedParser;
+import com.sbasite.sbasites.parsers.BaseFeedParser;
+import com.sbasite.sbasites.parsers.NewSitesFeedParser;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

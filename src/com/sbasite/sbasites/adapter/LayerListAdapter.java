@@ -3,8 +3,8 @@ package com.sbasite.sbasites.adapter;
 import java.util.ArrayList;
 
 import com.sbasite.sbasites.R;
+import com.sbasite.sbasites.layouts.LayerListItemView;
 import com.sbasite.sbasites.model.SiteLayer;
-import com.sbasite.sbasites.view.LayerListItemView;
 
 import android.content.Context;
 import android.util.Log;
@@ -44,7 +44,7 @@ public class LayerListAdapter extends BaseAdapter {
 		} else {
 			layerListItemView = (LayerListItemView)convertView;
 		}
-		layerListItemView.setSite(layers.get(position));
+		layerListItemView.setLayer(layers.get(position));
 		return layerListItemView;
 	}
 

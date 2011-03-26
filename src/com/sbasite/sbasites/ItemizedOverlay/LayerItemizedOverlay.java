@@ -2,16 +2,11 @@ package com.sbasite.sbasites.ItemizedOverlay;
 
 import java.util.ArrayList;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
-
 import com.google.android.maps.MapView;
-import com.google.android.maps.OverlayItem;
 import com.readystatesoftware.mapviewballoons.BalloonItemizedOverlay;
 import com.sbasite.sbasites.SiteDetailActivity;
 import com.sbasite.sbasites.SiteOverlayItem;

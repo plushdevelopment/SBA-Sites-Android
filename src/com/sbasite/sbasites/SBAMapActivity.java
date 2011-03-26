@@ -1,4 +1,4 @@
-	 
+
 package com.sbasite.sbasites;
 
 import java.util.ArrayList;
@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,12 +30,14 @@ import com.sbasite.sbasites.R;
 import com.sbasite.sbasites.ItemizedOverlay.LayerItemizedOverlay;
 import com.sbasite.sbasites.model.SearchResult;
 import com.sbasite.sbasites.model.Site;
+import com.sbasite.sbasites.model.SiteLayer;
 
 public class SBAMapActivity extends MapActivity {
-	
+
 	private static final String TAG = SBAMapActivity.class.getSimpleName();
 	protected static final int CHOOSE_SEARCH_RESULT = 1;
 	protected static final int CHOOSE_SITE_RESULT = 2;
+	protected static final int CHOOSE_LAYER = 3;
 	private MapView mapView;
 	private MapController mapController;
 	private EditText searchText;
@@ -46,37 +49,34 @@ public class SBAMapActivity extends MapActivity {
 	private Button btnSearch;
 	private LayerItemizedOverlay itemizedOverlay;
 	Drawable marker;
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    super.onCreateOptionsMenu(menu);
-	    getMenuInflater().inflate(R.menu.menu, menu);
-	    menu.findItem(R.id.instructions).setIntent(
-	    		new Intent(this, Instructions.class));
-	    menu.findItem(R.id.layers).setIntent(
-	    		new Intent(this, Layers.class));
+		super.onCreateOptionsMenu(menu);
+		getMenuInflater().inflate(R.menu.menu, menu);
+		menu.findItem(R.id.instructions).setIntent(
+				new Intent(this, Instructions.class));
+		menu.findItem(R.id.layers).setIntent(
+				new Intent(this, Layers.class));
 		menu.findItem(R.id.list_view).setIntent(
-	    		new Intent(this, SiteListActivity.class));
-	    return true;
+				new Intent(this, SiteListActivity.class));
+		return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item){
 		super.onOptionsItemSelected(item);
-		
 		if (item.getItemId() == R.id.list_view) {
-			final int result=1;
-			startActivityForResult(item.getIntent(), result);
+			startActivityForResult(item.getIntent(), CHOOSE_SITE_RESULT);
 		} else if (item.getItemId() == R.id.layers) {
-			final int result=2;
-			startActivityForResult(item.getIntent(), result);
+			startActivityForResult(item.getIntent(), CHOOSE_LAYER);
 		} else {
 			startActivity(item.getIntent());
 		}
-		
+
 		return true;
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// Call super always
@@ -102,13 +102,13 @@ public class SBAMapActivity extends MapActivity {
 		mapOverlays.add(me);
 		me.enableMyLocation();
 		me.enableCompass();
-		
+
 		mapController.setCenter(getPoint(46.0730555556, -100.546666667)); // Set center to the center of North America
 		mapController.setZoom(4);
-		
+
 		welcomeImageView=(ImageView)findViewById(R.id.imageView1);
 		welcomeImageView.setVisibility(View.VISIBLE);
-		
+
 		btnSearch = (Button)findViewById(R.id.SearchButton);
 		btnSearch.setEnabled(true);
 		btnSearch.setOnClickListener(new OnClickListener() {
@@ -118,39 +118,22 @@ public class SBAMapActivity extends MapActivity {
 				}
 			}
 		});
-		
+
 		searchText=(EditText)findViewById(R.id.searchText);
-		
+
 		messageHandler = new Handler() {
 			public void handleMessage(Message msg) {
 				if (welcomeImageView.getVisibility() == View.GONE) {
-					
-					if (mapView.getZoomLevel() < 13) {
-						mapView.getController().setZoom(13);
+
+					if (mapView.getZoomLevel() < 11) {
+						mapView.getController().setZoom(11);
 					} else if (msg.what == 1) {
-						double latSpan = ((mapView.getLatitudeSpan() / 1000000.0)/2.0);
-						double longSpan = ((mapView.getLongitudeSpan() / 1000000.0)/2.0);
-						double latCenter = (mapView.getMapCenter().getLatitudeE6()/1000000.0);
-						double longCenter = (mapView.getMapCenter().getLongitudeE6()/1000000.0);
-						double maxLat = (latCenter + latSpan);
-						double minLat = (latCenter -  latSpan);
-						double maxLong = (longCenter + longSpan);
-						double minLong = (longCenter - longSpan);
-						//itemizedOverlay.removeAllItems();
-						ArrayList<Site> sites = Site.loadSitesForRegion(getApplicationContext(), minLat, maxLat, minLong, maxLong);
-						if (!sites.isEmpty()) {
-							itemizedOverlay.addOverlays(sites);
-							/*
-							for (Site site : sites) {
-								itemizedOverlay.addOverlay(new SiteOverlayItem(site));
-							}
-							*/
-						}
+						updateOverlays();
 					}
 				}
-            }
-        };
-        
+			}
+		};
+
 		updateMapOverlaysThread = new UpdateMapsOverlaysThread(mapView, messageHandler);
 		new Thread(updateMapOverlaysThread).start();
 	}
@@ -159,144 +142,119 @@ public class SBAMapActivity extends MapActivity {
 		String addressInput = searchText.getText().toString(); //Get input text
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
-		Intent searchIntent = new Intent(SBAMapActivity.this, SearchListActivity.class);
+		Intent searchIntent = new Intent(this, SearchListActivity.class);
 		searchIntent.putExtra("search_text", addressInput);
-		startActivity(searchIntent);
+		startActivityForResult(searchIntent, CHOOSE_SEARCH_RESULT);
 		searchText.setText("");
 		searchText.setHint("Search");
 	}	
-	
- 	@Override
+
+	@Override
 	protected boolean isRouteDisplayed() {
 		return(false);
 	}
- 	
- 	@Override
-    public void onActivityResult(int requestCode,int resultCode,Intent data) 
- 	{
- 		if (CHOOSE_SEARCH_RESULT == requestCode && RESULT_OK == resultCode) {
- 			SearchResult result = data.getParcelableExtra(SearchListActivity.SEARCH_RESULT);
- 	 		welcomeImageView.setVisibility(View.GONE);
- 	 		mapView.setClickable(true);
- 	 		navigateToLocation(result.coordinates.getLatitudeE6(), result.coordinates.getLongitudeE6(), mapView);
- 		} else {
- 			super.onActivityResult(requestCode, resultCode, data);
- 		}
- 	}
- 	
- 	  public static void navigateToLocation (double latitude, double longitude, MapView mv) {
- 	    GeoPoint p = new GeoPoint((int) latitude, (int) longitude); //new GeoPoint
- 	    mv.displayZoomControls(true); //display Zoom (seems that it doesn't work yet)
- 	    MapController mc = mv.getController();
- 	    mc.animateTo(p); //move map to the given point
- 	    //int zoomlevel = mv.getMaxZoomLevel(); //detect maximum zoom level
- 	    mc.setZoom(15); //zoom
- 	    //mv.setSatellite(false); //display only "normal" mapview	
- 	  }
- 	
- 	public void userLocationClicked(View view)  
- 	{
- 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
-		
- 		if (me != null) {
- 			GeoPoint location = me.getMyLocation();
- 			if (null == location) {
- 				AlertDialog.Builder dialog = new AlertDialog.Builder(SBAMapActivity.this);
- 				dialog.setTitle("Location Error");
- 				dialog.setMessage("Your location could not be found");
- 				dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
- 					public void onClick(DialogInterface dialog, int Click) {
- 						dialog.dismiss();
- 					}
- 				});
- 				dialog.show();
- 			} else {
- 				welcomeImageView.setVisibility(View.GONE);
- 				mapView.setClickable(true);
- 				mapView.getController().setCenter(location);
- 				mapView.getController().setZoom(13);
- 			}
- 		}
- 	}  
 
- 	protected SBASitesApplication getSBASitesApplication() {
+	@Override
+	public void onActivityResult(int requestCode,int resultCode,Intent data) 
+	{
+		if (CHOOSE_SEARCH_RESULT == requestCode && RESULT_OK == resultCode) {
+			SearchResult result = data.getParcelableExtra(SearchListActivity.SEARCH_RESULT);
+			welcomeImageView.setVisibility(View.GONE);
+			mapView.setClickable(true);
+			Log.d(TAG, String.format("Latitude: %d, Longitude: %d", result.coordinates.getLatitudeE6(), result.coordinates.getLongitudeE6()));
+			navigateToLocation(result.coordinates.getLatitudeE6(), result.coordinates.getLongitudeE6(), mapView);
+		} else if (CHOOSE_SITE_RESULT == requestCode && RESULT_OK == resultCode) {
+			String mobileKey = data.getStringExtra("MobileKey");
+			Log.d(TAG, String.format("%s", mobileKey));
+			Site site = Site.siteForMobileKey(getApplicationContext(), mobileKey);
+			Log.d(TAG, site.toString());
+			if (null != site) {
+				navigateToSite(site.latitude, site.longitude, mapView);
+			}
+		} else if (CHOOSE_LAYER == requestCode && RESULT_OK == resultCode) {
+
+		} else {
+			super.onActivityResult(requestCode, resultCode, data);
+		}
+		updateOverlays();
+	}
+
+	public static void navigateToLocation (double latitude, double longitude, MapView mv) {
+		GeoPoint p = new GeoPoint((int) latitude, (int) longitude); //new GeoPoint
+		mv.displayZoomControls(true); //display Zoom (seems that it doesn't work yet)
+		MapController mc = mv.getController();
+		mc.animateTo(p); //move map to the given point
+		//int zoomlevel = mv.getMaxZoomLevel(); //detect maximum zoom level
+		mc.setZoom(15); //zoom
+		//mv.setSatellite(false); //display only "normal" mapview	
+	}
+	
+	public static void navigateToSite (double latitude, double longitude, MapView mv) {
+		GeoPoint p = new GeoPoint((int)(latitude*1000000.0), (int)(longitude*1000000.0)); //new GeoPoint
+		mv.displayZoomControls(true); //display Zoom (seems that it doesn't work yet)
+		MapController mc = mv.getController();
+		mc.animateTo(p); //move map to the given point
+		//int zoomlevel = mv.getMaxZoomLevel(); //detect maximum zoom level
+		mc.setZoom(15); //zoom
+		//mv.setSatellite(false); //display only "normal" mapview	
+	}
+
+	public void userLocationClicked(View view)  
+	{
+		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
+
+		if (me != null) {
+			GeoPoint location = me.getMyLocation();
+			if (null == location) {
+				AlertDialog.Builder dialog = new AlertDialog.Builder(SBAMapActivity.this);
+				dialog.setTitle("Location Error");
+				dialog.setMessage("Your location could not be found");
+				dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int Click) {
+						dialog.dismiss();
+					}
+				});
+				dialog.show();
+			} else {
+				welcomeImageView.setVisibility(View.GONE);
+				mapView.setClickable(true);
+				mapView.getController().setCenter(location);
+				mapView.getController().setZoom(13);
+			}
+		}
+	}  
+
+	protected SBASitesApplication getSBASitesApplication() {
 		return (SBASitesApplication)getApplication();
 	}
- 	
+
 	private GeoPoint getPoint(double lat, double lon) {
 		return(new GeoPoint((int)(lat*1000000.0), (int)(lon*1000000.0)));
 	}
-	/*	
-	private class SitesOverlay extends ItemizedOverlay<OverlayItem> {
-		private List<OverlayItem> items=new ArrayList<OverlayItem>();
-		private Drawable marker=null;
-		
-		public SitesOverlay(Drawable marker) {
-			super(marker);
-			this.marker=marker;
-			
-			populate();
-		}
-		
-		public void addOverlay(OverlayItem overlay) {
-		    items.add(overlay);
-		    populate();
-		}
-		
-		public void addOverlays(ArrayList<Site> overlays) {
-			items.removeAll(items);
-			for (int i = 0; i < overlays.size(); i++) {
-				Site site = overlays.get(i);
-				OverlayItem overlayItem = new OverlayItem(this.getPoint(site.latitude, site.longitude), site.siteName, site.mobileKey);
-				items.add(overlayItem);
-			}
-		    populate();
-		}
-		
-		private GeoPoint getPoint(double lat, double lon) {
-			return(new GeoPoint((int)(lat*1000000.0), (int)(lon*1000000.0)));
-		}
 
-		@Override
-		protected OverlayItem createItem(int i) {
-			return(items.get(i));
+	public void updateOverlays() {
+		double latSpan = ((mapView.getLatitudeSpan() / 1000000.0)/2.0);
+		double longSpan = ((mapView.getLongitudeSpan() / 1000000.0)/2.0);
+		double latCenter = (mapView.getMapCenter().getLatitudeE6()/1000000.0);
+		double longCenter = (mapView.getMapCenter().getLongitudeE6()/1000000.0);
+		double maxLat = (latCenter + latSpan);
+		double minLat = (latCenter -  latSpan);
+		double maxLong = (longCenter + longSpan);
+		double minLong = (longCenter - longSpan);
+		itemizedOverlay.removeAllItems();
+		ArrayList<Site> sites = new ArrayList<Site>();
+		for (SiteLayer layer : getSBASitesApplication().getLayers()) {
+			if (layer.activated == true) {
+				sites.addAll(Site.loadSitesForRegionInLayer(getApplicationContext(), minLat, maxLat, minLong, maxLong, layer));
+			}
 		}
-		
-		@Override
-		public void draw(Canvas canvas, MapView mapView,
-											boolean shadow) {
-			super.draw(canvas, mapView, shadow);
-			
-			boundCenterBottom(marker);
-		}
- 		
-		@Override
-		  protected boolean onTap(int i) {
-			
-			InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-			imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
-			
-		   final OverlayItem item = items.get(i);
-		   AlertDialog.Builder dialog = new AlertDialog.Builder(SBAMapActivity.this);
-		   dialog.setTitle(item.getTitle());
-		   dialog.setMessage(item.getSnippet());
-		   dialog.setPositiveButton("Load", new DialogInterface.OnClickListener() {
-		    public void onClick(DialogInterface dialog, int Click) {
-		    	Log.d("Overlay Tapped", item.getSnippet());
-		     Intent intent = new Intent(SBAMapActivity.this, SiteDetailActivity.class);
-		     intent.putExtra("MobileKey", item.getSnippet());
-		     startActivity(intent);
-		     }
-		   });
-		   dialog.show();
-		   return true;
-		  }
-		
-		@Override
-		public int size() {
-			return(items.size());
+		getSBASitesApplication().setCurrentSites(sites);
+		if (!sites.isEmpty()) {
+			itemizedOverlay.addOverlays(sites);
+			for (Site site : sites) {
+				itemizedOverlay.addOverlay(new SiteOverlayItem(site));
+			}
 		}
 	}
-	*/
 }

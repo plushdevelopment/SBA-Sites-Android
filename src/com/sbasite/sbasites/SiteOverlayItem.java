@@ -31,15 +31,15 @@ public class SiteOverlayItem extends OverlayItem {
 
 	public Drawable getPinIcon() {
 		int iconID;
-		if (site.siteLayer.matches("Canada")) {
+		if (site.siteLayer.name.matches("Canada")) {
 			iconID = R.drawable.canada;
-		} else if (site.siteLayer.matches("New Construction")) {
+		} else if (site.siteLayer.name.matches("New Construction")) {
 			iconID = R.drawable.new_construction;
-		} else if (site.siteLayer.matches("Central America")) {
+		} else if (site.siteLayer.name.matches("Central America")) {
 			iconID = R.drawable.central_america;
-		} else if (site.siteLayer.matches("Managed")) {
+		} else if (site.siteLayer.name.matches("Managed")) {
 			iconID = R.drawable.managed;
-		} else if (site.siteLayer.matches("Owned")) {
+		} else if (site.siteLayer.name.matches("Owned")) {
 			iconID = R.drawable.owned;
 		} else {
 			iconID = R.drawable.yellow_icon;

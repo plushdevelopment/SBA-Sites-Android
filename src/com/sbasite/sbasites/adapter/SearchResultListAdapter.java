@@ -3,16 +3,16 @@ package com.sbasite.sbasites.adapter;
 import java.util.ArrayList;
 
 import com.sbasite.sbasites.R;
-import com.sbasite.sbasites.view.SearchListItemView;
+import com.sbasite.sbasites.layouts.SearchResultItem;
 import com.sbasite.sbasites.model.SearchResult;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 public class SearchResultListAdapter extends BaseAdapter {
+
 	private static final String TAG = SearchResultListAdapter.class.getSimpleName();
 	private Context context;
 	private ArrayList<SearchResult> results;
@@ -38,14 +38,13 @@ public class SearchResultListAdapter extends BaseAdapter {
 	
 	 public View getView(int position, View convertView, ViewGroup parent) {
 		 
-		SearchListItemView searchListItemView;
+		 SearchResultItem searchListItemView;
 		if (null == convertView) {
-			searchListItemView = (SearchListItemView)View.inflate(context, R.layout.search_result_list_item, null);
+			searchListItemView = (SearchResultItem)View.inflate(context, R.layout.search_result_list_item, null);
 		} else {
-			searchListItemView = (SearchListItemView)convertView;
+			searchListItemView = (SearchResultItem)convertView;
 		}
-		searchListItemView.setSearchResult(results.get(position));
-		Log.d(TAG, searchListItemView.getResult().toString());
+		searchListItemView.setResult(results.get(position));
 		return searchListItemView;
 	}
 

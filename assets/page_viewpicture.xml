@@ -1,0 +1,26 @@
+<LinearLayout orientation="1" layout_height="-1" layout_width="-1">
+<RelativeLayout layout_height="resource_id:0x3401" layout_width="-1" background="resource_id:0x7f020007">
+<Button id="resource_id:0x7f060020" text="Back" layout_height="resource_id:0x2801" layout_width="-2" layout_centerVertical="true">
+</Button>
+<LinearLayout layout_centerVertical="true" layout_centerHorizontal="true" layout_height="-2" layout_width="-2">
+<TextView id="resource_id:0x7f060033" text="0" textColor="-16777216" textStyle="1" textSize="resource_id:0x1601" layout_height="-2" layout_width="-2">
+</TextView>
+<TextView text=" of " textColor="-16777216" textStyle="1" textSize="resource_id:0x1601" layout_height="-2" layout_width="-2">
+</TextView>
+<TextView id="resource_id:0x7f060034" text="0" textColor="-16777216" textStyle="1" textSize="resource_id:0x1601" layout_height="-2" layout_width="-2">
+</TextView>
+</LinearLayout>
+</RelativeLayout>
+<RelativeLayout layout_weight="resource_id:0x3f800000" layout_height="-2" layout_width="-1">
+<ViewFlipper id="resource_id:0x7f060035" layout_height="-1" layout_width="-1" background="-12895429">
+</ViewFlipper>
+<ProgressBar id="resource_id:0x7f06001b" layout_centerInParent="true" layout_height="-2" layout_width="-2">
+</ProgressBar>
+</RelativeLayout>
+<LinearLayout layout_height="resource_id:0x3201" layout_width="-1" background="resource_id:0x7f020007">
+<Button id="resource_id:0x7f060036" text="Previous" layout_weight="resource_id:0x3f800000" layout_height="-2" layout_width="-1">
+</Button>
+<Button id="resource_id:0x7f060037" text="Next" layout_weight="resource_id:0x3f800000" layout_height="-2" layout_width="-1">
+</Button>
+</LinearLayout>
+</LinearLayout>

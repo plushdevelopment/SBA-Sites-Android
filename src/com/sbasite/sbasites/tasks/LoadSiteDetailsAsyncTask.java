@@ -1,7 +1,7 @@
 package com.sbasite.sbasites.tasks;
 
-import com.sbasite.sbasites.XML.SiteDetailsFeedParser;
 import com.sbasite.sbasites.model.Site;
+import com.sbasite.sbasites.parsers.SiteDetailsFeedParser;
 
 import android.content.Context;
 import android.os.AsyncTask;

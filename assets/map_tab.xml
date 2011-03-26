@@ -1,0 +1,6 @@
+<LinearLayout layout_height="-2" layout_width="-2" gravity="16">
+<TextView id="resource_id:0x7f060007" text="Sono - Well roc" layout_height="-2" layout_width="-2">
+</TextView>
+<Button id="resource_id:0x7f060008" text=">" layout_height="resource_id:0x1401" layout_width="-2" layout_marginLeft="resource_id:0xa01">
+</Button>
+</LinearLayout>
