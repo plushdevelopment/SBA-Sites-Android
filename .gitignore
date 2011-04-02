@@ -24,3 +24,7 @@ CVS
 *.class
 *.classpath
 *.project
+bin/com/sbasite/sbasites/ItemizedOverlay/LayerItemizedOverlay.class
+bin/com/sbasite/sbasites/SBAMapActivity$1.class
+bin/com/sbasite/sbasites/SBAMapActivity.class
+.project
