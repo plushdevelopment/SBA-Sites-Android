@@ -37,7 +37,7 @@
 				android:id="@+id/map"
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
-				android:apiKey="0rpLA5b4fBX8iWpkbDyBNQWPYdYsOGdiNyEi__g"
+				android:apiKey="0GQrhHyBPjQce3-CumhLPh31pc5VTiMP2gXbbJg"
 				android:clickable="true"></com.google.android.maps.MapView>
 			<ImageView
 				android:src="@drawable/welcome_instructions" 
