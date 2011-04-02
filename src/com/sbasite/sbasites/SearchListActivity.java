@@ -66,7 +66,9 @@ public class SearchListActivity extends ListActivity implements LoadSearchResult
 		this.doneButton = (Button)this.findViewById(R.id.Button30);
         this.doneButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-	            finish();
+				Intent intent = new Intent();
+				setResult(RESULT_CANCELED, intent);
+				finish();
 			}
         });		
 	}

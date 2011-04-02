@@ -8,7 +8,12 @@
   	android:layout_height="fill_parent"
   	android:orientation="vertical">
     <RelativeLayout android:layout_width="fill_parent" android:id="@+id/relativeLayout1" android:layout_height="wrap_content">
-        <ImageView android:id="@+id/ImageView_SiteThumbnail" android:visibility="visible" android:src="@drawable/icon_ipad" android:padding="5.0px" android:layout_height="95.0px" android:layout_width="95.0px" android:scaleType="fitCenter"></ImageView>
+        <ImageView android:id="@+id/ImageView_SiteThumbnail" android:visibility="gone" android:adjustViewBounds="true"
+        android:layout_width="93sp"
+        android:layout_height="93sp"
+	   	android:layout_marginTop="6sp"
+	   	android:layout_marginLeft="6sp" 
+    	android:layout_marginRight="6sp"></ImageView>
         <LinearLayout android:id="@+id/linearLayout1" android:layout_height="wrap_content" android:layout_toRightOf="@+id/ImageView_SiteThumbnail" android:orientation="vertical" android:layout_width="fill_parent" android:padding="5.0px">
             <TextView android:layout_width="fill_parent" android:textStyle="bold" android:textSize="16sp" android:layout_height="wrap_content" android:layout_weight="1.0" android:id="@+id/TextView_SiteName" android:text="Loading..." android:gravity="right" android:padding="2.0px"></TextView>
             <TextView android:layout_width="fill_parent" android:textSize="16sp" android:layout_height="wrap_content" android:layout_weight="1.0" android:id="@+id/TextView_SiteCode" android:text="Loading..." android:gravity="right" android:padding="2.0px"></TextView>

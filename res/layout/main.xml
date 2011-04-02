@@ -14,9 +14,8 @@
         		android:id="@+id/SiteIconImageButton" 
         		android:layout_toLeftOf="@+id/SiteNameTextView"
 	        	android:src="@drawable/location" 
-    	    	android:layout_gravity="left|center_vertical" 
-        		android:onClick="@string/userLocationClicked">
-    		</ImageButton>
+    	    	android:layout_gravity="left|center_vertical"/>
+    	    	<!-- android:onClick="@string/userLocationClicked" -->
 			<EditText
 				android:id="@+id/searchText"
 				android:layout_height="wrap_content"

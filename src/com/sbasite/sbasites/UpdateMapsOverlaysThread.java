@@ -14,9 +14,9 @@ import com.sbasite.sbasites.model.Site;
 public class UpdateMapsOverlaysThread implements Runnable {
  
 	private static final String TAG = "UpdateMapOverlaysThread";
-	private static final int INTERVAL = 1500;
-	private static final int PAUSE_INTERVAL = 9500;
-	private final Double DISTANCE_CHANGE = .01; //in km
+	private static final int INTERVAL = 5500;
+	private static final int PAUSE_INTERVAL = 14500;
+	private final Double DISTANCE_CHANGE = .10; //in km
  
 	private boolean enabled = true;
 	private boolean interrupted = false;

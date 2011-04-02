@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.sbasite.sbasites" android:versionName="@string/app_version" android:versionCode="1">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="com.sbasite.sbasites" android:versionName="@string/app_version"
+	android:versionCode="1">
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="11"></uses-sdk>
-	<application android:name="SBASitesApplication" android:label="@string/app_name" android:icon="@drawable/icon" android:theme="@style/Theme.OTweet">
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+	<application android:name="SBASitesApplication"
+		android:label="@string/app_name" android:icon="@drawable/icon"
+		android:theme="@style/Theme.OTweet">
 		<meta-data android:name="AA_DB_NAME" android:value="Application.db" />
 		<meta-data android:name="AA_DB_VERSION" android:value="1" />
 		<uses-library android:required="true" android:name="com.google.android.maps"></uses-library>
@@ -19,7 +24,8 @@
 		</activity>
 		<activity android:label="@string/list_view" android:name=".SiteListActivity">
 		</activity>
-		<activity android:label="@string/site_detail_activity" android:name=".SiteDetailActivity">
+		<activity android:label="@string/site_detail_activity"
+			android:name=".SiteDetailActivity">
 		</activity>
 		<activity android:label="@string/site_name_id" android:name=".SearchSiteNameAddress">
 		</activity>
@@ -27,7 +33,8 @@
 		</activity>
 		<activity android:label="@string/address" android:name=".SearchAddress">
 		</activity>
-		<activity android:label="@string/about_sba_communications" android:name=".AboutSbaCommunications">
+		<activity android:label="@string/about_sba_communications"
+			android:name=".AboutSbaCommunications">
 		</activity>
 		<activity android:label="Search" android:name=".SearchListActivity"></activity>
 		<activity android:label="Site Image" android:name=".Activity.SiteImageViewActivity"></activity>

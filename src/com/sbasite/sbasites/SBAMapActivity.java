@@ -8,6 +8,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,6 +23,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -32,7 +37,7 @@ import com.sbasite.sbasites.model.SearchResult;
 import com.sbasite.sbasites.model.Site;
 import com.sbasite.sbasites.model.SiteLayer;
 
-public class SBAMapActivity extends MapActivity {
+public class SBAMapActivity extends MapActivity implements LocationListener {
 
 	private static final String TAG = SBAMapActivity.class.getSimpleName();
 	protected static final int CHOOSE_SEARCH_RESULT = 1;
@@ -47,8 +52,11 @@ public class SBAMapActivity extends MapActivity {
 	private UpdateMapsOverlaysThread updateMapOverlaysThread;
 	private List<Overlay> mapOverlays;
 	private Button btnSearch;
+	private ImageButton useLocationButton;
 	private LayerItemizedOverlay itemizedOverlay;
 	Drawable marker;
+	private LocationManager locationManager=null;
+	private Location latestLocation;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -81,12 +89,33 @@ public class SBAMapActivity extends MapActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		// Call super always
 		super.onCreate(savedInstanceState);
-		setupViews();	
-	}
-
-	private void setupViews() {
 		// Inflate your view
 		setContentView(R.layout.main);
+		setUpViews();
+		setUpLocation();
+		//locationManager=(LocationManager)getSystemService(Context.LOCATION_SERVICE);
+	}
+
+	private void setUpLocation() {
+		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                60,
+                5,
+                this);
+	}
+	
+	public void onLocationChanged(Location location) {
+		latestLocation = location;
+	}
+	
+	public void onProviderDisabled(String provider) { }
+
+	public void onProviderEnabled(String provider) { }
+
+	public void onStatusChanged(String provider, int status, Bundle extras) { }
+
+	private void setUpViews() {
 		// Assign ivars to elements listed in main.xml
 		mapView=(MapView)findViewById(R.id.map);
 		mapView.setClickable(false);
@@ -100,8 +129,7 @@ public class SBAMapActivity extends MapActivity {
 		mapView.getOverlays().add(itemizedOverlay);
 		me=new MyLocationOverlay(this, mapView);
 		mapOverlays.add(me);
-		me.enableMyLocation();
-		me.enableCompass();
+		mapView.invalidate();
 
 		mapController.setCenter(getPoint(46.0730555556, -100.546666667)); // Set center to the center of North America
 		mapController.setZoom(4);
@@ -115,6 +143,34 @@ public class SBAMapActivity extends MapActivity {
 			public void onClick(View v) {
 				if (searchText.getTextSize() > 0.0) {
 					startSearch();
+				}
+			}
+		});
+		
+		useLocationButton = (ImageButton)findViewById(R.id.SiteIconImageButton);
+		useLocationButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				
+				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
+				
+				if (latestLocation != null) {
+					GeoPoint location = getPoint(latestLocation.getLatitude(), latestLocation.getLongitude());
+					Log.i(TAG, String.format("%s", location.toString()));
+						welcomeImageView.setVisibility(View.GONE);
+						mapView.setClickable(true);
+						mapView.getController().setCenter(location);
+						mapView.getController().setZoom(13);
+				} else {
+					AlertDialog.Builder dialog = new AlertDialog.Builder(SBAMapActivity.this);
+					dialog.setTitle("Location Error");
+					dialog.setMessage("Your location could not be found");
+					dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int Click) {
+							dialog.dismiss();
+						}
+					});
+					dialog.show();
 				}
 			}
 		});
@@ -138,6 +194,28 @@ public class SBAMapActivity extends MapActivity {
 		new Thread(updateMapOverlaysThread).start();
 	}
 
+	@Override
+	protected boolean isLocationDisplayed() {
+		return true;
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		updateMapOverlaysThread.setEnabled(false);
+		locationManager.removeUpdates(this);
+		me.disableMyLocation();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60, 5, this);
+		me.enableMyLocation();
+		updateMapOverlaysThread.setEnabled(true);
+	}
+
 	protected void startSearch() {
 		String addressInput = searchText.getText().toString(); //Get input text
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -151,7 +229,7 @@ public class SBAMapActivity extends MapActivity {
 
 	@Override
 	protected boolean isRouteDisplayed() {
-		return(false);
+		return false;
 	}
 
 	@Override
@@ -203,7 +281,7 @@ public class SBAMapActivity extends MapActivity {
 	{
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
-
+		
 		if (me != null) {
 			GeoPoint location = me.getMyLocation();
 			if (null == location) {

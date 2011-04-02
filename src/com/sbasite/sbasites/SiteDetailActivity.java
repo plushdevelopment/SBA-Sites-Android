@@ -34,6 +34,7 @@ public class SiteDetailActivity extends Activity implements LoadSiteDetailsAsync
 	private TextView siteAddress1TextView;
 	private TextView siteAddress2TextView;
 	private TextView siteLayerTextView;
+	private TextView siteStatusTextView;
 	private TextView siteCoordinatesTextView;
 	private TextView siteTypeTextView;
 	private TextView siteHeightTextView;
@@ -61,6 +62,7 @@ public class SiteDetailActivity extends Activity implements LoadSiteDetailsAsync
 		siteAddress1TextView = (TextView)findViewById(R.id.TextView_SiteAddress1);
 		siteAddress2TextView = (TextView)findViewById(R.id.TextView_SiteAddress2);
 		siteLayerTextView = (TextView)findViewById(R.id.TextView_SiteLayer);
+		siteStatusTextView = (TextView)findViewById(R.id.TextView_SiteStatus);
 		siteCoordinatesTextView = (TextView)findViewById(R.id.TextView_SiteCoordinates);
 		siteTypeTextView = (TextView)findViewById(R.id.TextView_SiteType);
 		siteHeightTextView = (TextView)findViewById(R.id.TextView_SiteHeight);
@@ -123,6 +125,7 @@ public class SiteDetailActivity extends Activity implements LoadSiteDetailsAsync
 		siteAddress1TextView.setText(site.address);
 		siteAddress2TextView.setText(site.city + ", " + site.stateProvince + " " + site.zip);
 		siteLayerTextView.setText(site.siteLayer.name);
+		siteStatusTextView.setText(site.siteStatus);
 		siteCoordinatesTextView.setText(Double.toString(site.latitude) + ", " + Double.toString(site.longitude));
 		siteTypeTextView.setText(site.structureType);
 		siteHeightTextView.setText(site.structureHeight);
