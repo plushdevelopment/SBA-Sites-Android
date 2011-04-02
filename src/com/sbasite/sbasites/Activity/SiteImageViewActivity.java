@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 
@@ -61,6 +62,7 @@ public class SiteImageViewActivity extends Activity implements LoadImageAsyncTas
 		setProgressBarIndeterminateVisibility(false);
 		progressDialog.dismiss();
 		image.setImageDrawable(drawable);
+		image.setVisibility(View.VISIBLE);
 	}
 
 }

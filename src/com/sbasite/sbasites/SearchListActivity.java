@@ -50,7 +50,6 @@ public class SearchListActivity extends ListActivity implements LoadSearchResult
 	
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
 		SearchResult result = listAdapter.getItem(position); 
 		if (null != result) {

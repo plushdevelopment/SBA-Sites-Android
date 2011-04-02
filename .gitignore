@@ -16,7 +16,11 @@ xcuserdata
 # svn & cvs
 .svn
 CVS
-.classpath
 
-/bin/SBASites-Android.apk
-/bin/resources.ap_
+# eclipse noise
+*.apk
+*.ap_
+*.dex
+*.class
+*.classpath
+*.project
