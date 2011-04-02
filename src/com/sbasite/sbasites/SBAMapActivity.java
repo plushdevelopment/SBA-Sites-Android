@@ -36,8 +36,10 @@ import com.sbasite.sbasites.ItemizedOverlay.LayerItemizedOverlay;
 import com.sbasite.sbasites.model.SearchResult;
 import com.sbasite.sbasites.model.Site;
 import com.sbasite.sbasites.model.SiteLayer;
+import com.sbasite.sbasites.tasks.LoadSiteForRegionTask;
+import com.sbasite.sbasites.tasks.LoadSiteForRegionTask.LoadSiteForRegionTaskResponder;
 
-public class SBAMapActivity extends MapActivity implements LocationListener {
+public class SBAMapActivity extends MapActivity implements LocationListener, LoadSiteForRegionTaskResponder {
 
 	private static final String TAG = SBAMapActivity.class.getSimpleName();
 	protected static final int CHOOSE_SEARCH_RESULT = 1;
@@ -184,7 +186,7 @@ public class SBAMapActivity extends MapActivity implements LocationListener {
 					if (mapView.getZoomLevel() < 11) {
 						mapView.getController().setZoom(11);
 					} else if (msg.what == 1) {
-						updateOverlays();
+						new LoadSiteForRegionTask(getApplicationContext(), SBAMapActivity.this, mapView, getSBASitesApplication().getLayers()).execute();
 					}
 				}
 			}
@@ -312,6 +314,7 @@ public class SBAMapActivity extends MapActivity implements LocationListener {
 	}
 
 	public void updateOverlays() {
+		/*
 		double latSpan = ((mapView.getLatitudeSpan() / 1000000.0)/2.0);
 		double longSpan = ((mapView.getLongitudeSpan() / 1000000.0)/2.0);
 		double latCenter = (mapView.getMapCenter().getLatitudeE6()/1000000.0);
@@ -334,5 +337,21 @@ public class SBAMapActivity extends MapActivity implements LocationListener {
 				itemizedOverlay.addOverlay(new SiteOverlayItem(site));
 			}
 		}
+		*/
+		
+	}
+
+	public void sitesLoading() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void sitesLoadCancelled() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void sitesLoaded(ArrayList<Site> sites) {
+		
 	}
 }
