@@ -70,8 +70,8 @@ public class SBASitesApplication extends com.activeandroid.Application implement
         catch (SQLException sqle) { throw sqle; }
 		
 		// Starts loading deleted sites
-		String urlString = "http://map.sbasite.com/Mobile/GetData?LastUpdate=" + lastDeletedUpdated + "&Skip=" + totalDeleted + "&Take=" + take + "&Version=2&Action=3";
-		Log.i(TAG, urlString);
+		//String urlString = "http://map.sbasite.com/Mobile/GetData?LastUpdate=" + lastDeletedUpdated + "&Skip=" + totalDeleted + "&Take=" + take + "&Version=2&Action=3";
+		//Log.i(TAG, urlString);
         //new LoadDeletedSitesAsyncTask(this, this).execute(urlString);
 		
         /*

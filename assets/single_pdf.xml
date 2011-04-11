@@ -1,8 +1,0 @@
-<LinearLayout paddingBottom="resource_id:0xa01" layout_height="-2" layout_width="-1">
-<ImageView layout_height="resource_id:0x2801" layout_width="resource_id:0x2801" background="resource_id:0x7f020017">
-</ImageView>
-<TextView id="resource_id:0x7f06003c" text="none" textColor="-10260612" layout_weight="resource_id:0x3f800000" layout_height="-2" textStyle="1" layout_width="-1" gravity="17">
-</TextView>
-<Button id="resource_id:0x7f060008" text="View" layout_height="resource_id:0x2801" layout_width="resource_id:0x3c01">
-</Button>
-</LinearLayout>

@@ -3,7 +3,7 @@ package com.sbasite.sbasites;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import com.sbasite.sbasites.Activity.SiteImageViewActivity;
+import com.sbasite.sbasites.activity.SiteImageViewActivity;
 import com.sbasite.sbasites.model.Site;
 import com.sbasite.sbasites.tasks.LoadImageAsyncTask;
 import com.sbasite.sbasites.tasks.LoadImageAsyncTask.LoadImageAsyncTaskResponder;

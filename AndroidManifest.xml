@@ -2,11 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.sbasite.sbasites" android:versionName="@string/app_version"
 	android:versionCode="1">
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="11"></uses-sdk>
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-	<application android:name="SBASitesApplication"
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	
+	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="8"></uses-sdk>
+	
+	<application android:name=".SBASitesApplication"
 		android:label="@string/app_name" android:icon="@drawable/icon"
 		android:theme="@style/Theme.OTweet">
 		<meta-data android:name="AA_DB_NAME" android:value="Application.db" />
@@ -37,6 +39,6 @@
 			android:name=".AboutSbaCommunications">
 		</activity>
 		<activity android:label="Search" android:name=".SearchListActivity"></activity>
-		<activity android:label="Site Image" android:name=".Activity.SiteImageViewActivity"></activity>
+		<activity android:label="Site Image" android:name=".activity.SiteImageViewActivity"></activity>
 	</application>
 </manifest>

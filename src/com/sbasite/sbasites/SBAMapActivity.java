@@ -101,7 +101,7 @@ public class SBAMapActivity extends MapActivity implements LocationListener, Loa
 	private void setUpLocation() {
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
+                LocationManager.NETWORK_PROVIDER,
                 60,
                 5,
                 this);
@@ -186,7 +186,8 @@ public class SBAMapActivity extends MapActivity implements LocationListener, Loa
 					if (mapView.getZoomLevel() < 11) {
 						mapView.getController().setZoom(11);
 					} else if (msg.what == 1) {
-						new LoadSiteForRegionTask(getApplicationContext(), SBAMapActivity.this, mapView, getSBASitesApplication().getLayers()).execute();
+						updateOverlays();
+						//new LoadSiteForRegionTask(getApplicationContext(), SBAMapActivity.this, mapView, getSBASitesApplication().getLayers()).execute();
 					}
 				}
 			}
@@ -204,7 +205,7 @@ public class SBAMapActivity extends MapActivity implements LocationListener, Loa
 	@Override
 	protected void onPause() {
 		super.onPause();
-		updateMapOverlaysThread.setEnabled(false);
+		//updateMapOverlaysThread.setEnabled(false);
 		locationManager.removeUpdates(this);
 		me.disableMyLocation();
 	}
@@ -215,7 +216,7 @@ public class SBAMapActivity extends MapActivity implements LocationListener, Loa
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60, 5, this);
 		me.enableMyLocation();
-		updateMapOverlaysThread.setEnabled(true);
+		//updateMapOverlaysThread.setEnabled(true);
 	}
 
 	protected void startSearch() {
@@ -314,7 +315,7 @@ public class SBAMapActivity extends MapActivity implements LocationListener, Loa
 	}
 
 	public void updateOverlays() {
-		/*
+		
 		double latSpan = ((mapView.getLatitudeSpan() / 1000000.0)/2.0);
 		double longSpan = ((mapView.getLongitudeSpan() / 1000000.0)/2.0);
 		double latCenter = (mapView.getMapCenter().getLatitudeE6()/1000000.0);
@@ -337,7 +338,7 @@ public class SBAMapActivity extends MapActivity implements LocationListener, Loa
 				itemizedOverlay.addOverlay(new SiteOverlayItem(site));
 			}
 		}
-		*/
+		
 		
 	}
 

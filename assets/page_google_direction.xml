@@ -1,4 +1,0 @@
-<LinearLayout layout_height="-1" layout_width="-1">
-<com.google.android.maps.MapView clickable="true" id="resource_id:0x7f060009" layout_height="-1" layout_width="-1" apiKey="04pI2Ogai1MaMCgC27lzO8gYPI8rjSvWFGFOXgw">
-</com.google.android.maps.MapView>
-</LinearLayout>

@@ -1,4 +1,4 @@
-package com.sbasite.sbasites.Activity;
+package com.sbasite.sbasites.activity;
 
 import java.net.MalformedURLException;
 import java.net.URL;
