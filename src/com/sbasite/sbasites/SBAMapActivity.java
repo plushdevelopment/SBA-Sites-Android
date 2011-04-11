@@ -338,7 +338,7 @@ public class SBAMapActivity extends MapActivity implements LocationListener, Loa
 				itemizedOverlay.addOverlay(new SiteOverlayItem(site));
 			}
 		}
-		
+		mapView.invalidate();
 		
 	}
 
