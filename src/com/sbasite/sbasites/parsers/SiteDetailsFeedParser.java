@@ -133,14 +133,12 @@ public class SiteDetailsFeedParser extends BaseFeedParser {
 						} else if (currentSite != null){
 							String textValue = parser.nextText();
 							currentSite.put(name, textValue);
-							Log.d(TAG, String.format("Tag %s: %s", name, textValue));
 						}
 						break;
 					case XmlPullParser.END_TAG:
 						name = parser.getName();
 						if (name.equalsIgnoreCase(SITE) && currentSite != null){
 							if (currentSite.containsKey(SITEMOBILEKEY) && (null != currentSite.get(SITEMOBILEKEY))) {
-								Log.d(TAG, currentSite.get(SITEMOBILEKEY));
 								site = Site.siteForMobileKey(context, currentSite.get(SITEMOBILEKEY));
 								site.address = currentSite.get(SITEADRESS);
 								site.agl = currentSite.get(SITEAGL);
@@ -157,7 +155,7 @@ public class SiteDetailsFeedParser extends BaseFeedParser {
 								site.siteStatus = currentSite.get(SITESTATUS);
 								site.structureType = currentSite.get(SITETYPE);
 								site.zip = currentSite.get(SITEZIP);
-								site.save();
+								//site.save();
 							}
 						} else if (name.equalsIgnoreCase(SITES)){
 							done = true;
@@ -167,8 +165,6 @@ public class SiteDetailsFeedParser extends BaseFeedParser {
 				eventType = parser.next();
 			}
 		} catch (Exception e) {
-			Log.e(TAG, e.getMessage(), e);
-			throw new RuntimeException(e);
 		}
 		return site;
 	}

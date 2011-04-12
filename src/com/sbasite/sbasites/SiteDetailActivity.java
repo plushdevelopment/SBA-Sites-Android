@@ -49,14 +49,19 @@ public class SiteDetailActivity extends Activity implements LoadSiteDetailsAsync
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mobileKey = getIntent().getStringExtra("MobileKey");
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		setContentView(R.layout.sitedetailactivity);
 		setupViews();
 	}
 
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		finish();
+	}
+
 	private void setupViews() {
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		
-		setContentView(R.layout.sitedetailactivity);
-		
 		siteNameTextView = (TextView)findViewById(R.id.TextView_SiteName);
 		siteCodeTextView = (TextView)findViewById(R.id.TextView_SiteCode);
 		siteAddress1TextView = (TextView)findViewById(R.id.TextView_SiteAddress1);
@@ -96,27 +101,20 @@ public class SiteDetailActivity extends Activity implements LoadSiteDetailsAsync
 	}
 
 	private void loadSiteDetailsIfNotLoaded() {
-		Log.d(TAG, "loadSiteDetailsIfNotLoaded");
 		
-		if (null == site) {
-			site = Site.siteForMobileKey(getApplicationContext(), mobileKey);
-		}
-		
-		if (!site.detailsLoaded() && null != mobileKey) {
-			new LoadSiteDetailsAsyncTask(getApplicationContext(), this, mobileKey).execute();		
-		} else {
-			refreshViews();
-		}
-		
+		new LoadSiteDetailsAsyncTask(this, this, mobileKey).execute();		
 	}
 
 	public void siteLoaded(Site site) {
-		Log.d(TAG, "siteLoaded" + site.toString());
 		setProgressBarIndeterminateVisibility(false);
 		this.site = site;
-		refreshViews();
-		progressDialog.dismiss();
-		loadSiteThumbnail();
+		if (site == null) {
+			new LoadSiteDetailsAsyncTask(this, this, mobileKey).execute();
+		} else {
+			progressDialog.dismiss();
+			refreshViews();
+			loadSiteThumbnail();
+		}
 	}
 
 	private void refreshViews() {
@@ -135,13 +133,11 @@ public class SiteDetailActivity extends Activity implements LoadSiteDetailsAsync
 	}
 
 	public void siteLoading() {
-		Log.d(TAG, "siteLoading");
 		setProgressBarIndeterminateVisibility(true);
 		progressDialog = ProgressDialog.show(SiteDetailActivity.this, "Loading...", "Site details are loading");
 	}
 
 	public void siteLoadCancelled() {
-		Log.d(TAG, "siteLoadCancelled");
 		setProgressBarIndeterminateVisibility(false);
 		refreshViews();
 		progressDialog.dismiss();
@@ -153,27 +149,25 @@ public class SiteDetailActivity extends Activity implements LoadSiteDetailsAsync
 			URL requestURL = new URL(urlString);
 			new LoadImageAsyncTask(this).execute(requestURL);
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			
 		}
 	}
 
 	public void imageLoading() {
-		Log.d(TAG, "imageLoading()");
+		
 	}
 
 	public void imageLoadCancelled() {
-		Log.d(TAG, "imageLoadCancelled()");
+		
 	}
 
 	public void imageLoaded(Drawable drawable) {
 		if (null == drawable) {
-			Log.d(TAG, "drawable == null");
 		} else {
 			siteImage.setImageDrawable(drawable);
 			siteImage.setVisibility(View.VISIBLE);
 			siteImage.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					Log.d(TAG, "Image Tapped");
 				     Intent intent = new Intent(SiteDetailActivity.this, SiteImageViewActivity.class);
 				     intent.putExtra("SiteCode", site.siteCode);
 				     startActivity(intent);

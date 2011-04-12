@@ -35,22 +35,18 @@ public class LayerItemizedOverlay extends BalloonItemizedOverlay<SiteOverlayItem
 	}
 	
 	public void addOverlays(ArrayList<Site> overlays) {
-		mapOverlays.removeAll(mapOverlays);
-		Log.d(TAG, String.format("mapOverlays.size() == %d", mapOverlays.size()));
+		//mapOverlays.removeAll(mapOverlays);
 		for (int i = 0; i < overlays.size(); i++) {
 			Site site = overlays.get(i);
 			SiteOverlayItem overlayItem = new SiteOverlayItem(site);
 			mapOverlays.add(overlayItem);
-			Log.d(TAG, String.format("mapOverlays.size() == %d", mapOverlays.size()));
+			
 		}
-		Log.d(TAG, String.format("mapOverlays.size() == %d", mapOverlays.size()));
 		populate();
-		Log.d(TAG, String.format("mapOverlays.size() == %d", mapOverlays.size()));
 	}
 
 	@Override
 	protected SiteOverlayItem createItem(int i) {
-		Log.d(TAG, String.format("createItem(%d), mapOverlays.size() == %d", i, mapOverlays.size()));
 		return mapOverlays.get(i);
 	}
 
@@ -61,6 +57,9 @@ public class LayerItemizedOverlay extends BalloonItemizedOverlay<SiteOverlayItem
 
 	@Override
 	protected boolean onBalloonTap(int index) {
+		
+		Log.d(TAG, Integer.toString(size()));
+		
 		SiteOverlayItem item = mapOverlays.get(index);
 		Intent intent = new Intent(context, SiteDetailActivity.class);
 		intent.putExtra("MobileKey", item.getSite().mobileKey);

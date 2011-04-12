@@ -48,13 +48,11 @@ public class LoadSiteDetailsAsyncTask extends AsyncTask<Void, Void, Site> {
 	protected void onPostExecute(Site result) {
 		super.onPostExecute(result);
 		responder.siteLoaded(result);
-		Log.d(TAG, "onPostExecute()" + result.toString());
 	}
 
 	protected Site loadSiteDetails() {
 		SiteDetailsFeedParser parser = new SiteDetailsFeedParser(context, getSiteRequestURL());
 		Site site = parser.parseSite();
-		Log.d(TAG, "loadSiteDetails()" + site.toString());
 		return site;
 	}
 

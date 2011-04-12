@@ -112,56 +112,24 @@ public class LoadSearchResultsAsyncTask extends AsyncTask<String, Void, LoadSear
 			results.add(result);
 		}
 		
-		/*
+		
 		StringTokenizer tokenizer = new StringTokenizer(addressInput, ",");
-		String coordLat = tokenizer.nextToken();
-		String coordLong = tokenizer.nextToken();
 		
-		if ((containsOnlyNumbers(coordLat)) && (containsOnlyNumbers(coordLong))) {
-			Double latitude = Double.valueOf(coordLat);
-			Double longitude = (Double.valueOf(coordLong));
-			if (longitude > 0.0) {
-				longitude *= -1.0;
+		if (tokenizer.countTokens() > 1 && tokenizer.countTokens() < 3) {
+			String coordLat = tokenizer.nextToken();
+			String coordLong = tokenizer.nextToken().trim();
+			
+			if ((containsOnlyNumbers(coordLat)) && (containsOnlyNumbers(coordLong))) {
+				Double latitude = Double.valueOf(coordLat);
+				Double longitude = (Double.valueOf(coordLong));
+				if (longitude > 0.0) {
+					longitude *= -1.0;
+				}
+				SearchResult result = new SearchResult(latitude, longitude);
+				results.add(result);
 			}
-			SearchResult result = new SearchResult(latitude, longitude);
-			results.add(result);
 		}
-		*/
-		return results;
-	}
-
-	private ArrayList<SearchResult> searchForMatchingSites(String addressInput) {
-		/*
-		 * Search for matching sites
-		 */
-		ArrayList<SearchResult> results = new ArrayList<SearchResult>();
-		ArrayList<Site> sites = Site.sitesForSearchText(context, addressInput);
 		
-		for (Site site : sites) {
-			SearchResult result = new SearchResult(site);
-			results.add(result);
-		}
-		return results;
-	}
-
-	private ArrayList<SearchResult> searchForCoordinates(String addressInput) {
-		/*
-		 * Check to see if the user entered coordinates
-		 */
-		ArrayList<SearchResult> results = new ArrayList<SearchResult>();
-		StringTokenizer tokenizer = new StringTokenizer(addressInput, ",");
-		String coordLat = tokenizer.nextToken();
-		String coordLong = tokenizer.nextToken();
-		
-		if ((containsOnlyNumbers(coordLat)) && (containsOnlyNumbers(coordLong))) {
-			Double latitude = Double.valueOf(coordLat);
-			Double longitude = (Double.valueOf(coordLong));
-			if (longitude > 0.0) {
-				longitude *= -1.0;
-			}
-			SearchResult result = new SearchResult(latitude, longitude);
-			results.add(result);
-		}
 		return results;
 	}
 	
@@ -171,8 +139,10 @@ public class LoadSearchResultsAsyncTask extends AsyncTask<String, Void, LoadSear
 			return false;
 		for (int i = 0; i < str.length(); i++) {
 			//If we find a non-digit character we return false.
-			if (!Character.isDigit(str.charAt(i)))
+			if ((!Character.isDigit(str.charAt(i))) && str.charAt(i) != '-')
 				return false;
+			//if (!Character.isDigit(str.charAt(i)))
+				
 		}
 		return true;
 	}

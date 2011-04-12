@@ -51,7 +51,7 @@ public class SBASitesApplication extends com.activeandroid.Application implement
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		
+		/*
 		prefs = this.getSharedPreferences(APPLICATION_PREFERENCES, Context.MODE_PRIVATE);
 		totalAdded = prefs.getInt("totalAdded", 0);
 		totalUpdated = prefs.getInt("totalUpdated", 0);
@@ -59,7 +59,7 @@ public class SBASitesApplication extends com.activeandroid.Application implement
 		lastAddedUpdated = prefs.getString("lastAddedUpdated", "2011-03-22T22:33:49.399Z");
 		lastModifiedUpdated = prefs.getString("lastModifiedUpdated", "2011-03-22T23:43:54.122Z");
 		lastDeletedUpdated = prefs.getString("lastDeletedUpdated", "2011-03-22T22:33:43.351Z");
-		
+		*/
 		
 		SitesSqliteOpenHelper helper = new SitesSqliteOpenHelper(this);
 		

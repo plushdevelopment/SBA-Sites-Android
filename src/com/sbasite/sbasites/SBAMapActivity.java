@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -95,13 +96,12 @@ public class SBAMapActivity extends MapActivity implements LocationListener, Loa
 		setContentView(R.layout.main);
 		setUpViews();
 		setUpLocation();
-		//locationManager=(LocationManager)getSystemService(Context.LOCATION_SERVICE);
 	}
 
 	private void setUpLocation() {
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(
-                LocationManager.NETWORK_PROVIDER,
+                LocationManager.GPS_PROVIDER,
                 60,
                 5,
                 this);
@@ -128,7 +128,7 @@ public class SBAMapActivity extends MapActivity implements LocationListener, Loa
 		marker = this.getResources().getDrawable(R.drawable.yellow_icon);
 		marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
 		itemizedOverlay = new LayerItemizedOverlay(marker, mapView);
-		mapView.getOverlays().add(itemizedOverlay);
+		mapOverlays.add(itemizedOverlay);
 		me=new MyLocationOverlay(this, mapView);
 		mapOverlays.add(me);
 		mapView.invalidate();
@@ -213,8 +213,7 @@ public class SBAMapActivity extends MapActivity implements LocationListener, Loa
 	@Override
 	protected void onResume() {
 		super.onResume();
-		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60, 5, this);
+		setUpLocation();
 		me.enableMyLocation();
 		//updateMapOverlaysThread.setEnabled(true);
 	}
@@ -252,8 +251,6 @@ public class SBAMapActivity extends MapActivity implements LocationListener, Loa
 			if (null != site) {
 				navigateToSite(site.latitude, site.longitude, mapView);
 			}
-		} else if (CHOOSE_LAYER == requestCode && RESULT_OK == resultCode) {
-
 		} else {
 			super.onActivityResult(requestCode, resultCode, data);
 		}
@@ -315,9 +312,8 @@ public class SBAMapActivity extends MapActivity implements LocationListener, Loa
 	}
 
 	public void updateOverlays() {
-		
-		double latSpan = ((mapView.getLatitudeSpan() / 1000000.0)/2.0);
-		double longSpan = ((mapView.getLongitudeSpan() / 1000000.0)/2.0);
+		double latSpan = ((mapView.getLatitudeSpan() / 1000000.0));
+		double longSpan = ((mapView.getLongitudeSpan() / 1000000.0));
 		double latCenter = (mapView.getMapCenter().getLatitudeE6()/1000000.0);
 		double longCenter = (mapView.getMapCenter().getLongitudeE6()/1000000.0);
 		double maxLat = (latCenter + latSpan);
@@ -325,21 +321,20 @@ public class SBAMapActivity extends MapActivity implements LocationListener, Loa
 		double maxLong = (longCenter + longSpan);
 		double minLong = (longCenter - longSpan);
 		itemizedOverlay.removeAllItems();
-		ArrayList<Site> sites = new ArrayList<Site>();
+		
+		getSBASitesApplication().setCurrentSites(new ArrayList<Site>());
+		//mapView.invalidate();
+		
 		for (SiteLayer layer : getSBASitesApplication().getLayers()) {
 			if (layer.activated == true) {
-				sites.addAll(Site.loadSitesForRegionInLayer(getApplicationContext(), minLat, maxLat, minLong, maxLong, layer));
+				getSBASitesApplication().getCurrentSites().addAll(Site.loadSitesForRegionInLayer(getApplicationContext(), minLat, maxLat, minLong, maxLong, layer));
 			}
 		}
-		getSBASitesApplication().setCurrentSites(sites);
-		if (!sites.isEmpty()) {
-			itemizedOverlay.addOverlays(sites);
-			for (Site site : sites) {
-				itemizedOverlay.addOverlay(new SiteOverlayItem(site));
-			}
+		
+		if (!getSBASitesApplication().getCurrentSites().isEmpty()) {
+			itemizedOverlay.addOverlays(getSBASitesApplication().getCurrentSites());
 		}
 		mapView.invalidate();
-		
 	}
 
 	public void sitesLoading() {

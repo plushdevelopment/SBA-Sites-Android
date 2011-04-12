@@ -9,36 +9,35 @@
 	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="8"></uses-sdk>
 	
 	<application android:name=".SBASitesApplication"
-		android:label="@string/app_name" android:icon="@drawable/icon"
-		android:theme="@style/Theme.OTweet">
+		android:label="@string/app_name" android:icon="@drawable/icon" android:debuggable="true">
 		<meta-data android:name="AA_DB_NAME" android:value="Application.db" />
 		<meta-data android:name="AA_DB_VERSION" android:value="1" />
 		<uses-library android:required="true" android:name="com.google.android.maps"></uses-library>
-		<activity android:label="@string/app_name" android:name=".SBAMapActivity">
+		<activity android:label="@string/app_name" android:name=".SBAMapActivity" android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:label="@string/instructions" android:name=".Instructions">
+		<activity android:label="@string/instructions" android:name=".Instructions" android:screenOrientation="portrait">
 		</activity>
-		<activity android:label="@string/layers" android:name=".Layers">
+		<activity android:label="@string/layers" android:name=".Layers" android:screenOrientation="portrait">
 		</activity>
-		<activity android:label="@string/list_view" android:name=".SiteListActivity">
+		<activity android:label="@string/list_view" android:name=".SiteListActivity" android:screenOrientation="portrait">
 		</activity>
 		<activity android:label="@string/site_detail_activity"
-			android:name=".SiteDetailActivity">
+			android:name=".SiteDetailActivity" android:screenOrientation="portrait">
 		</activity>
-		<activity android:label="@string/site_name_id" android:name=".SearchSiteNameAddress">
+		<activity android:label="@string/site_name_id" android:name=".SearchSiteNameAddress" android:screenOrientation="portrait">
 		</activity>
-		<activity android:label="@string/coordinates" android:name=".SearchCoordinates">
+		<activity android:label="@string/coordinates" android:name=".SearchCoordinates" android:screenOrientation="portrait">
 		</activity>
-		<activity android:label="@string/address" android:name=".SearchAddress">
+		<activity android:label="@string/address" android:name=".SearchAddress" android:screenOrientation="portrait">
 		</activity>
 		<activity android:label="@string/about_sba_communications"
-			android:name=".AboutSbaCommunications">
+			android:name=".AboutSbaCommunications" android:screenOrientation="portrait">
 		</activity>
-		<activity android:label="Search" android:name=".SearchListActivity"></activity>
-		<activity android:label="Site Image" android:name=".activity.SiteImageViewActivity"></activity>
+		<activity android:label="Search" android:name=".SearchListActivity" android:screenOrientation="portrait"></activity>
+		<activity android:label="Site Image" android:name=".activity.SiteImageViewActivity" android:screenOrientation="portrait"></activity>
 	</application>
 </manifest>
