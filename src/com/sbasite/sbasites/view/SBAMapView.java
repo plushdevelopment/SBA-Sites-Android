@@ -1,29 +1,40 @@
 package com.sbasite.sbasites.view;
 
-import android.content.Context;
 import android.graphics.Canvas;
-import android.util.AttributeSet;
-import android.util.Log;
+import android.view.MotionEvent;
 
 import com.google.android.maps.MapView;
 
 public class SBAMapView extends MapView {
-	
-	private static final String TAG = "SBAMapView";
 
-	public SBAMapView(Context arg0, AttributeSet arg1) {
-		super(arg0, arg1);
-		// TODO Auto-generated constructor stub
-	}
-	
+	private static final String TAG = "SBAMapView";
 	int oldZoomLevel=-1;
-	 @Override
-	 public void dispatchDraw(Canvas canvas) {
-	  super.dispatchDraw(canvas);
-	  if (getZoomLevel() != oldZoomLevel) {
-	   Log.d(TAG, "ZOOOMED");
-	   oldZoomLevel = getZoomLevel();
-	  }
-	 }
+
+	public SBAMapView(android.content.Context context, android.util.AttributeSet attrs) {
+		super(context, attrs);
+	}
+
+	public SBAMapView(android.content.Context context, android.util.AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+	}
+
+	public SBAMapView(android.content.Context context, java.lang.String apiKey) {
+		super(context, apiKey);
+	}
+
+	public boolean onTouchEvent(MotionEvent ev) {
+		if (ev.getAction()==MotionEvent.ACTION_UP) {
+			//do your thing
+		}
+		return super.onTouchEvent(ev);
+	}
+
+	public void dispatchDraw(Canvas canvas) {
+		super.dispatchDraw(canvas);
+		if (getZoomLevel() != oldZoomLevel) {
+			//do your thing
+			oldZoomLevel = getZoomLevel();
+		}
+	}
 
 }

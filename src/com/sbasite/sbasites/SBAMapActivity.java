@@ -245,9 +245,7 @@ public class SBAMapActivity extends MapActivity implements LocationListener, Loa
 			navigateToLocation(result.coordinates.getLatitudeE6(), result.coordinates.getLongitudeE6(), mapView);
 		} else if (CHOOSE_SITE_RESULT == requestCode && RESULT_OK == resultCode) {
 			String mobileKey = data.getStringExtra("MobileKey");
-			Log.d(TAG, String.format("%s", mobileKey));
 			Site site = Site.siteForMobileKey(getApplicationContext(), mobileKey);
-			Log.d(TAG, site.toString());
 			if (null != site) {
 				navigateToSite(site.latitude, site.longitude, mapView);
 			}
