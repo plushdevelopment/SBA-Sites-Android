@@ -39,8 +39,11 @@ import com.sbasite.sbasites.model.Site;
 import com.sbasite.sbasites.model.SiteLayer;
 import com.sbasite.sbasites.tasks.LoadSiteForRegionTask;
 import com.sbasite.sbasites.tasks.LoadSiteForRegionTask.LoadSiteForRegionTaskResponder;
+import com.sbasite.sbasites.view.SBAMapRegion;
+import com.sbasite.sbasites.view.SBAMapView;
+import com.sbasite.sbasites.view.SBAMapViewListener;
 
-public class SBAMapActivity extends MapActivity implements LocationListener, LoadSiteForRegionTaskResponder {
+public class SBAMapActivity extends MapActivity implements LocationListener, LoadSiteForRegionTaskResponder, SBAMapViewListener {
 
 	private static final String TAG = SBAMapActivity.class.getSimpleName();
 	protected static final int CHOOSE_SEARCH_RESULT = 1;
@@ -123,6 +126,7 @@ public class SBAMapActivity extends MapActivity implements LocationListener, Loa
 		mapView.setClickable(false);
 		mapView.setBuiltInZoomControls(true);
 		mapView.setSatellite(true);
+		//mapView.addListener(this);
 		mapController = mapView.getController();
 		mapOverlays = mapView.getOverlays();
 		marker = this.getResources().getDrawable(R.drawable.yellow_icon);
@@ -207,14 +211,14 @@ public class SBAMapActivity extends MapActivity implements LocationListener, Loa
 		super.onPause();
 		//updateMapOverlaysThread.setEnabled(false);
 		locationManager.removeUpdates(this);
-		me.disableMyLocation();
+		//me.disableMyLocation();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 		setUpLocation();
-		me.enableMyLocation();
+		//me.enableMyLocation();
 		//updateMapOverlaysThread.setEnabled(true);
 	}
 
@@ -318,7 +322,7 @@ public class SBAMapActivity extends MapActivity implements LocationListener, Loa
 		double minLat = (latCenter -  latSpan);
 		double maxLong = (longCenter + longSpan);
 		double minLong = (longCenter - longSpan);
-		itemizedOverlay.removeAllItems();
+		//itemizedOverlay.removeAllItems();
 		
 		getSBASitesApplication().setCurrentSites(new ArrayList<Site>());
 		//mapView.invalidate();
@@ -347,5 +351,23 @@ public class SBAMapActivity extends MapActivity implements LocationListener, Loa
 
 	public void sitesLoaded(ArrayList<Site> sites) {
 		
+	}
+
+	public void mapViewRegionWillChange(SBAMapView mapView, SBAMapRegion region) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mapViewRegionDidChange(SBAMapView mapView, SBAMapRegion region) {
+		getSBASitesApplication().setCurrentSites(new ArrayList<Site>());
+		for (SiteLayer layer : getSBASitesApplication().getLayers()) {
+			if (layer.activated == true) {
+				getSBASitesApplication().getCurrentSites().addAll(Site.loadSitesForRegionInLayer(getApplicationContext(), region.minLat, region.maxLat, region.minLong, region.maxLong, layer));
+			}
+		}
+		if (!getSBASitesApplication().getCurrentSites().isEmpty()) {
+			itemizedOverlay.addOverlays(getSBASitesApplication().getCurrentSites());
+		}
+		mapView.invalidate();
 	}
 }

@@ -63,11 +63,13 @@ public class SBASitesApplication extends com.activeandroid.Application implement
 		
 		SitesSqliteOpenHelper helper = new SitesSqliteOpenHelper(this);
 		
-        try { helper.createDataBase(); }
+		try { helper.createDataBase(); }
         catch (IOException ioe) { throw new Error("Unable to create database"); }
  
-        try { database = helper.openDataBase(); }
+        try { helper.openDataBase(); }
         catch (SQLException sqle) { throw sqle; }
+        
+        helper = null;
 		
 		// Starts loading deleted sites
 		//String urlString = "http://map.sbasite.com/Mobile/GetData?LastUpdate=" + lastDeletedUpdated + "&Skip=" + totalDeleted + "&Take=" + take + "&Version=2&Action=3";
