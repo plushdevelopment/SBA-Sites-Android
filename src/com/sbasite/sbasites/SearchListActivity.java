@@ -58,9 +58,11 @@ public class SearchListActivity extends ListActivity implements LoadSearchResult
 		super.onListItemClick(l, v, position, id);
 		SearchResult result = listAdapter.getItem(position); 
 		if (null != result) {
-			Intent intent = new Intent();
+			Intent intent = new Intent(this, SBAMapActivity.class);
+			
 			intent.putExtra(SEARCH_RESULT, result);
 			setResult(RESULT_OK, intent);
+			startActivity(intent);
 		}
 		finish();
 	}

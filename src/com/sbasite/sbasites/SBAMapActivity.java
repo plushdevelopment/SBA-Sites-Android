@@ -36,6 +36,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
@@ -65,18 +66,13 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, L
 	private EditText searchText;
 	private ImageView welcomeImageView;
 	private MyLocationOverlay me;
-	private Handler messageHandler;
-	private UpdateMapsOverlaysThread updateMapOverlaysThread;
 	private List<Overlay> mapOverlays;
 	//private Button btnSearch;
 	//private ImageButton useLocationButton;
 	private LayerItemizedOverlay itemizedOverlay;
 	Drawable marker;
-	private LocationManager locationManager=null;
-	private Location latestLocation;
-	private boolean userIsPanning=false;
-	private GeoPoint mapCenter = null;
-	private final Double DISTANCE_CHANGE = 2.0; //in km
+	//private LocationManager locationManager=null;
+	private ProgressBar progressBar;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -115,7 +111,7 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, L
 		addActionBarItem(Type.Search);
 		addActionBarItem(Type.Locate);
 		setUpViews();
-		setUpLocation();
+		//setUpLocation();
 	}
 
 	@Override
@@ -179,7 +175,8 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, L
 
 		return gps;
 	}
-
+	
+	/*
 	private void setUpLocation() {
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(
@@ -188,9 +185,10 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, L
 				5,
 				this);
 	}
-
+	*/
+	
 	public void onLocationChanged(Location location) {
-		latestLocation = location;
+		//latestLocation = location;
 	}
 
 	public void onProviderDisabled(String provider) { }
@@ -205,6 +203,9 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, L
 		mapView.setClickable(false);
 		//mapView.setBuiltInZoomControls(true);
 		mapView.setSatellite(false);
+		mapView.setTraffic(false);
+		progressBar = (ProgressBar)findViewById(R.id.progressBar1);
+		progressBar.setVisibility(View.GONE);
 		/*
 		mapView.setOnTouchListener(new OnTouchListener() {
 
@@ -306,24 +307,34 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, L
 	}
 
 	@Override
-	protected boolean isLocationDisplayed() {
-		return true;
-	}
-
-	@Override
 	protected void onPause() {
 		super.onPause();
 		//updateMapOverlaysThread.setEnabled(false);
-		locationManager.removeUpdates(this);
+		//locationManager.removeUpdates(this);
 		//me.disableMyLocation();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		setUpLocation();
+		//setUpLocation();
 		//me.enableMyLocation();
 		//updateMapOverlaysThread.setEnabled(true);
+	}
+	
+	
+
+	@Override
+	public void onNewIntent(Intent intent) {
+		// TODO Auto-generated method stub
+		super.onNewIntent(intent);
+		if (intent.hasExtra(SearchListActivity.SEARCH_RESULT)) {
+			SearchResult result = intent.getParcelableExtra(SearchListActivity.SEARCH_RESULT);
+			welcomeImageView.setVisibility(View.GONE);
+			mapView.setClickable(true);
+			Log.d(TAG, String.format("Latitude: %d, Longitude: %d", result.coordinates.getLatitudeE6(), result.coordinates.getLongitudeE6()));
+			navigateToLocation(result.coordinates.getLatitudeE6(), result.coordinates.getLongitudeE6(), mapView);
+		}
 	}
 
 	protected void startSearch() {
@@ -345,7 +356,6 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, L
 	@Override
 	public void onActivityResult(int requestCode,int resultCode,Intent data) 
 	{
-		/*
 		if (CHOOSE_SEARCH_RESULT == requestCode && RESULT_OK == resultCode) {
 			SearchResult result = data.getParcelableExtra(SearchListActivity.SEARCH_RESULT);
 			welcomeImageView.setVisibility(View.GONE);
@@ -361,7 +371,6 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, L
 		} else {
 			super.onActivityResult(requestCode, resultCode, data);
 		}
-		 */
 		updateOverlays();
 	}
 
@@ -423,6 +432,7 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, L
 	class OverlayTask extends AsyncTask<Void, Void, Void> {
 		@Override
 		public void onPreExecute() {
+			progressBar.setVisibility(View.VISIBLE);
 			if (itemizedOverlay!=null) {
 				mapView.getOverlays().remove(itemizedOverlay);
 				mapView.invalidate();	
@@ -459,7 +469,8 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, L
 				itemizedOverlay.addOverlays(getSBASitesApplication().getCurrentSites());
 			}
 			mapView.getOverlays().add(itemizedOverlay);
-			mapView.invalidate();			
+			mapView.invalidate();
+			progressBar.setVisibility(View.GONE);
 		}
 	}
 }
