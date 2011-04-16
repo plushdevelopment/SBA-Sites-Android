@@ -8,6 +8,7 @@ import com.sbasite.sbasites.tasks.LoadSearchResultsAsyncTask.LoadSearchResults;
 import com.sbasite.sbasites.tasks.LoadSearchResultsAsyncTask.LoadSearchResultsResponder;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -20,34 +21,38 @@ public class SearchListActivity extends ListActivity implements LoadSearchResult
 
 	private static final String TAG = SearchListActivity.class.getSimpleName();
 	public static final String SEARCH_RESULT = "search_result";
-	private Button doneButton;
 	private SearchResultListAdapter listAdapter;
-	public String searchString;
+	private String query=null;
 	protected ProgressDialog progressDialog;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        searchString = getIntent().getStringExtra("search_text");
+        //searchString = getIntent().getStringExtra("search_text");
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.search_list_activity);
+        
+        // Get the intent, verify the action and get the query
+        Intent intent = getIntent();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+          query = intent.getStringExtra(SearchManager.QUERY);
+          new LoadSearchResultsAsyncTask(this, this).execute(query);
+        }
+        
         setUpViews();
     }
 	
 	@Override
-	protected void onResume() {
-		super.onResume();
-		loadResultsIfNotLoaded();
+	protected void onNewIntent(Intent intent) {
+		// TODO Auto-generated method stub
+		super.onNewIntent(intent);
+		setIntent(intent);
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+          query = intent.getStringExtra(SearchManager.QUERY);
+          new LoadSearchResultsAsyncTask(this, this).execute(query);
+        }
 	}
 
-	private void loadResultsIfNotLoaded() {
-		if (null == getListAdapter()) {
-			new LoadSearchResultsAsyncTask(getApplicationContext(), this).execute(searchString);
-		} else {
-			listAdapter.forceReload();
-		}
-	}
-	
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
@@ -61,15 +66,7 @@ public class SearchListActivity extends ListActivity implements LoadSearchResult
 	}
 
 	private void setUpViews() {
-		
-		this.doneButton = (Button)this.findViewById(R.id.Button30);
-        this.doneButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent();
-				setResult(RESULT_CANCELED, intent);
-				finish();
-			}
-        });		
+			
 	}
 
 	public void loadingSearchResults() {
@@ -77,7 +74,7 @@ public class SearchListActivity extends ListActivity implements LoadSearchResult
 		progressDialog = ProgressDialog.show(
 				SearchListActivity.this,
 				"Searching...",
-				"Performing search for '" + searchString + "'"
+				"Performing search for '" + query + "'"
 		);
 	}
 

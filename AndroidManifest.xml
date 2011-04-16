@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.sbasite.sbasites" android:versionName="@string/app_version"
-	android:versionCode="1">
+	package="com.sbasite.sbasites" android:versionName="@string/app_version" android:versionCode="3">
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.INTERNET" />
@@ -9,15 +8,19 @@
 	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="8"></uses-sdk>
 	
 	<application android:name=".SBASitesApplication"
-		android:label="@string/app_name" android:icon="@drawable/icon" android:debuggable="true" android:theme="@style/Theme.OTweet">
+		android:label="@string/app_name" android:icon="@drawable/icon" android:theme="@style/Theme.GDCatalog">
 		<meta-data android:name="AA_DB_NAME" android:value="Application.db" />
 		<meta-data android:name="AA_DB_VERSION" android:value="1" />
 		<uses-library android:required="true" android:name="com.google.android.maps"></uses-library>
-		<activity android:label="@string/app_name" android:name=".SBAMapActivity" android:screenOrientation="portrait">
+		<activity android:label="@string/app_name" android:name=".SBAMapActivity" android:screenOrientation="portrait" android:launchMode="singleTask">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
+			<meta-data android:name="android.app.searchable"
+                   android:resource="@xml/searchable"/>
+            <meta-data android:name="android.app.default_searchable"
+                   android:value=".SearchListActivity" />
 		</activity>
 		<activity android:label="@string/instructions" android:name=".Instructions" android:screenOrientation="portrait">
 		</activity>
@@ -37,7 +40,15 @@
 		<activity android:label="@string/about_sba_communications"
 			android:name=".AboutSbaCommunications" android:screenOrientation="portrait">
 		</activity>
-		<activity android:label="Search" android:name=".SearchListActivity" android:screenOrientation="portrait"></activity>
+		<activity android:label="Search" android:name=".SearchListActivity" android:screenOrientation="portrait" android:launchMode="singleTask">
+			<intent-filter>
+            	<action android:name="android.intent.action.SEARCH" />
+        	</intent-filter>
+        	<meta-data android:name="android.app.searchable"
+                   android:resource="@xml/searchable"/>
+            <meta-data android:name="android.app.default_searchable"
+                   android:value=".SearchListActivity" />
+		</activity>
 		<activity android:label="Site Image" android:name=".activity.SiteImageViewActivity" android:screenOrientation="portrait"></activity>
 	</application>
 </manifest>

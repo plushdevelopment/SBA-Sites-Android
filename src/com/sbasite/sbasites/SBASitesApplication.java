@@ -1,5 +1,7 @@
 package com.sbasite.sbasites;
 
+import greendroid.app.GDApplication;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,11 +28,10 @@ import android.database.sqlite.SQLiteDatabase;
 
 import android.util.Log;
 
-public class SBASitesApplication extends com.activeandroid.Application implements LoadMoreSitesResponder, LoadDeletedSitesResponder, LoadModifiedSitesResponder {
+public class SBASitesApplication extends GDApplication implements LoadMoreSitesResponder, LoadDeletedSitesResponder, LoadModifiedSitesResponder {
 
 	private static final String TAG = SBASitesApplication.class.getSimpleName();
 	private static final String APPLICATION_PREFERENCES = "app_prefs";
-	public SQLiteDatabase database;
 	public ArrayList<Site> currentSites = new ArrayList<Site>();
 	private ArrayList<SiteLayer> layers;
 	private SharedPreferences prefs;
@@ -92,12 +93,20 @@ public class SBASitesApplication extends com.activeandroid.Application implement
         
         
 	}
+	
+	@Override
+    public Class<?> getHomeActivityClass() {
+        return SBAMapActivity.class;
+    }
 
 	public void setCurrentSites(ArrayList<Site> currentSites) {
 		this.currentSites = currentSites;
 	}
 
 	public ArrayList<Site> getCurrentSites() {
+		if (currentSites == null) {
+			currentSites = new ArrayList<Site>();
+		}
 		return currentSites;
 	}
 
