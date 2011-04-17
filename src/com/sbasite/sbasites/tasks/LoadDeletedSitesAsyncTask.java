@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 
 public class LoadDeletedSitesAsyncTask extends AsyncTask<String, Void, LoadDeletedSitesAsyncTask.LoadDeletedSitesResult> {
 
-	private static final String TAG = LoadDeletedSitesAsyncTask.class.getSimpleName();
+	//private static final String TAG = LoadDeletedSitesAsyncTask.class.getSimpleName();
 	private Context context;
 	private LoadDeletedSitesResponder responder;
 

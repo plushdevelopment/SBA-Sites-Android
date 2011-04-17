@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 
 public class LoadModifiedSitesAsyncTask extends AsyncTask<String, Void, LoadModifiedSitesAsyncTask.LoadModifiedSitesResult> {
 
-	private static final String TAG = LoadModifiedSitesAsyncTask.class.getSimpleName();
+	//private static final String TAG = LoadModifiedSitesAsyncTask.class.getSimpleName();
 	private Context context;
 	private LoadModifiedSitesResponder responder;
 

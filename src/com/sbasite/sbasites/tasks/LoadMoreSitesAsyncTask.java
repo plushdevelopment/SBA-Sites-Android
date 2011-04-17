@@ -1,16 +1,12 @@
 package com.sbasite.sbasites.tasks;
 
-import java.net.URL;
-
 import com.sbasite.sbasites.parsers.NewSitesFeedParser;
-import com.sbasite.sbasites.tasks.LoadMoreSitesAsyncTask.LoadMoreSitesResult;
-
 import android.content.Context;
 import android.os.AsyncTask;
 
 public class LoadMoreSitesAsyncTask extends AsyncTask<String, Void, LoadMoreSitesAsyncTask.LoadMoreSitesResult> {
 
-	private static final String TAG = LoadMoreSitesAsyncTask.class.getSimpleName();
+	//private static final String TAG = LoadMoreSitesAsyncTask.class.getSimpleName();
 	private Context context;
 	private LoadMoreSitesResponder responder;
 

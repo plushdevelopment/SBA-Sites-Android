@@ -4,16 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import com.sbasite.sbasites.R;
-import com.sbasite.sbasites.SearchListActivity;
-import com.sbasite.sbasites.model.DBMetadata;
 import com.sbasite.sbasites.model.SearchResult;
 import com.sbasite.sbasites.model.Site;
-import com.sbasite.sbasites.parsers.BaseFeedParser;
-import com.sbasite.sbasites.parsers.NewSitesFeedParser;
-
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;

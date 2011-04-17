@@ -1,13 +1,7 @@
 package com.sbasite.sbasites.model;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.activeandroid.ActiveRecordBase;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;

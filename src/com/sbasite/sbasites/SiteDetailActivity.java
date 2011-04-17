@@ -15,7 +15,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -25,7 +24,7 @@ import android.widget.TextView;
 
 public class SiteDetailActivity extends Activity implements LoadSiteDetailsAsyncTaskResponder, LoadImageAsyncTaskResponder {
 	
-	private static final String TAG = SiteDetailActivity.class.getSimpleName();
+	//private static final String TAG = SiteDetailActivity.class.getSimpleName();
 	private Site site;
 	private String mobileKey;
 	private Button emailButton;

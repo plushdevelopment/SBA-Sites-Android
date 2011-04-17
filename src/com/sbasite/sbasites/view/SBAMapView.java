@@ -14,15 +14,9 @@ import com.sbasite.sbasites.DistanceCalculator;
 
 public class SBAMapView extends MapView {
 	
-	private static final String TAG = "SBAMapView";
-	
 	private List<SBAMapViewListener> listeners = new ArrayList<SBAMapViewListener>();
 
-	private static final int INTERVAL = 5500;
-	private static final int PAUSE_INTERVAL = 14500;
 	private final Double DISTANCE_CHANGE = 0.5; //in km
-	private static boolean firstUpdate=true;
-	
 	int oldZoomLevel=-1;
 	private GeoPoint mapCenter = null;
 

@@ -13,13 +13,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ListView;
 
 public class SearchListActivity extends ListActivity implements LoadSearchResultsResponder {
 
-	private static final String TAG = SearchListActivity.class.getSimpleName();
+	//private static final String TAG = SearchListActivity.class.getSimpleName();
 	public static final String SEARCH_RESULT = "search_result";
 	private SearchResultListAdapter listAdapter;
 	private String query=null;

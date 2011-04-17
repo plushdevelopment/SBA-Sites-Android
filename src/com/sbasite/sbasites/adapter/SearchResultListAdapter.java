@@ -13,7 +13,7 @@ import android.widget.BaseAdapter;
 
 public class SearchResultListAdapter extends BaseAdapter {
 
-	private static final String TAG = SearchResultListAdapter.class.getSimpleName();
+	//private static final String TAG = SearchResultListAdapter.class.getSimpleName();
 	private Context context;
 	private ArrayList<SearchResult> results;
 	
@@ -24,7 +24,6 @@ public class SearchResultListAdapter extends BaseAdapter {
 	}
 
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return results.size();
 	}
 

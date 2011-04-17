@@ -1,8 +1,6 @@
 package com.sbasite.sbasites.parsers;
 
 import java.util.HashMap;
-import java.util.Map;
-
 import org.xmlpull.v1.XmlPullParser;
 
 import android.content.Context;

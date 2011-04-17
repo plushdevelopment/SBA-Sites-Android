@@ -4,7 +4,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.sbasite.sbasites.R;
-import com.sbasite.sbasites.SiteDetailActivity;
 import com.sbasite.sbasites.tasks.LoadImageAsyncTask.LoadImageAsyncTaskResponder;
 import com.sbasite.sbasites.tasks.LoadImageAsyncTask;
 

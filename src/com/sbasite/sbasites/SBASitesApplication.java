@@ -20,18 +20,14 @@ import com.sbasite.sbasites.tasks.LoadModifiedSitesAsyncTask.LoadModifiedSitesRe
 import com.sbasite.sbasites.tasks.LoadMoreSitesAsyncTask.LoadMoreSitesResponder;
 import com.sbasite.sbasites.tasks.LoadMoreSitesAsyncTask.LoadMoreSitesResult;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-
-import android.util.Log;
 
 public class SBASitesApplication extends GDApplication implements LoadMoreSitesResponder, LoadDeletedSitesResponder, LoadModifiedSitesResponder {
 
-	private static final String TAG = SBASitesApplication.class.getSimpleName();
-	private static final String APPLICATION_PREFERENCES = "app_prefs";
+	//private static final String TAG = SBASitesApplication.class.getSimpleName();
+	//private static final String APPLICATION_PREFERENCES = "app_prefs";
 	public ArrayList<Site> currentSites = new ArrayList<Site>();
 	private ArrayList<SiteLayer> layers;
 	private SharedPreferences prefs;
@@ -129,7 +125,6 @@ public class SBASitesApplication extends GDApplication implements LoadMoreSitesR
 			editor.putInt("totalAdded", totalAdded);
 			editor.commit();
 			String urlString = "http://map.sbasite.com/Mobile/GetData?LastUpdate=" + lastAddedUpdated + "&Skip=" + totalAdded + "&Take=" + take + "&Version=2&Action=1";
-			Log.i(TAG, urlString);
 	        new LoadMoreSitesAsyncTask(this, this).execute(urlString);
 		} else {
 			totalAdded = 0;
@@ -140,7 +135,6 @@ public class SBASitesApplication extends GDApplication implements LoadMoreSitesR
 			
 			// Starts loading modified sites
 			String urlString = "http://map.sbasite.com/Mobile/GetData?LastUpdate=" + lastModifiedUpdated + "&Skip=" + totalUpdated + "&Take=" + take + "&Version=2&Action=2";
-			Log.i(TAG, urlString);
 	        new LoadModifiedSitesAsyncTask(this, this).execute(urlString);
 		}
 	}
@@ -157,7 +151,6 @@ public class SBASitesApplication extends GDApplication implements LoadMoreSitesR
 			editor.putInt("totalDeleted", totalDeleted);
 			editor.commit();
 			String urlString = "http://map.sbasite.com/Mobile/GetData?LastUpdate=" + lastDeletedUpdated + "&Skip=" + totalDeleted + "&Take=" + take + "&Version=2&Action=3";
-			Log.i(TAG, urlString);
 	        new LoadDeletedSitesAsyncTask(this, this).execute(urlString);
 		} else {
 			totalDeleted = 0;
@@ -168,7 +161,6 @@ public class SBASitesApplication extends GDApplication implements LoadMoreSitesR
 			
 			// Starts loading new sites
 			String urlString = "http://map.sbasite.com/Mobile/GetData?LastUpdate=" + lastAddedUpdated + "&Skip=" + totalAdded + "&Take=" + take + "&Version=2&Action=1";
-			Log.i(TAG, urlString);
 	        new LoadMoreSitesAsyncTask(this, this).execute(urlString);
 		}
 	}
@@ -186,7 +178,6 @@ public class SBASitesApplication extends GDApplication implements LoadMoreSitesR
 			editor.putInt("totalUpdated", totalUpdated);
 			editor.commit();
 			String urlString = "http://map.sbasite.com/Mobile/GetData?LastUpdate=" + lastModifiedUpdated + "&Skip=" + totalUpdated + "&Take=" + take + "&Version=2&Action=2";
-			Log.i(TAG, urlString);
 	        new LoadModifiedSitesAsyncTask(this, this).execute(urlString);
 		} else {
 			totalUpdated = 0;

@@ -23,7 +23,7 @@ public class LoadSiteForRegionTask extends AsyncTask<Void, Void, ArrayList<Site>
 	private double longCenter;
 	private double latSpan;
 	private double longSpan;
-	private static ArrayList<SiteLayer> layers;
+	private ArrayList<SiteLayer> layers;
 
 	public interface LoadSiteForRegionTaskResponder {
 		public void sitesLoading();

@@ -5,13 +5,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.xmlpull.v1.XmlPullParser;
-
 import android.content.Context;
-import android.util.Log;
-import android.util.Xml;
-
-import com.sbasite.sbasites.model.Site;
 
 public abstract class BaseFeedParser implements FeedParserInterface {
 
