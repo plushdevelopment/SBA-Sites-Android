@@ -1,7 +1,11 @@
 package com.sbasite.sbasites.model;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
+import android.util.Log;
+
 import com.activeandroid.ActiveRecordBase;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -10,6 +14,8 @@ import com.sbasite.sbasites.R;
 
 @Table(name = "SITES")	
 public class Site extends ActiveRecordBase<Site> {
+	
+	private static final String TAG = Site.class.getSimpleName();
 	
 	public Site(Context context) { super(context); }
 	
@@ -80,10 +86,6 @@ public class Site extends ActiveRecordBase<Site> {
 	public String structureType;
 	@Column(name = "SITE_ZIP")
     public String zip;
-    
-	public static ArrayList<Site> loadSitesForRegion(Context context, double minLat, double maxLat, double minLong, double maxLong) {
-		return Site.query(context, Site.class, null, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong, "SITE_NAME", "100");
-	}
 	
 	public static Site siteForMobileKey(Context context, String mobileKey) {
 		return Site.querySingle(context, Site.class, null, String.format("SITE_MOBILEKEY = '%s'", mobileKey), null); 
@@ -100,43 +102,6 @@ public class Site extends ActiveRecordBase<Site> {
 	public static ArrayList<Site> sitesForSearchText(Context context, String addressInput) {
 		// SELECT * FROM SITES WHERE SITE_NAME LIKE '%a%' OR SITE_CODE LIKE '%a%'
 		return Site.query(context, Site.class, null, "SITE_NAME LIKE '%" + addressInput + "%' OR SITE_CODE LIKE '%" + addressInput + "%'", "SITE_NAME", "10");
-	}
-
-	public boolean detailsLoaded() {
-		if (null == address) { 
-			return false;
-		} else if (agl == null) {
-			return false;
-		} else if (bta == null) {
-			return false;
-		} else if (city == null) {
-			return false;
-		} else if (contact == null) {
-			return false;
-		} else if (county == null) {
-			return false;
-		} else if (email == null) {
-			return false;
-		} else if (lastUpdated == null) {
-			return false;
-		} else if (mta == null) {
-			return false;
-		} else if (phone == null) {
-			return false;
-		} else if (siteStatus == null) {
-			return false;
-		} else if (stateProvince == null) {
-			return false;
-		} else if (structureHeight == null) {
-			return false;
-		} else if (structureID == null) {
-			return false;
-		} else if (structureType == null) {
-			return false;
-		} else if (zip == null) {
-			return false;
-		}
-		return true;
 	}
 	
 	@Override
@@ -168,7 +133,17 @@ public class Site extends ActiveRecordBase<Site> {
 	public static ArrayList<Site> loadSitesForRegionInLayer(
 			Context context, double minLat, double maxLat,
 			double minLong, double maxLong, SiteLayer layer) {
-		return Site.query(context, Site.class, null, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong + " AND SITE_LAYER = " + layer.getId(), "SITE_NAME");
+		ArrayList<Site> sites = Site.query(context, Site.class, new String[] { "SITE_LATITUDE", "SITE_LONGITUDE", "SITE_CODE", "SITE_NAME", "SITE_MOBILEKEY", "SITE_LAYER"}, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong + " AND SITE_LAYER = " + layer.getId(), "SITE_NAME", "20");
+		Log.d(TAG, String.format("Sites loaded: %d, Region: %f, %f, %f, %f, Layer: %s", sites.size(), minLat, maxLat, minLong, maxLong, layer.name));
+		return sites;
+	}
+	
+	public static ArrayList<Site> loadSitesForRegionInLayer(
+			Context context, double minLat, double maxLat,
+			double minLong, double maxLong, String layers) {
+		ArrayList<Site> sites = Site.query(context, Site.class, new String[] { "SITE_LATITUDE", "SITE_LONGITUDE", "SITE_CODE", "SITE_NAME", "SITE_MOBILEKEY", "SITE_LAYER"}, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong + " AND SITE_LAYER IN " + layers, "SITE_NAME", "20");
+		Log.d(TAG, String.format("Sites loaded: %d, Region: %f, %f, %f, %f, Layers: %s", sites.size(), minLat, maxLat, minLong, maxLong, layers));
+		return sites;
 	}
 
 	public GeoPoint getPoint() {

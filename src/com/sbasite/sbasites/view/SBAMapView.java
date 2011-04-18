@@ -1,8 +1,5 @@
 package com.sbasite.sbasites.view;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
@@ -10,13 +7,12 @@ import android.view.MotionEvent;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
-import com.sbasite.sbasites.DistanceCalculator;
+import com.sbasite.sbasites.util.DistanceCalculator;
 
 public class SBAMapView extends MapView {
 	
-	private List<SBAMapViewListener> listeners = new ArrayList<SBAMapViewListener>();
-
-	private final Double DISTANCE_CHANGE = 0.5; //in km
+	private SBAMapViewListener listener;
+	private final Double DISTANCE_CHANGE = 1.5; //in km
 	int oldZoomLevel=-1;
 	private GeoPoint mapCenter = null;
 
@@ -52,18 +48,9 @@ public class SBAMapView extends MapView {
 	public boolean onTouchEvent(MotionEvent ev) {
 		if (ev.getAction()==MotionEvent.ACTION_UP) {
 			if(mapCenter == null || DistanceCalculator.calculateDistance(mapCenter, getMapCenter()) > DISTANCE_CHANGE) {
-	    		mapCenter = getMapCenter();
-	    		for (SBAMapViewListener listener : listeners) {
-					SBAMapRegion region = new SBAMapRegion();
-					double latSpan = ((getLatitudeSpan() / 1000000.0));
-					double longSpan = ((getLongitudeSpan() / 1000000.0));
-					double latCenter = (getMapCenter().getLatitudeE6()/1000000.0);
-					double longCenter = (getMapCenter().getLongitudeE6()/1000000.0);
-					region.maxLat = (latCenter + latSpan);
-					region.minLat = (latCenter -  latSpan);
-					region.maxLong = (longCenter + longSpan);
-					region.minLong = (longCenter - longSpan);
-					listener.mapViewRegionDidChange(this, region);
+				mapCenter = getMapCenter();
+				if (null != listener) {
+					listener.mapViewRegionDidChange();
 				}
 			}
 		}
@@ -74,32 +61,19 @@ public class SBAMapView extends MapView {
 	public void dispatchDraw(Canvas canvas) {
 		super.dispatchDraw(canvas);
 		if (getZoomLevel() != oldZoomLevel) {
-			for (SBAMapViewListener listener : listeners) {
-				SBAMapRegion region = new SBAMapRegion();
-				double latSpan = ((getLatitudeSpan() / 1000000.0));
-				double longSpan = ((getLongitudeSpan() / 1000000.0));
-				double latCenter = (getMapCenter().getLatitudeE6()/1000000.0);
-				double longCenter = (getMapCenter().getLongitudeE6()/1000000.0);
-				region.maxLat = (latCenter + latSpan);
-				region.minLat = (latCenter -  latSpan);
-				region.maxLong = (longCenter + longSpan);
-				region.minLong = (longCenter - longSpan);
-				listener.mapViewRegionDidChange(this, region);
+			if (null != listener) {
+				listener.mapViewRegionDidChange();
 			}
 			oldZoomLevel = getZoomLevel();
 		}
 	}
 	
 	public void addListener(SBAMapViewListener listener) {
-		synchronized (listeners) {
-			listeners.add(listener);
-		}
+		this.listener = listener;
 	}
 	
 	public void removeListener(SBAMapViewListener listener) {
-		synchronized (listeners) {
-			listeners.remove(listener);
-		}
+		this.listener = null;
 	}
 
 }

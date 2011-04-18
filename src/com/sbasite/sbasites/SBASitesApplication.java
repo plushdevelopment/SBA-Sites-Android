@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.sbasite.sbasites.activity.SBAMapActivity;
 import com.sbasite.sbasites.controller.SitesSqliteOpenHelper;
 import com.sbasite.sbasites.model.Site;
 import com.sbasite.sbasites.model.SiteLayer;
@@ -28,7 +29,7 @@ public class SBASitesApplication extends GDApplication implements LoadMoreSitesR
 
 	//private static final String TAG = SBASitesApplication.class.getSimpleName();
 	//private static final String APPLICATION_PREFERENCES = "app_prefs";
-	public ArrayList<Site> currentSites = new ArrayList<Site>();
+	public ArrayList<Site> currentSites;
 	private ArrayList<SiteLayer> layers;
 	private SharedPreferences prefs;
 	public boolean updatedDeletedSites = false;

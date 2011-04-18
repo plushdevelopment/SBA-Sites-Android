@@ -3,8 +3,8 @@ package com.sbasite.sbasites.adapter;
 import java.util.ArrayList;
 
 import com.sbasite.sbasites.R;
-import com.sbasite.sbasites.layouts.SiteListItem;
 import com.sbasite.sbasites.model.Site;
+import com.sbasite.sbasites.view.SiteListItem;
 
 import android.content.Context;
 import android.util.Log;

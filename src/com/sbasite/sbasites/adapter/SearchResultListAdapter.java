@@ -3,8 +3,8 @@ package com.sbasite.sbasites.adapter;
 import java.util.ArrayList;
 
 import com.sbasite.sbasites.R;
-import com.sbasite.sbasites.layouts.SearchResultItem;
 import com.sbasite.sbasites.model.SearchResult;
+import com.sbasite.sbasites.view.SearchResultItem;
 
 import android.content.Context;
 import android.view.View;

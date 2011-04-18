@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.activeandroid.ActiveRecordBase;
 import com.activeandroid.annotation.Column;
@@ -13,6 +14,8 @@ import com.sbasite.sbasites.R;
 
 @Table(name = "SITE_LAYERS")	
 public class SiteLayer extends ActiveRecordBase<SiteLayer> {
+	
+	private static final String TAG = SiteLayer.class.getSimpleName();
 	
 	public boolean activated=true;
 	
@@ -67,5 +70,22 @@ public class SiteLayer extends ActiveRecordBase<SiteLayer> {
 	
 	public List<Site> sites(Context context) {
 		return getMany(Site.class, "SITE_LAYER");
+	}
+	
+	public static String activeLayersToString(SiteLayer[] layer) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("(");
+		for (int i = 0; i < layer.length; i++) {
+			if (layer[i].activated == true) {
+				if (i < (layer.length - 1)) {
+					sb.append(layer[i].getId().toString() + ", ");
+				} else {
+					sb.append(layer[i].getId().toString());
+				}
+			}
+		}
+		sb.append(")");
+		Log.d(TAG, sb.toString());
+		return sb.toString();
 	}
 }
