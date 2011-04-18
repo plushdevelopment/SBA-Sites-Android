@@ -36,8 +36,8 @@ public class LayerItemizedOverlay extends BalloonItemizedOverlay<SiteOverlayItem
 	
 	public void addOverlays(ArrayList<Site> overlays) {
 		//mapOverlays.removeAll(mapOverlays);
-		for (int i = 0; i < overlays.size(); i++) {
-			Site site = overlays.get(i);
+		for (Site site : overlays) {
+			//Site site = overlays.get(i);
 			SiteOverlayItem overlayItem = new SiteOverlayItem(site);
 			mapOverlays.add(overlayItem);
 			

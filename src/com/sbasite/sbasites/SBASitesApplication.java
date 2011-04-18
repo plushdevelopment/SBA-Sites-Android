@@ -91,22 +91,22 @@ public class SBASitesApplication extends GDApplication implements LoadMoreSitesR
 	}
 	
 	@Override
-    public Class<?> getHomeActivityClass() {
+    public synchronized Class<?> getHomeActivityClass() {
         return SBAMapActivity.class;
     }
 
-	public void setCurrentSites(ArrayList<Site> currentSites) {
+	public synchronized void setCurrentSites(ArrayList<Site> currentSites) {
 		this.currentSites = currentSites;
 	}
 
-	public ArrayList<Site> getCurrentSites() {
+	public synchronized ArrayList<Site> getCurrentSites() {
 		if (currentSites == null) {
 			currentSites = new ArrayList<Site>();
 		}
 		return currentSites;
 	}
 
-	public ArrayList<SiteLayer> getLayers() {
+	public synchronized ArrayList<SiteLayer> getLayers() {
 		if (null == layers) {
 			layers = SiteLayer.layers(this);
 		}

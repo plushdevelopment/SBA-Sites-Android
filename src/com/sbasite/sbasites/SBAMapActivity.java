@@ -295,14 +295,14 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, L
 		super.onPause();
 		//updateMapOverlaysThread.setEnabled(false);
 		//locationManager.removeUpdates(this);
-		//me.disableMyLocation();
+		me.disableMyLocation();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 		//setUpLocation();
-		//me.enableMyLocation();
+		me.enableMyLocation();
 		//updateMapOverlaysThread.setEnabled(true);
 	}
 	
@@ -422,8 +422,8 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, L
 				mapView.invalidate();	
 				itemizedOverlay=null;
 
-				double latSpan = ((mapView.getLatitudeSpan() / 1000000.0)/2.0);
-				double longSpan = ((mapView.getLongitudeSpan() / 1000000.0)/2.0);
+				double latSpan = ((mapView.getLatitudeSpan() / 1000000.0));
+				double longSpan = ((mapView.getLongitudeSpan() / 1000000.0));
 				double latCenter = (mapView.getMapCenter().getLatitudeE6()/1000000.0);
 				double longCenter = (mapView.getMapCenter().getLongitudeE6()/1000000.0);
 				double maxLat = (latCenter + latSpan);
@@ -431,27 +431,30 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, L
 				double maxLong = (longCenter + longSpan);
 				double minLong = (longCenter - longSpan);
 
-				getSBASitesApplication().setCurrentSites(new ArrayList<Site>());
+				ArrayList<Site> sites = new ArrayList<Site>();
 
 				for (SiteLayer layer : getSBASitesApplication().getLayers()) {
 					if (layer.activated == true) {
-						getSBASitesApplication().getCurrentSites().addAll(Site.loadSitesForRegionInLayer(getApplicationContext(), minLat, maxLat, minLong, maxLong, layer));
+						sites.addAll(Site.loadSitesForRegionInLayer(getApplicationContext(), minLat, maxLat, minLong, maxLong, layer));
 					}
 				}
+				getSBASitesApplication().setCurrentSites(sites);
 			}
 		}
 
 		@Override
 		public Void doInBackground(Void... unused) {
 			itemizedOverlay=new LayerItemizedOverlay(marker, mapView);
+			ArrayList<Site> sites = getSBASitesApplication().getCurrentSites(); 
+			if (!sites.isEmpty()) {
+				itemizedOverlay.addOverlays(sites);
+			}
 			return(null);
 		}
 
 		@Override
 		public void onPostExecute(Void unused) {
-			if (!getSBASitesApplication().getCurrentSites().isEmpty()) {
-				itemizedOverlay.addOverlays(getSBASitesApplication().getCurrentSites());
-			}
+			
 			mapView.getOverlays().add(itemizedOverlay);
 			mapView.invalidate();
 			progressBar.setVisibility(View.GONE);

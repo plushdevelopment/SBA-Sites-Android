@@ -4,7 +4,7 @@
 	android:id="@+id/frameLayout1">
 	<com.sbasite.sbasites.view.SBAMapView
 		android:id="@+id/map" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:apiKey="0GQrhHyBPjQce3-CumhLPh31pc5VTiMP2gXbbJg"
+		android:layout_height="fill_parent" android:apiKey="0GQrhHyBPjQdVyXlfEXbSalpjfjaGAk-0hdrTxQ"
 		android:clickable="true">
 		<!-- Debug API Key -->
 		<!-- android:apiKey="0GQrhHyBPjQce3-CumhLPh31pc5VTiMP2gXbbJg" -->
