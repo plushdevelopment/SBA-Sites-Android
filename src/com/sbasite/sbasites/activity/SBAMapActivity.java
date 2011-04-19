@@ -287,9 +287,6 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 				mapOverlays.remove(itemizedOverlay);
 				mapView.invalidate();	
 				itemizedOverlay=null;
-				
-				
-				
 			}
 		}
 
@@ -299,8 +296,8 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 			itemizedOverlay=new LayerItemizedOverlay(marker, mapView);
 			
 			SBAMapRegion region = new SBAMapRegion();
-			double latSpan = ((mapView.getLatitudeSpan() / 1000000.0));
-			double longSpan = ((mapView.getLongitudeSpan() / 1000000.0));
+			double latSpan = ((mapView.getLatitudeSpan() / 1000000.0)/2.0);
+			double longSpan = ((mapView.getLongitudeSpan() / 1000000.0)/2.0);
 			double latCenter = (mapView.getMapCenter().getLatitudeE6()/1000000.0);
 			double longCenter = (mapView.getMapCenter().getLongitudeE6()/1000000.0);
 			region.maxLat = (latCenter + latSpan);

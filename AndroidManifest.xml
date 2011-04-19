@@ -19,8 +19,7 @@
 			</intent-filter>
 			<meta-data android:name="android.app.searchable"
                    android:resource="@xml/searchable"/>
-            <meta-data android:name="android.app.default_searchable"
-                   android:value=".SearchListActivity" />
+            <meta-data android:name="android.app.default_searchable" android:value=".activity.SearchListActivity"/>
 		</activity>
 		<activity android:label="@string/instructions" android:screenOrientation="portrait" android:name=".activity.Instructions">
 		</activity>
@@ -45,8 +44,7 @@
         	</intent-filter>
         	<meta-data android:name="android.app.searchable"
                    android:resource="@xml/searchable"/>
-            <meta-data android:name="android.app.default_searchable"
-                   android:value=".SearchListActivity" />
+            <meta-data android:name="android.app.default_searchable" android:value=".activity.SearchListActivity"/>
 		</activity>
 		<activity android:label="Site Image" android:name=".activity.SiteImageViewActivity" android:screenOrientation="portrait"></activity>
 		<service android:name=".service.SBASyncService"></service>

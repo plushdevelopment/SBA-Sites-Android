@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
 	android:layout_width="fill_parent" android:layout_height="fill_parent">
-	<ListView android:id="@id/android:list" android:layout_width="fill_parent"
-		android:layout_above="@+id/Button30" android:layout_height="wrap_content"
+	<ListView android:id="@id/android:list" android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:layout_alignParentTop="true" />
-	<Button android:layout_height="wrap_content" android:id="@+id/Button30"
-		android:layout_width="fill_parent" android:layout_alignParentBottom="true"
-		android:text="@string/LABEL_CANCEL" />
-</RelativeLayout>
+</LinearLayout>
