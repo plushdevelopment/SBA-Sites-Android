@@ -58,8 +58,8 @@ public class NewSitesFeedParser extends BaseFeedParser {
 								site.mobileKey = currentSite.get(SITEMOBILEKEY);
 								site.siteName = currentSite.get(SITENAME);
 								site.siteCode = currentSite.get(SITECODE);
-								site.siteStatus = currentSite.get(SITESTATUS);
-								site.lastUpdated = currentSite.get(SITELASTUPDATED);
+								//site.siteStatus = currentSite.get(SITESTATUS);
+								//site.lastUpdated = currentSite.get(SITELASTUPDATED);
 								site.latitude = Double.parseDouble(currentSite.get(SITELATITUDE));
 								site.longitude = Double.parseDouble(currentSite.get(SITELONGITUDE));
 								// Check to see if Layer exists

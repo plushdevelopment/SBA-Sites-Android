@@ -13,12 +13,16 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * @author rosschapman
  *
  */
 public class SitesSqliteOpenHelper extends SQLiteOpenHelper {
+	
+	private static final String TAG = SitesSqliteOpenHelper.class.getSimpleName();
+	
 	//The Android's default system path of your application database.
     public static final String DB_PATH = "/data/data/com.sbasite.sbasites/databases/";
 	public static final int VERSION = 1;
@@ -52,7 +56,7 @@ public class SitesSqliteOpenHelper extends SQLiteOpenHelper {
 	
     private SQLiteDatabase myDataBase; 
     
-    private final Context myContext;
+    private final Context context;
 	
 	/**
 	 * @param context
@@ -62,7 +66,7 @@ public class SitesSqliteOpenHelper extends SQLiteOpenHelper {
 	 */
 	public SitesSqliteOpenHelper(Context context) {
 		super(context, DB_NAME2, null, VERSION);
-		this.myContext = context;
+		this.context = context;
 	}
 	
 	/**
@@ -75,17 +79,15 @@ public class SitesSqliteOpenHelper extends SQLiteOpenHelper {
     	if(dbExist){
     		//do nothing - database already exist
     	}else{
- 
     		//By calling this method and empty database will be created into the default system path
-            //of your application so we are gonna be able to overwrite that database with our database.
+    		//of your application so we are gonna be able to overwrite that database with our database.
     		this.getReadableDatabase();
-        	try {
+    		try {
     			copyDataBase();
     		} catch (IOException e) {
     			e.printStackTrace();
-        		//throw new Error("Error copying database");
- 
-        	}
+    			throw new Error("Error copying database");
+    		}
     	}
  
     }
@@ -120,7 +122,7 @@ public class SitesSqliteOpenHelper extends SQLiteOpenHelper {
     private void copyDataBase() throws IOException{
  
     	//Open your local db as the input stream
-    	InputStream myInput = myContext.getAssets().open(DB_NAME1);
+    	InputStream myInput = context.getAssets().open(DB_NAME1);
  
     	// Path to the just created empty db
     	String outFileName = DB_PATH + DB_NAME2;
@@ -143,7 +145,6 @@ public class SitesSqliteOpenHelper extends SQLiteOpenHelper {
     }
  
     public SQLiteDatabase openDataBase() throws SQLException{
- 
     	//Open the database
         String myPath = DB_PATH + DB_NAME2;
     	myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
@@ -162,16 +163,12 @@ public class SitesSqliteOpenHelper extends SQLiteOpenHelper {
  
 	@Override
 	public void onCreate(SQLiteDatabase db) {
- 
+		Log.d(TAG, "onCreate()");
 	}
  
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
- 
+		
 	}
- 
-        // Add your public helper methods to access and get content from the database.
-       // You could return cursors by doing "return myDataBase.query(....)" so it'd be easy
-       // to you to create adapters for your views.
  
 }

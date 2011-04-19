@@ -1,11 +1,14 @@
 package com.sbasite.sbasites.util;
 
+import android.util.Log;
+
 import com.google.android.maps.GeoPoint;
  
 public class DistanceCalculator {
  
 	//earth’s radius (mean radius = 6,371km)
    private static final double radius = 6371;
+   private static final String TAG = DistanceCalculator.class.getSimpleName();
  
    public static double calculateDistance(GeoPoint startP, GeoPoint endP) {
  
@@ -24,7 +27,9 @@ public class DistanceCalculator {
 		  double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 		  distance = radius * c;
 	  }
- 
+	  
+	  Log.d(TAG, String.format("Distance = %f", distance));
+	  
 	  return distance;
    }
 }

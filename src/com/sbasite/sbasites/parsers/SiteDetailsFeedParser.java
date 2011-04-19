@@ -40,7 +40,6 @@ public class SiteDetailsFeedParser extends BaseFeedParser {
 						} else if (currentSite != null){
 							currentSite.put(name, parser.nextText());
 							/*
-							
 							} else if (name.equalsIgnoreCase(SITEADRESS)){
 								currentSite.address = parser.nextText();
 							} else if (name.equalsIgnoreCase(SITEAGL)){

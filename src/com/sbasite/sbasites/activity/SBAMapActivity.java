@@ -5,12 +5,14 @@ import greendroid.app.GDMapActivity;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.SQLException;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -29,6 +31,7 @@ import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 import com.sbasite.sbasites.R;
 import com.sbasite.sbasites.SBASitesApplication;
+import com.sbasite.sbasites.controller.SitesSqliteOpenHelper;
 import com.sbasite.sbasites.model.SearchResult;
 import com.sbasite.sbasites.model.Site;
 import com.sbasite.sbasites.model.SiteLayer;
@@ -92,7 +95,7 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 		addActionBarItem(Type.Locate);
 		setUpViews();
 	}
-	
+
 	private void setUpViews() {
 		// Assign ivars to elements listed in main.xml
 		mapView=(SBAMapView)findViewById(R.id.map);
@@ -101,7 +104,7 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 		mapView.setTraffic(false);
 		progressBar = (ProgressBar)findViewById(R.id.progressBar1);
 		progressBar.setVisibility(View.GONE);
-		
+
 		mapView.addListener(this);
 		mapController = mapView.getController();
 		mapOverlays = mapView.getOverlays();
@@ -130,7 +133,7 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 		//setUpLocation();
 		me.enableMyLocation();
 	}
-	
+
 	@Override
 	public void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
@@ -178,7 +181,7 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 		}
 		return true;
 	}
-	
+
 	private double[] getGPS() {
 		LocationManager lm = (LocationManager) getSystemService(
 				Context.LOCATION_SERVICE);
@@ -199,7 +202,7 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 
 		return gps;
 	}
-	
+
 	/*
 	private void setUpLocation() {
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -209,8 +212,8 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 				5,
 				this);
 	}
-	*/
-	
+	 */
+
 	public void onLocationChanged(Location location) {
 		//latestLocation = location;
 	}
@@ -276,20 +279,24 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 	}
 
 	class OverlayTask extends AsyncTask<Void, Void, Void> {
+		
 		@Override
 		public void onPreExecute() {
-			Log.d(TAG, "onPreExecute");
 			progressBar.setVisibility(View.VISIBLE);
 			if (itemizedOverlay!=null) {
 				mapOverlays.remove(itemizedOverlay);
 				mapView.invalidate();	
 				itemizedOverlay=null;
+				
+				
+				
 			}
 		}
 
 		@Override
 		protected Void doInBackground(Void... unused) {
-			Log.d(TAG, "doInBackground");
+			
+			itemizedOverlay=new LayerItemizedOverlay(marker, mapView);
 			
 			SBAMapRegion region = new SBAMapRegion();
 			double latSpan = ((mapView.getLatitudeSpan() / 1000000.0));
@@ -304,20 +311,18 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 			ArrayList<SiteLayer> layers = SiteLayer.layers(getBaseContext());
 			SiteLayer[] layer = new SiteLayer[layers.size()];
 			layer = layers.toArray(layer);
-			String layerString = SiteLayer.activeLayersToString(layer);
-			ArrayList<Site> sites = Site.loadSitesForRegionInLayer(getBaseContext(), region.minLat, region.maxLat, region.minLong, region.maxLong, layerString);
+			String layersString = SiteLayer.activeLayersToString(layer);
+			ArrayList<Site> sites = Site.loadSitesForRegionInLayer(getBaseContext(), region.minLat, region.maxLat, region.minLong, region.maxLong, layersString);
 			getSBASitesApplication().setCurrentSites(sites);
-			itemizedOverlay=new LayerItemizedOverlay(marker, mapView);
 			if (!sites.isEmpty()) {
 				itemizedOverlay.addOverlays(sites);
 			}
-			
+
 			return null;
 		}
-		
+
 		@Override
 		public void onPostExecute(Void unused) {
-			Log.d(TAG, "onPostExecute");
 			mapOverlays.add(itemizedOverlay);
 			mapView.invalidate();
 			progressBar.setVisibility(View.GONE);

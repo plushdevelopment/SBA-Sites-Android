@@ -21,70 +21,48 @@ public class Site extends ActiveRecordBase<Site> {
 	
 	@Column(name = "SITE_LATITUDE")
 	public double latitude;
-	
 	@Column(name = "SITE_LONGITUDE")
 	public double longitude;
-	
-	@Column(name = "SITE_DELETED")
 	public int deleted;
-	
 	@Column(name = "SITE_MOBILEKEY")
 	public String mobileKey;
-	
 	@Column(name = "SITE_CODE")
 	public String siteCode;
-	
 	@Column(name = "SITE_LAYER")
 	public SiteLayer siteLayer;
-
 	@Column(name = "SITE_NAME")
 	public String siteName;
-	
-	@Column(name = "SITE_ADDRESS")
+	//@Column(name = "SITE_ADDRESS")
 	public String address;
-	
-	@Column(name = "SITE_AGL")
+	//@Column(name = "SITE_AGL")
 	public String agl;
-	
-	@Column(name = "SITE_BTA")
+	//@Column(name = "SITE_BTA")
 	public String bta;
-	
-	@Column(name = "SITE_CITY")
+	//@Column(name = "SITE_CITY")
 	public String city;
-	
-	@Column(name = "SITE_CONTACT")
+	//@Column(name = "SITE_CONTACT")
 	public String contact;
-	
-	@Column(name = "SITE_COUNTY")
+	//@Column(name = "SITE_COUNTY")
 	public String county;
-	
-	@Column(name = "SITE_EMAIL")
+	//@Column(name = "SITE_EMAIL")
 	public String email;
-	
-	@Column(name = "SITE_LASTUPDATED")
+	//@Column(name = "SITE_LASTUPDATED")
 	public String lastUpdated;
-	
-	@Column(name = "SITE_MTA")
+	//@Column(name = "SITE_MTA")
 	public String mta;
-	
-	@Column(name = "SITE_PHONE")
+	//@Column(name = "SITE_PHONE")
 	public String phone;
-	
-	@Column(name = "SITE_STATUS")
+	//@Column(name = "SITE_STATUS")
 	public String siteStatus;
-	
-	@Column(name = "SITE_STATEPROVINCE")
+	//@Column(name = "SITE_STATEPROVINCE")
 	public String stateProvince;
-	
-	@Column(name = "SITE_STRUCTUREHEIGHT")
+	//@Column(name = "SITE_STRUCTUREHEIGHT")
 	public String structureHeight;
-	
-	@Column(name = "SITE_STRUCTUREID")
+	//@Column(name = "SITE_STRUCTUREID")
 	public String structureID;
-	
-	@Column(name = "SITE_STRUCTURETYPE")
+	//@Column(name = "SITE_STRUCTURETYPE")
 	public String structureType;
-	@Column(name = "SITE_ZIP")
+	//@Column(name = "SITE_ZIP")
     public String zip;
 	
 	public static Site siteForMobileKey(Context context, String mobileKey) {
@@ -130,18 +108,19 @@ public class Site extends ActiveRecordBase<Site> {
 		return description;
 	}
 
+	/*
 	public static ArrayList<Site> loadSitesForRegionInLayer(
 			Context context, double minLat, double maxLat,
 			double minLong, double maxLong, SiteLayer layer) {
-		ArrayList<Site> sites = Site.query(context, Site.class, new String[] { "SITE_LATITUDE", "SITE_LONGITUDE", "SITE_CODE", "SITE_NAME", "SITE_MOBILEKEY", "SITE_LAYER"}, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong + " AND SITE_LAYER = " + layer.getId(), "SITE_NAME", "20");
-		Log.d(TAG, String.format("Sites loaded: %d, Region: %f, %f, %f, %f, Layer: %s", sites.size(), minLat, maxLat, minLong, maxLong, layer.name));
+		ArrayList<Site> sites = Site.query(context, Site.class, null, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong + " AND SITE_LAYER = " + layer.getId(), "SITE_NAME", "20");
 		return sites;
 	}
+	*/
 	
 	public static ArrayList<Site> loadSitesForRegionInLayer(
 			Context context, double minLat, double maxLat,
 			double minLong, double maxLong, String layers) {
-		ArrayList<Site> sites = Site.query(context, Site.class, new String[] { "SITE_LATITUDE", "SITE_LONGITUDE", "SITE_CODE", "SITE_NAME", "SITE_MOBILEKEY", "SITE_LAYER"}, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong + " AND SITE_LAYER IN " + layers, "SITE_NAME", "20");
+		ArrayList<Site> sites = Site.query(context, Site.class, null, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong + " AND SITE_LAYER IN " + layers, "SITE_NAME", "20");
 		Log.d(TAG, String.format("Sites loaded: %d, Region: %f, %f, %f, %f, Layers: %s", sites.size(), minLat, maxLat, minLong, maxLong, layers));
 		return sites;
 	}

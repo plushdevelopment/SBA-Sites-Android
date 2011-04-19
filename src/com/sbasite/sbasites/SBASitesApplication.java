@@ -21,20 +21,19 @@ import com.sbasite.sbasites.tasks.LoadModifiedSitesAsyncTask.LoadModifiedSitesRe
 import com.sbasite.sbasites.tasks.LoadMoreSitesAsyncTask.LoadMoreSitesResponder;
 import com.sbasite.sbasites.tasks.LoadMoreSitesAsyncTask.LoadMoreSitesResult;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.SQLException;
+import android.util.Log;
 
 public class SBASitesApplication extends GDApplication implements LoadMoreSitesResponder, LoadDeletedSitesResponder, LoadModifiedSitesResponder {
 
-	//private static final String TAG = SBASitesApplication.class.getSimpleName();
-	//private static final String APPLICATION_PREFERENCES = "app_prefs";
+	private static final String TAG = SBASitesApplication.class.getSimpleName();
+	private static final String APPLICATION_PREFERENCES = "app_prefs";
 	public ArrayList<Site> currentSites;
 	private ArrayList<SiteLayer> layers;
 	private SharedPreferences prefs;
-	public boolean updatedDeletedSites = false;
-	public boolean updatedModifiedSites = false;
-	public boolean updatedAddedSites = false;
 	public int totalAdds = 0;
 	public int totalUpdates = 0;
 	public int totalDeletes = 0;
@@ -48,46 +47,27 @@ public class SBASitesApplication extends GDApplication implements LoadMoreSitesR
 
 	@Override
 	public void onCreate() {
+		
+		SitesSqliteOpenHelper helper = new SitesSqliteOpenHelper(this);
+
+		try { helper.createDataBase(); }
+		catch (IOException ioe) { throw new Error("Unable to create database"); }
+		
 		super.onCreate();
+		
 		/*
 		prefs = this.getSharedPreferences(APPLICATION_PREFERENCES, Context.MODE_PRIVATE);
 		totalAdded = prefs.getInt("totalAdded", 0);
 		totalUpdated = prefs.getInt("totalUpdated", 0);
 		totalDeleted = prefs.getInt("totalDeleted", 0);
-		lastAddedUpdated = prefs.getString("lastAddedUpdated", "2011-03-22T22:33:49.399Z");
-		lastModifiedUpdated = prefs.getString("lastModifiedUpdated", "2011-03-22T23:43:54.122Z");
-		lastDeletedUpdated = prefs.getString("lastDeletedUpdated", "2011-03-22T22:33:43.351Z");
+		lastAddedUpdated = prefs.getString("lastAddedUpdated", "2011-04-18T23:19:06.960Z");
+		lastModifiedUpdated = prefs.getString("lastModifiedUpdated", "2008-02-15T23:43:54.122Z");
+		lastDeletedUpdated = prefs.getString("lastDeletedUpdated", "2011-04-19T02:08:48.115Z");
 		*/
 		
-		SitesSqliteOpenHelper helper = new SitesSqliteOpenHelper(this);
-		
-		try { helper.createDataBase(); }
-        catch (IOException ioe) { throw new Error("Unable to create database"); }
- 
-        try { helper.openDataBase(); }
-        catch (SQLException sqle) { throw sqle; }
-        
-        helper = null;
-		
-		// Starts loading deleted sites
-		//String urlString = "http://map.sbasite.com/Mobile/GetData?LastUpdate=" + lastDeletedUpdated + "&Skip=" + totalDeleted + "&Take=" + take + "&Version=2&Action=3";
-		//Log.i(TAG, urlString);
-        //new LoadDeletedSitesAsyncTask(this, this).execute(urlString);
-		
-        /*
 		// Starts loading new sites
-		String urlString = "http://map.sbasite.com/Mobile/GetData?LastUpdate=2008-02-15&Skip=" + totalAdded + "&Take=" + take + "&Version=2&Action=1";
-		Log.i(TAG, urlString);
-        new LoadMoreSitesAsyncTask(this, this).execute(urlString);
-        */
-        
-        /*
-		// Starts loading modified sites
-		String urlString = "http://map.sbasite.com/Mobile/GetData?LastUpdate=2008-02-15&Skip=" + totalUpdated + "&Take=" + take + "&Version=2&Action=2";
-		Log.i(TAG, urlString);
-        new LoadModifiedSitesAsyncTask(this, this).execute(urlString);
-        */
-        
+		//String urlString = "http://map.sbasite.com/Mobile/GetData?LastUpdate=" + lastAddedUpdated + "&Skip=" + totalAdded + "&Take=" + take + "&Version=2&Action=1";
+        //new LoadMoreSitesAsyncTask(this, this).execute(urlString);
         
 	}
 	
@@ -159,15 +139,10 @@ public class SBASitesApplication extends GDApplication implements LoadMoreSitesR
 			lastDeletedUpdated = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
 			editor.putString("lastDeletedUpdated", lastDeletedUpdated);
 			editor.commit();
-			
-			// Starts loading new sites
-			String urlString = "http://map.sbasite.com/Mobile/GetData?LastUpdate=" + lastAddedUpdated + "&Skip=" + totalAdded + "&Take=" + take + "&Version=2&Action=1";
-	        new LoadMoreSitesAsyncTask(this, this).execute(urlString);
 		}
 	}
 
 	public void loadingModifiedSites() {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -186,6 +161,10 @@ public class SBASitesApplication extends GDApplication implements LoadMoreSitesR
 			lastModifiedUpdated = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
 			editor.putString("lastModifiedUpdated", lastModifiedUpdated);
 			editor.commit();
+			
+			// Starts loading deleted sites
+			String urlString = "http://map.sbasite.com/Mobile/GetData?LastUpdate=" + lastDeletedUpdated + "&Skip=" + totalDeleted + "&Take=" + take + "&Version=2&Action=3";
+	        new LoadDeletedSitesAsyncTask(this, this).execute(urlString);
 		}
 	}
 
