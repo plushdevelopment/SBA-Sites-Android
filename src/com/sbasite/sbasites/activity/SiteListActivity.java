@@ -21,7 +21,6 @@ import android.widget.ListView;
 public class SiteListActivity extends ListActivity {
 
 	private static final String TAG = SiteListActivity.class.getSimpleName();
-	private Button doneButton;
 	private SiteListAdapter listAdapter;
 	private ArrayList<Site> sites;
 	
@@ -33,7 +32,6 @@ public class SiteListActivity extends ListActivity {
         listAdapter = new SiteListAdapter(this, sites);
         setContentView(R.layout.listview);
         setListAdapter(listAdapter);
-        setUpViews();
     }
 
 	/* (non-Javadoc)
@@ -52,15 +50,6 @@ public class SiteListActivity extends ListActivity {
 		}
 		finish();
 	    
-	}
-
-	private void setUpViews() {
-		this.doneButton = (Button)this.findViewById(R.id.Button01);
-        this.doneButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-	            finish();
-			}
-        });
 	}
 	
 	@Override

@@ -20,7 +20,6 @@ import android.widget.ListView;
 public class Layers extends ListActivity {
 
 	private static final String TAG = Layers.class.getSimpleName();
-	private Button doneButton;
 	private LayerListAdapter listAdapter;
 	private ArrayList<SiteLayer> layers;
 	
@@ -32,7 +31,6 @@ public class Layers extends ListActivity {
         listAdapter = new LayerListAdapter(this, layers);
         setContentView(R.layout.layers);
         setListAdapter(listAdapter);
-        setUpViews();
     }
 
 	/* (non-Javadoc)
@@ -47,15 +45,6 @@ public class Layers extends ListActivity {
 			layer.activated = !layer.activated;
 		}
 		listAdapter.forceReload();
-	}
-
-	private void setUpViews() {
-		this.doneButton = (Button)this.findViewById(R.id.Button01);
-        this.doneButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-	            finish();
-			}
-        });
 	}
 	
 	@Override

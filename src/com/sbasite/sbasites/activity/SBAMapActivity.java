@@ -247,6 +247,7 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 		} else {
 			super.onActivityResult(requestCode, resultCode, data);
 		}
+		new OverlayTask().execute();
 	}
 
 	public static void navigateToLocation (double latitude, double longitude, SBAMapView mv) {
@@ -272,14 +273,18 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 	}
 
 	public void mapViewRegionDidChange() {
+		int zoomLevel = mapView.getZoomLevel();
 		if (!firstUpdate) {
+			if (zoomLevel < 10) {
+				mapView.getController().setZoom(10);
+			}
 			new OverlayTask().execute();
 		}
 		firstUpdate = false;
 	}
 
 	class OverlayTask extends AsyncTask<Void, Void, Void> {
-		
+
 		@Override
 		public void onPreExecute() {
 			progressBar.setVisibility(View.VISIBLE);
@@ -292,9 +297,9 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 
 		@Override
 		protected Void doInBackground(Void... unused) {
-			
+
 			itemizedOverlay=new LayerItemizedOverlay(marker, mapView);
-			
+
 			SBAMapRegion region = new SBAMapRegion();
 			double latSpan = ((mapView.getLatitudeSpan() / 1000000.0)/2.0);
 			double longSpan = ((mapView.getLongitudeSpan() / 1000000.0)/2.0);
@@ -304,8 +309,8 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 			region.minLat = (latCenter -  latSpan);
 			region.maxLong = (longCenter + longSpan);
 			region.minLong = (longCenter - longSpan);
-			
-			ArrayList<SiteLayer> layers = SiteLayer.layers(getBaseContext());
+
+			ArrayList<SiteLayer> layers = getSBASitesApplication().getLayers();
 			SiteLayer[] layer = new SiteLayer[layers.size()];
 			layer = layers.toArray(layer);
 			String layersString = SiteLayer.activeLayersToString(layer);

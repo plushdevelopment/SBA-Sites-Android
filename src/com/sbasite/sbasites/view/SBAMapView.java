@@ -3,16 +3,19 @@ package com.sbasite.sbasites.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
+import com.sbasite.sbasites.activity.SBAMapActivity;
 import com.sbasite.sbasites.util.DistanceCalculator;
 
 public class SBAMapView extends MapView {
 	
+	private static final String TAG = SBAMapView.class.getSimpleName();
 	private SBAMapViewListener listener;
-	private final Double DISTANCE_CHANGE = 1.5; //in km
+	private final Double DISTANCE_CHANGE = 6.0; //in km
 	int oldZoomLevel=-1;
 	private GeoPoint mapCenter = null;
 
@@ -47,10 +50,15 @@ public class SBAMapView extends MapView {
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
 		if (ev.getAction()==MotionEvent.ACTION_UP) {
-			if(mapCenter == null || DistanceCalculator.calculateDistance(mapCenter, getMapCenter()) > DISTANCE_CHANGE) {
+			if (mapCenter == null) {
+				mapCenter = getMapCenter();
+			}
+			
+			if (DistanceCalculator.calculateDistance(mapCenter, getMapCenter()) > DISTANCE_CHANGE) {
 				mapCenter = getMapCenter();
 				if (null != listener) {
 					listener.mapViewRegionDidChange();
+					Log.d(TAG, "Scroll event!");
 				}
 			}
 		}
@@ -63,9 +71,10 @@ public class SBAMapView extends MapView {
 		if (getZoomLevel() != oldZoomLevel) {
 			if (null != listener) {
 				listener.mapViewRegionDidChange();
+				Log.d(TAG, String.format("Zoom event! - Level: %d", getZoomLevel()));
 			}
 			oldZoomLevel = getZoomLevel();
-		}
+		} 
 	}
 	
 	public void addListener(SBAMapViewListener listener) {
