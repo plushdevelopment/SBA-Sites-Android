@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import com.google.android.maps.Overlay;
 import com.sbasite.sbasites.activity.SBAMapActivity;
 import com.sbasite.sbasites.controller.SitesSqliteOpenHelper;
 import com.sbasite.sbasites.model.Site;
@@ -21,11 +23,8 @@ import com.sbasite.sbasites.tasks.LoadModifiedSitesAsyncTask.LoadModifiedSitesRe
 import com.sbasite.sbasites.tasks.LoadMoreSitesAsyncTask.LoadMoreSitesResponder;
 import com.sbasite.sbasites.tasks.LoadMoreSitesAsyncTask.LoadMoreSitesResult;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.database.SQLException;
-import android.util.Log;
 
 public class SBASitesApplication extends GDApplication implements LoadMoreSitesResponder, LoadDeletedSitesResponder, LoadModifiedSitesResponder {
 
@@ -44,6 +43,7 @@ public class SBASitesApplication extends GDApplication implements LoadMoreSitesR
 	public String lastAddedUpdated;
 	public String lastModifiedUpdated;
 	public String lastDeletedUpdated;
+	public boolean satelliteMode=false;
 
 	@Override
 	public void onCreate() {

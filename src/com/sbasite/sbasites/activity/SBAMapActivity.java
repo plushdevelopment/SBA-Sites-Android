@@ -5,19 +5,17 @@ import greendroid.app.GDMapActivity;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.SQLException;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -27,35 +25,33 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
-import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 import com.sbasite.sbasites.R;
 import com.sbasite.sbasites.SBASitesApplication;
-import com.sbasite.sbasites.controller.SitesSqliteOpenHelper;
 import com.sbasite.sbasites.model.SearchResult;
 import com.sbasite.sbasites.model.Site;
 import com.sbasite.sbasites.model.SiteLayer;
 import com.sbasite.sbasites.view.LayerItemizedOverlay;
+import com.sbasite.sbasites.view.MyItemizedOverlay;
 import com.sbasite.sbasites.view.SBAMapRegion;
 import com.sbasite.sbasites.view.SBAMapView;
 import com.sbasite.sbasites.view.SBAMapViewListener;
+import com.sbasite.sbasites.view.SiteOverlayItem;
 
-public class SBAMapActivity extends GDMapActivity implements LocationListener, SBAMapViewListener {
+public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener {
 
 	private static final String TAG = SBAMapActivity.class.getSimpleName();
 	protected static final int CHOOSE_SEARCH_RESULT = 1;
 	protected static final int CHOOSE_SITE_RESULT = 2;
 	protected static final int CHOOSE_LAYER = 3;
 	private SBAMapView mapView;
-	private MapController mapController;
 	private ImageView welcomeImageView;
-	private MyLocationOverlay me;
-	private List<Overlay> mapOverlays;
-	private LayerItemizedOverlay itemizedOverlay;
-	Drawable marker;
-	//private LocationManager locationManager=null;
+	private LocationManager locManager;
+	private LocationListener locListener;
 	private ProgressBar progressBar;
-	private boolean firstUpdate=true;
+	private static boolean firstUpdate=true;
+	private Location location;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,52 +82,158 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// Call super always
 		super.onCreate(savedInstanceState);
-		// Inflate your view
+
 		setActionBarContentView(R.layout.main);
 		addActionBarItem(Type.LocateMyself);
 		addActionBarItem(Type.Search);
 		addActionBarItem(Type.Locate);
+
+		initMap();
+		initLocationManager();
 		setUpViews();
-	}
-
-	private void setUpViews() {
-		// Assign ivars to elements listed in main.xml
-		mapView=(SBAMapView)findViewById(R.id.map);
-		mapView.setClickable(false);
-		mapView.setSatellite(false);
-		mapView.setTraffic(false);
-		progressBar = (ProgressBar)findViewById(R.id.progressBar1);
-		progressBar.setVisibility(View.GONE);
-
-		mapView.addListener(this);
-		mapController = mapView.getController();
-		mapOverlays = mapView.getOverlays();
-		marker = this.getResources().getDrawable(R.drawable.yellow_icon);
-		marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
-		me=new MyLocationOverlay(this, mapView);
-		mapOverlays.add(me);
-
-		mapController.setCenter(getPoint(46.0730555556, -100.546666667)); // Set center to the center of North America
-		mapController.setZoom(4);
-
-		welcomeImageView=(ImageView)findViewById(R.id.imageView1);
-		welcomeImageView.setVisibility(View.VISIBLE);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		//locationManager.removeUpdates(this);
-		me.disableMyLocation();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		//setUpLocation();
-		me.enableMyLocation();
+		createAndShowMyItemizedOverlay();
+	}
+
+	/**
+	 * Initialise the map and adds the zoomcontrols to the LinearLayout.
+	 */
+	private void initMap() {
+		mapView=(SBAMapView)findViewById(R.id.map);
+		mapView.setClickable(false);
+		mapView.setSatellite(false);
+		mapView.setTraffic(false);
+		mapView.setBuiltInZoomControls(true);
+		mapView.addListener(this);
+		mapView.getController().setCenter(getPoint(46.0730555556, -100.546666667)); // Set center to the center of North America
+		firstUpdate=true;
+		mapView.getController().setZoom(4);
+	}
+
+	/**
+	 * Initialise the location manager.
+	 */
+	private void initLocationManager() {
+		locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+		locListener = new LocationListener() {
+
+			public void onLocationChanged(Location newLocation) {
+				location = newLocation;
+				createAndShowMyItemizedOverlay();
+			}
+
+			public void onProviderDisabled(String arg0) {
+			}
+
+			public void onProviderEnabled(String arg0) {
+			}
+
+			public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
+			}
+		};
+		locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
+				locListener);
+
+	}
+
+	/**
+	 * This method will be called whenever a change of the current position
+	 * is submitted via the GPS.
+	 * @param newLocation
+	 */
+	protected void createAndShowMyItemizedOverlay() {
+		progressBar.setVisibility(View.VISIBLE);
+		mapView.setClickable(false);
+
+		List<Overlay> overlays = mapView.getOverlays();
+
+		// first remove old overlay
+		if (overlays.size() != 0) {
+			for (Iterator<Overlay> iterator = overlays.iterator(); iterator.hasNext();) {
+				iterator.next();
+				iterator.remove();
+			}
+		}
+		
+		List<String> providers = locManager.getProviders(true);
+
+		for (int i=providers.size()-1; i>=0; i--) {
+			location = locManager.getLastKnownLocation(providers.get(i));
+			if (location != null) break;
+		}
+		
+		if (location != null) {
+			// transform the location to a geopoint
+			GeoPoint geopoint = new GeoPoint(
+					(int) (location.getLatitude() * 1E6), (int) (location
+							.getLongitude() * 1E6));
+
+			// initialize icon
+			Drawable icon = getResources().getDrawable(R.drawable.marker);
+			icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon
+					.getIntrinsicHeight());
+
+			// create my overlay and show it
+			MyItemizedOverlay overlay = new MyItemizedOverlay(icon);
+			OverlayItem item = new OverlayItem(geopoint, "My Location", null);
+			overlay.addItem(item);
+			mapView.getOverlays().add(overlay);
+		}
+		
+			
+		Drawable marker = getResources().getDrawable(R.drawable.yellow_icon);
+		marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
+
+		LayerItemizedOverlay itemizedOverlay = new LayerItemizedOverlay(marker, mapView);
+
+		SBAMapRegion region = new SBAMapRegion();
+		double latSpan = ((mapView.getLatitudeSpan() / 1000000.0)/2.0);
+		double longSpan = ((mapView.getLongitudeSpan() / 1000000.0)/2.0);
+		double latCenter = (mapView.getMapCenter().getLatitudeE6()/1000000.0);
+		double longCenter = (mapView.getMapCenter().getLongitudeE6()/1000000.0);
+		region.maxLat = (latCenter + latSpan);
+		region.minLat = (latCenter -  latSpan);
+		region.maxLong = (longCenter + longSpan);
+		region.minLong = (longCenter - longSpan);
+
+		ArrayList<SiteLayer> layers = getSBASitesApplication().getLayers();
+		SiteLayer[] layer = new SiteLayer[layers.size()];
+		layer = layers.toArray(layer);
+		String layersString = SiteLayer.activeLayersToString(layer);
+		ArrayList<Site> sites = Site.loadSitesForRegionInLayer(getApplicationContext(), region.minLat, region.maxLat, region.minLong, region.maxLong, layersString);
+		getSBASitesApplication().setCurrentSites(sites);
+
+		if (sites.size() != 0) {
+			for (Iterator<Site> iterator = sites.iterator(); iterator.hasNext();) {
+				itemizedOverlay.addOverlay(new SiteOverlayItem(iterator.next()));
+			}
+		}
+
+		mapView.getOverlays().add(itemizedOverlay);
+
+		progressBar.setVisibility(View.GONE);
+		mapView.setClickable(true);
+		
+		// redraw map
+		mapView.invalidate();
+	}
+
+	private void setUpViews() {
+		progressBar = (ProgressBar)findViewById(R.id.progressBar1);
+		progressBar.setVisibility(View.GONE);
+		welcomeImageView=(ImageView)findViewById(R.id.imageView1);
+		welcomeImageView.setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -143,6 +245,7 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 			mapView.setClickable(true);
 			Log.d(TAG, String.format("Latitude: %d, Longitude: %d", result.coordinates.getLatitudeE6(), result.coordinates.getLongitudeE6()));
 			navigateToLocation(result.coordinates.getLatitudeE6(), result.coordinates.getLongitudeE6(), mapView);
+			createAndShowMyItemizedOverlay();
 		}
 	}
 
@@ -156,8 +259,8 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 				welcomeImageView.setVisibility(View.GONE);
 				mapView.setClickable(true);
 				mapView.getController().setCenter(location);
-				//mapView.getController().animateTo(location);
 				mapView.getController().setZoom(13);
+				createAndShowMyItemizedOverlay();
 			} else {
 				AlertDialog.Builder dialog = new AlertDialog.Builder(SBAMapActivity.this);
 				dialog.setTitle("Location Error");
@@ -183,14 +286,13 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 	}
 
 	private double[] getGPS() {
-		LocationManager lm = (LocationManager) getSystemService(
-				Context.LOCATION_SERVICE);
-		List<String> providers = lm.getProviders(true);
+		
+		List<String> providers = locManager.getProviders(true);
 
 		Location l = null;
 
 		for (int i=providers.size()-1; i>=0; i--) {
-			l = lm.getLastKnownLocation(providers.get(i));
+			l = locManager.getLastKnownLocation(providers.get(i));
 			if (l != null) break;
 		}
 
@@ -202,27 +304,6 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 
 		return gps;
 	}
-
-	/*
-	private void setUpLocation() {
-		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		locationManager.requestLocationUpdates(
-				LocationManager.GPS_PROVIDER,
-				60,
-				5,
-				this);
-	}
-	 */
-
-	public void onLocationChanged(Location location) {
-		//latestLocation = location;
-	}
-
-	public void onProviderDisabled(String provider) { }
-
-	public void onProviderEnabled(String provider) { }
-
-	public void onStatusChanged(String provider, int status, Bundle extras) { }
 
 	@Override
 	protected boolean isRouteDisplayed() {
@@ -247,21 +328,22 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 		} else {
 			super.onActivityResult(requestCode, resultCode, data);
 		}
-		new OverlayTask().execute();
+		//updateDisplay();
+		createAndShowMyItemizedOverlay();
 	}
 
 	public static void navigateToLocation (double latitude, double longitude, SBAMapView mv) {
 		GeoPoint p = new GeoPoint((int) latitude, (int) longitude); //new GeoPoint
 		MapController mc = mv.getController();
 		mc.setCenter(p);
-		mc.setZoom(15); //zoom
+		mc.setZoom(13); //zoom
 	}
 
 	public static void navigateToSite (double latitude, double longitude, SBAMapView mv) {
 		GeoPoint p = new GeoPoint((int)(latitude*1000000.0), (int)(longitude*1000000.0)); //new GeoPoint
 		MapController mc = mv.getController();
 		mc.setCenter(p); //move map to the given point
-		mc.setZoom(15); 
+		mc.setZoom(13); 
 	}
 
 	protected SBASitesApplication getSBASitesApplication() {
@@ -278,56 +360,9 @@ public class SBAMapActivity extends GDMapActivity implements LocationListener, S
 			if (zoomLevel < 10) {
 				mapView.getController().setZoom(10);
 			}
-			new OverlayTask().execute();
+			createAndShowMyItemizedOverlay();
 		}
 		firstUpdate = false;
 	}
-
-	class OverlayTask extends AsyncTask<Void, Void, Void> {
-
-		@Override
-		public void onPreExecute() {
-			progressBar.setVisibility(View.VISIBLE);
-			if (itemizedOverlay!=null) {
-				mapOverlays.remove(itemizedOverlay);
-				mapView.invalidate();	
-				itemizedOverlay=null;
-			}
-		}
-
-		@Override
-		protected Void doInBackground(Void... unused) {
-
-			itemizedOverlay=new LayerItemizedOverlay(marker, mapView);
-
-			SBAMapRegion region = new SBAMapRegion();
-			double latSpan = ((mapView.getLatitudeSpan() / 1000000.0)/2.0);
-			double longSpan = ((mapView.getLongitudeSpan() / 1000000.0)/2.0);
-			double latCenter = (mapView.getMapCenter().getLatitudeE6()/1000000.0);
-			double longCenter = (mapView.getMapCenter().getLongitudeE6()/1000000.0);
-			region.maxLat = (latCenter + latSpan);
-			region.minLat = (latCenter -  latSpan);
-			region.maxLong = (longCenter + longSpan);
-			region.minLong = (longCenter - longSpan);
-
-			ArrayList<SiteLayer> layers = getSBASitesApplication().getLayers();
-			SiteLayer[] layer = new SiteLayer[layers.size()];
-			layer = layers.toArray(layer);
-			String layersString = SiteLayer.activeLayersToString(layer);
-			ArrayList<Site> sites = Site.loadSitesForRegionInLayer(getBaseContext(), region.minLat, region.maxLat, region.minLong, region.maxLong, layersString);
-			getSBASitesApplication().setCurrentSites(sites);
-			if (!sites.isEmpty()) {
-				itemizedOverlay.addOverlays(sites);
-			}
-
-			return null;
-		}
-
-		@Override
-		public void onPostExecute(Void unused) {
-			mapOverlays.add(itemizedOverlay);
-			mapView.invalidate();
-			progressBar.setVisibility(View.GONE);
-		}
-	}
+	
 }

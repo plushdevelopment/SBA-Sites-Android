@@ -12,7 +12,6 @@ import com.sbasite.sbasites.model.SearchResult;
 
 public class SearchResultItem extends RelativeLayout {
 
-	private ImageView     pinIconView;
 	private TextView      siteName;
 	private TextView      siteCode;
 
@@ -24,12 +23,9 @@ public class SearchResultItem extends RelativeLayout {
 		findViews();
 		siteName.setText(result.title);
 		siteCode.setText(result.coordinates.toString());
-		Drawable icon = getResources().getDrawable(R.drawable.yellow_icon);
-		pinIconView.setImageDrawable(icon);
 	}
 
 	private void findViews() {
-		pinIconView = (ImageView) findViewById(R.id.search_result_icon);
 		siteName = (TextView) findViewById(R.id.search_result_title);
 		siteCode = (TextView) findViewById(R.id.search_result_subtitle);
 	}

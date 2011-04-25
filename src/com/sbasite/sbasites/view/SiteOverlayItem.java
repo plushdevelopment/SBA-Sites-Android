@@ -31,6 +31,12 @@ public class SiteOverlayItem extends OverlayItem {
 		this.site = site;
 	}
 
+	@Override
+	public void setMarker(Drawable marker) {
+		// TODO Auto-generated method stub
+		super.setMarker(marker);
+	}
+
 	public Drawable getPinIcon() {
 		int iconID;
 		if (site.siteLayer.name.matches("Canada")) {

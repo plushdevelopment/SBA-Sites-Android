@@ -12,12 +12,14 @@ import com.sbasite.sbasites.activity.SBAMapActivity;
 import com.sbasite.sbasites.util.DistanceCalculator;
 
 public class SBAMapView extends MapView {
-	
+
 	private static final String TAG = SBAMapView.class.getSimpleName();
 	private SBAMapViewListener listener;
-	private final Double DISTANCE_CHANGE = 6.0; //in km
-	int oldZoomLevel=-1;
+	private final Double DISTANCE_CHANGE = 1.0; //in km
+	int oldZoomLevel=10;
 	private GeoPoint mapCenter = null;
+	boolean firstUpdate = true;
+	boolean userIsPanning = false;
 
 	/**
 	 * @param context
@@ -26,7 +28,6 @@ public class SBAMapView extends MapView {
 	 */
 	public SBAMapView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -35,7 +36,6 @@ public class SBAMapView extends MapView {
 	 */
 	public SBAMapView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -44,43 +44,83 @@ public class SBAMapView extends MapView {
 	 */
 	public SBAMapView(Context context, String apiKey) {
 		super(context, apiKey);
-		// TODO Auto-generated constructor stub
 	}
-	
+
 	@Override
-	public boolean onTouchEvent(MotionEvent ev) {
-		if (ev.getAction()==MotionEvent.ACTION_UP) {
+	public boolean onTouchEvent(MotionEvent event) {
+		/*
+		int actionId = event.getAction();
+		 
+		if (actionId == MotionEvent.ACTION_UP && userIsPanning) {
+
+			userIsPanning = false;
+			if(mapCenter == null || DistanceCalculator.calculateDistance(mapCenter, getMapCenter()) > DISTANCE_CHANGE) {
+				mapCenter = getMapCenter();
+				
+			}
+			
+			listener.mapViewRegionDidChange();
+			firstUpdate = false;
+			
+			return true;
+
+		 } else if (actionId == MotionEvent.ACTION_MOVE) {
+			 userIsPanning = true;
+		 }
+
+		return false;
+		*/
+		
+		
+		if (event.getAction()==MotionEvent.ACTION_UP) {
 			if (mapCenter == null) {
 				mapCenter = getMapCenter();
 			}
-			
-			if (DistanceCalculator.calculateDistance(mapCenter, getMapCenter()) > DISTANCE_CHANGE) {
-				mapCenter = getMapCenter();
-				if (null != listener) {
-					listener.mapViewRegionDidChange();
-					Log.d(TAG, "Scroll event!");
-				}
+
+			int zoomLevel = getZoomLevel();
+
+			if (zoomLevel < 10) {
+				getController().setZoom(oldZoomLevel);
+			} else {
+
+				//if (DistanceCalculator.calculateDistance(mapCenter, getMapCenter()) > DISTANCE_CHANGE) {
+					mapCenter = getMapCenter();
+					if (null != listener) {
+						listener.mapViewRegionDidChange();
+						Log.d(TAG, "Scroll event!");
+					}
+				//}
 			}
 		}
-		return super.onTouchEvent(ev);
+		return super.onTouchEvent(event);
+		
 	}
-	
+
 	@Override
 	public void dispatchDraw(Canvas canvas) {
 		super.dispatchDraw(canvas);
-		if (getZoomLevel() != oldZoomLevel) {
-			if (null != listener) {
-				listener.mapViewRegionDidChange();
-				Log.d(TAG, String.format("Zoom event! - Level: %d", getZoomLevel()));
+		int zoomLevel = getZoomLevel();
+
+		if (zoomLevel < 10 && firstUpdate == false) {
+			getController().setZoom(oldZoomLevel);
+		} else {
+
+			if (zoomLevel != oldZoomLevel) {
+				if (null != listener) {
+					listener.mapViewRegionDidChange();
+					Log.d(TAG, String.format("Zoom event! - Level: %d", getZoomLevel()));
+				}
+				
 			}
-			oldZoomLevel = getZoomLevel();
-		} 
+		}
+		oldZoomLevel = getZoomLevel();
+		firstUpdate = false;
 	}
-	
+
 	public void addListener(SBAMapViewListener listener) {
 		this.listener = listener;
 	}
-	
+
 	public void removeListener(SBAMapViewListener listener) {
 		this.listener = null;
 	}

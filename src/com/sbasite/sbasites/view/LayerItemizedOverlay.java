@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import com.google.android.maps.MapView;
@@ -20,26 +21,18 @@ public class LayerItemizedOverlay extends BalloonItemizedOverlay<SiteOverlayItem
 	public LayerItemizedOverlay(Drawable defaultMarker, MapView mapView) {
 		super(boundCenterBottom(defaultMarker), mapView);
 		context = mapView.getContext();
-		populate();
 	}
 	
-	public void removeAllItems() {
-		mapOverlays.removeAll(mapOverlays);
-		populate();
+	@Override
+	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
+		super.draw(canvas, mapView, false);
 	}
-	
+
+
+
 	public void addOverlay(SiteOverlayItem overlay) {
 	    mapOverlays.add(overlay);
 	    populate();
-	}
-	
-	public void addOverlays(ArrayList<Site> overlays) {
-		for (Site site : overlays) {
-			SiteOverlayItem overlayItem = new SiteOverlayItem(site);
-			mapOverlays.add(overlayItem);
-			
-		}
-		populate();
 	}
 
 	@Override
@@ -60,7 +53,5 @@ public class LayerItemizedOverlay extends BalloonItemizedOverlay<SiteOverlayItem
 		context.startActivity(intent);
 		return true;
 	}
-	
-	
 	
 }

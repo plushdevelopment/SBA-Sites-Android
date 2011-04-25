@@ -10,6 +10,7 @@ import com.sbasite.sbasites.adapter.LayerListAdapter;
 import com.sbasite.sbasites.model.SiteLayer;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +23,8 @@ public class Layers extends ListActivity {
 	private static final String TAG = Layers.class.getSimpleName();
 	private LayerListAdapter listAdapter;
 	private ArrayList<SiteLayer> layers;
+	private Button hybridButton;
+	private Button mapButton;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,22 @@ public class Layers extends ListActivity {
         listAdapter = new LayerListAdapter(this, layers);
         setContentView(R.layout.layers);
         setListAdapter(listAdapter);
+        
+        
+        
+        hybridButton = (Button) findViewById(R.id.HybridButton);
+        mapButton = (Button) findViewById(R.id.MapButton);
+        
+        hybridButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				
+			}
+        });
+        mapButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				
+			}
+        });
     }
 
 	/* (non-Javadoc)
