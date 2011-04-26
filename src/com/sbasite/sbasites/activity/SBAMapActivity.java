@@ -28,6 +28,7 @@ import android.widget.ProgressBar;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapController;
+import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 import com.sbasite.sbasites.R;
@@ -82,7 +83,9 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		createAndShowMyItemizedOverlay();
+		
+		//createAndShowMyItemizedOverlay();
+		manageOverlays();
 	}
 
 	/**
@@ -103,6 +106,11 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 		
 		overlays = mapView.getOverlays();
 		
+		MyLocationOverlay myLocationOverlay = new MyLocationOverlay(getApplicationContext(), mapView);
+		myLocationOverlay.enableMyLocation();
+		myLocationOverlay.enableCompass();
+		overlays.add(myLocationOverlay);
+		
 		Drawable marker = getResources().getDrawable(R.drawable.yellow_icon);
 		marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
 		layerItemizedOverlay = new LayerItemizedOverlay(marker, mapView);
@@ -120,7 +128,9 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 
 			public void onLocationChanged(Location newLocation) {
 				location = newLocation;
-				createAndShowMyItemizedOverlay();
+				
+				//createAndShowMyItemizedOverlay();
+				manageOverlays();
 			}
 
 			public void onProviderDisabled(String arg0) {
@@ -135,6 +145,55 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 		locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
 				locListener);
 
+	}
+	
+	public void manageOverlays() {
+		
+		removeOverlaysNotinView();
+		
+		SBAMapRegion region = new SBAMapRegion();
+		double latSpan = ((mapView.getLatitudeSpan() / 1000000.0)/2.0);
+		double longSpan = ((mapView.getLongitudeSpan() / 1000000.0)/2.0);
+		double latCenter = (mapView.getMapCenter().getLatitudeE6()/1000000.0);
+		double longCenter = (mapView.getMapCenter().getLongitudeE6()/1000000.0);
+		region.maxLat = (latCenter + latSpan);
+		region.minLat = (latCenter -  latSpan);
+		region.maxLong = (longCenter + longSpan);
+		region.minLong = (longCenter - longSpan);
+
+		ArrayList<SiteLayer> layers = getSBASitesApplication().getLayers();
+		SiteLayer[] layer = new SiteLayer[layers.size()];
+		layer = layers.toArray(layer);
+		String layersString = SiteLayer.activeLayersToString(layer);
+		ArrayList<Site> sites = Site.loadSitesForRegionInLayer(getApplicationContext(), region.minLat, region.maxLat, region.minLong, region.maxLong, layersString);
+		getSBASitesApplication().setCurrentSites(sites);
+		
+		for (Site site : sites) {
+			boolean addToMap = true;
+			for (int i = 0; i < layerItemizedOverlay.size(); i++) {
+				if (layerItemizedOverlay.getItem(i).getSite().mobileKey.equalsIgnoreCase(site.mobileKey)) {
+					addToMap = false;
+					break;
+				}
+			}
+			if (addToMap == true) {
+				layerItemizedOverlay.addOverlay(new SiteOverlayItem(site));
+			}
+		}
+	}
+	
+	public void removeOverlaysNotinView() {
+		ArrayList<SiteOverlayItem> overlaysToRemove = new ArrayList<SiteOverlayItem>();
+		for (int i = 0; i < layerItemizedOverlay.size(); i++) {
+			SiteOverlayItem siteOverlay = layerItemizedOverlay.getItem(i);
+			if (isLocationVisible(siteOverlay.getPoint()) == false) {
+				overlaysToRemove.add(siteOverlay);
+			}
+		}
+		layerItemizedOverlay.removeOverlays(overlaysToRemove);
+		
+		mapView.invalidate();
+		//mapView.postInvalidate();
 	}
 
 	/**
@@ -252,7 +311,9 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 			mapView.setClickable(true);
 			Log.d(TAG, String.format("Latitude: %d, Longitude: %d", result.coordinates.getLatitudeE6(), result.coordinates.getLongitudeE6()));
 			navigateToLocation(result.coordinates.getLatitudeE6(), result.coordinates.getLongitudeE6(), mapView);
-			createAndShowMyItemizedOverlay();
+			
+			//createAndShowMyItemizedOverlay();
+			manageOverlays();
 		}
 	}
 
@@ -267,7 +328,10 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 				mapView.setClickable(true);
 				mapView.getController().setCenter(location);
 				mapView.getController().setZoom(13);
-				createAndShowMyItemizedOverlay();
+				
+				//createAndShowMyItemizedOverlay();
+				manageOverlays();
+				
 			} else {
 				AlertDialog.Builder dialog = new AlertDialog.Builder(SBAMapActivity.this);
 				dialog.setTitle("Location Error");
@@ -335,8 +399,9 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 		} else {
 			super.onActivityResult(requestCode, resultCode, data);
 		}
-		//updateDisplay();
-		createAndShowMyItemizedOverlay();
+		
+		//createAndShowMyItemizedOverlay();
+		manageOverlays();
 	}
 
 	public static void navigateToLocation (double latitude, double longitude, SBAMapView mv) {
@@ -379,7 +444,9 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 			if (zoomLevel < 12) {
 				mapView.getController().setZoom(10);
 			}
-			createAndShowMyItemizedOverlay();
+			
+			//createAndShowMyItemizedOverlay();
+			manageOverlays();
 		}
 		firstUpdate = false;
 	}

@@ -28,7 +28,15 @@ public class LayerItemizedOverlay extends BalloonItemizedOverlay<SiteOverlayItem
 		super.draw(canvas, mapView, false);
 	}
 
-
+	public void removeOverlay(SiteOverlayItem overlay) {
+	    mapOverlays.remove(overlay);
+	    populate();
+	}
+	
+	public void removeOverlays(ArrayList<SiteOverlayItem> overlays) {
+	    mapOverlays.removeAll(overlays);
+	    populate();
+	}
 
 	public void addOverlay(SiteOverlayItem overlay) {
 	    mapOverlays.add(overlay);
