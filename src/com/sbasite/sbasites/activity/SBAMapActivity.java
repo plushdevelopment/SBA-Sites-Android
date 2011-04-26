@@ -12,6 +12,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -24,6 +26,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import com.google.android.maps.GeoPoint;
+import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapController;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
@@ -52,33 +55,10 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 	private ProgressBar progressBar;
 	private static boolean firstUpdate=true;
 	private Location location;
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(R.menu.menu, menu);
-		menu.findItem(R.id.instructions).setIntent(
-				new Intent(this, Instructions.class));
-		menu.findItem(R.id.layers).setIntent(
-				new Intent(this, Layers.class));
-		menu.findItem(R.id.list_view).setIntent(
-				new Intent(this, SiteListActivity.class));
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item){
-		super.onOptionsItemSelected(item);
-		if (item.getItemId() == R.id.list_view) {
-			startActivityForResult(item.getIntent(), CHOOSE_SITE_RESULT);
-		} else if (item.getItemId() == R.id.layers) {
-			startActivityForResult(item.getIntent(), CHOOSE_LAYER);
-		} else {
-			startActivity(item.getIntent());
-		}
-
-		return true;
-	}
+	
+	private MapController mapController;
+	private List<Overlay> overlays;
+	private LayerItemizedOverlay layerItemizedOverlay;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -109,15 +89,25 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 	 * Initialise the map and adds the zoomcontrols to the LinearLayout.
 	 */
 	private void initMap() {
+		firstUpdate=true;
 		mapView=(SBAMapView)findViewById(R.id.map);
 		mapView.setClickable(false);
 		mapView.setSatellite(false);
 		mapView.setTraffic(false);
 		mapView.setBuiltInZoomControls(true);
 		mapView.addListener(this);
-		mapView.getController().setCenter(getPoint(46.0730555556, -100.546666667)); // Set center to the center of North America
-		firstUpdate=true;
-		mapView.getController().setZoom(4);
+		
+		mapController = mapView.getController(); 
+		mapController.setCenter(getPoint(46.0730555556, -100.546666667)); // Set center to the center of North America
+		mapController.setZoom(4);
+		
+		overlays = mapView.getOverlays();
+		
+		Drawable marker = getResources().getDrawable(R.drawable.yellow_icon);
+		marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
+		layerItemizedOverlay = new LayerItemizedOverlay(marker, mapView);
+		overlays.add(layerItemizedOverlay);
+		
 	}
 
 	/**
@@ -165,14 +155,14 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 				iterator.remove();
 			}
 		}
-		
+
 		List<String> providers = locManager.getProviders(true);
 
 		for (int i=providers.size()-1; i>=0; i--) {
 			location = locManager.getLastKnownLocation(providers.get(i));
 			if (location != null) break;
 		}
-		
+
 		if (location != null) {
 			// transform the location to a geopoint
 			GeoPoint geopoint = new GeoPoint(
@@ -190,8 +180,8 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 			overlay.addItem(item);
 			mapView.getOverlays().add(overlay);
 		}
-		
-			
+
+
 		Drawable marker = getResources().getDrawable(R.drawable.yellow_icon);
 		marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
 
@@ -221,10 +211,27 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 		}
 
 		mapView.getOverlays().add(itemizedOverlay);
+		
+		/*
+		if (mapView.getOverlays().size() != 0) {
+			for (Overlay overlay : overlays) {
+				if (overlay.getClass().equals(LayerItemizedOverlay.class.getClass())) {
+					Log.d(TAG, "LayerItemizedOverlay!!!");
+					LayerItemizedOverlay layerItemizedOverlay = (LayerItemizedOverlay)overlay;
+					for (int i = 0; i < layerItemizedOverlay.size(); i++) {
+						SiteOverlayItem siteItem = layerItemizedOverlay.getItem(i);
+						if (isLocationVisible(siteItem.getPoint())) {
+							Log.d(TAG, siteItem.toString() + "is Visible");
+						}
+					}
+				}
+			}
+		}
+		*/
 
 		progressBar.setVisibility(View.GONE);
 		mapView.setClickable(true);
-		
+
 		// redraw map
 		mapView.invalidate();
 	}
@@ -286,7 +293,7 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 	}
 
 	private double[] getGPS() {
-		
+
 		List<String> providers = locManager.getProviders(true);
 
 		Location l = null;
@@ -353,11 +360,23 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 	private GeoPoint getPoint(double lat, double lon) {
 		return(new GeoPoint((int)(lat*1000000.0), (int)(lon*1000000.0)));
 	}
+	
+	private boolean isLocationVisible(GeoPoint geoPoint)
+    {
+        Rect currentMapBoundsRect = new Rect();
+        Point currentPosition = new Point();
+
+        mapView.getProjection().toPixels(geoPoint, currentPosition);
+        mapView.getDrawingRect(currentMapBoundsRect);
+
+        return currentMapBoundsRect.contains(currentPosition.x, currentPosition.y);
+
+    }
 
 	public void mapViewRegionDidChange() {
 		int zoomLevel = mapView.getZoomLevel();
 		if (!firstUpdate) {
-			if (zoomLevel < 10) {
+			if (zoomLevel < 12) {
 				mapView.getController().setZoom(10);
 			}
 			createAndShowMyItemizedOverlay();
@@ -365,4 +384,31 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 		firstUpdate = false;
 	}
 	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		getMenuInflater().inflate(R.menu.menu, menu);
+		menu.findItem(R.id.instructions).setIntent(
+				new Intent(this, Instructions.class));
+		menu.findItem(R.id.layers).setIntent(
+				new Intent(this, Layers.class));
+		menu.findItem(R.id.list_view).setIntent(
+				new Intent(this, SiteListActivity.class));
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item){
+		super.onOptionsItemSelected(item);
+		if (item.getItemId() == R.id.list_view) {
+			startActivityForResult(item.getIntent(), CHOOSE_SITE_RESULT);
+		} else if (item.getItemId() == R.id.layers) {
+			startActivityForResult(item.getIntent(), CHOOSE_LAYER);
+		} else {
+			startActivity(item.getIntent());
+		}
+
+		return true;
+	}
+
 }

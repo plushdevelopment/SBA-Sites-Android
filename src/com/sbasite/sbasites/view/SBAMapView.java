@@ -79,7 +79,7 @@ public class SBAMapView extends MapView {
 
 			int zoomLevel = getZoomLevel();
 
-			if (zoomLevel < 10) {
+			if (zoomLevel < 12) {
 				getController().setZoom(oldZoomLevel);
 			} else {
 
@@ -101,7 +101,7 @@ public class SBAMapView extends MapView {
 		super.dispatchDraw(canvas);
 		int zoomLevel = getZoomLevel();
 
-		if (zoomLevel < 10 && firstUpdate == false) {
+		if (zoomLevel < 12 && firstUpdate == false) {
 			getController().setZoom(oldZoomLevel);
 		} else {
 
