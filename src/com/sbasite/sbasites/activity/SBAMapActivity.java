@@ -83,7 +83,6 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
 		//createAndShowMyItemizedOverlay();
 		manageOverlays();
 	}

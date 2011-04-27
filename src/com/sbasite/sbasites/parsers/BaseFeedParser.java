@@ -25,6 +25,7 @@ public abstract class BaseFeedParser implements FeedParserInterface {
 	static final  String SITEBTA = "BTA";
 	static final  String SITECITY = "City";
 	static final  String SITECONTACT = "Contact";
+	static final  String SITECOUNTY = "County";
 	static final  String SITEEMAIL = "Email";
 	static final  String SITELASTUPDATED = "LastUpdated";
 	static final  String SITEMTA = "MTA";

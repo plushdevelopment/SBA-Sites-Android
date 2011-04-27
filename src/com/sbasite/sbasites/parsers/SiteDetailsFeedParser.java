@@ -80,11 +80,12 @@ public class SiteDetailsFeedParser extends BaseFeedParser {
 							if (currentSite.containsKey(SITEMOBILEKEY) && (null != currentSite.get(SITEMOBILEKEY))) {
 								Site site = Site.siteForMobileKey(context, currentSite.get(SITEMOBILEKEY));
 								site.address = currentSite.get(SITEADRESS);
-								site.agl = currentSite.get(SITEADRESS);
-								site.bta = currentSite.get(SITEADRESS);
-								site.city = currentSite.get(SITEADRESS);
-								site.contact = currentSite.get(SITEADRESS);
-								site.email = currentSite.get(SITEADRESS);
+								site.agl = currentSite.get(SITEAGL);
+								site.bta = currentSite.get(SITEBTA);
+								site.city = currentSite.get(SITECITY);
+								site.contact = currentSite.get(SITECONTACT);
+								site.county = currentSite.get(SITECOUNTY);
+								site.email = currentSite.get(SITEEMAIL);
 								site.structureHeight = currentSite.get(SITEHEIGHT);
 								site.structureID = currentSite.get(SITEID);
 								site.lastUpdated = currentSite.get(SITELASTUPDATED);
@@ -142,6 +143,7 @@ public class SiteDetailsFeedParser extends BaseFeedParser {
 								site.bta = currentSite.get(SITEBTA);
 								site.city = currentSite.get(SITECITY);
 								site.contact = currentSite.get(SITECONTACT);
+								site.county = currentSite.get(SITECOUNTY);
 								site.email = currentSite.get(SITEEMAIL);
 								site.structureHeight = currentSite.get(SITEHEIGHT);
 								site.structureID = currentSite.get(SITEID);

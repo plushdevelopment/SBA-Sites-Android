@@ -83,11 +83,11 @@ public class SiteDetailActivity extends Activity implements LoadSiteDetailsAsync
         emailButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-				String[] recipients = new String[]{site.email, "jsilberstein@sbasite.com", "bgottfried@sbasite.com", "",};
-				emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, recipients);
-				emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Site Inquiry");
-				emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, site.toString());
 				emailIntent.setType("text/plain");
+				String[] recipients = new String[]{site.email, "jsilberstein@sbasite.com", "bgottfried@sbasite.com"};
+				emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, recipients);
+				emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, site.siteName);
+				emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, site.toString());
 				startActivity(Intent.createChooser(emailIntent, "Send mail..."));
 				finish();
 			}
@@ -124,7 +124,7 @@ public class SiteDetailActivity extends Activity implements LoadSiteDetailsAsync
 		siteAddress2TextView.setText(site.city + ", " + site.stateProvince + " " + site.zip);
 		siteLayerTextView.setText(site.siteLayer.name);
 		siteStatusTextView.setText(site.siteStatus);
-		siteCoordinatesTextView.setText(Double.toString(site.latitude) + ", " + Double.toString(site.longitude));
+		siteCoordinatesTextView.setText(site.latitudeString() + ", " + site.longitudeString());
 		siteTypeTextView.setText(site.structureType);
 		siteHeightTextView.setText(site.structureHeight);
 		siteElevationTextView.setText(site.agl);
@@ -162,7 +162,9 @@ public class SiteDetailActivity extends Activity implements LoadSiteDetailsAsync
 	}
 
 	public void imageLoaded(Drawable drawable) {
+		
 		if (null == drawable) {
+			siteImage.setVisibility(View.GONE);
 		} else {
 			siteImage.setImageDrawable(drawable);
 			siteImage.setVisibility(View.VISIBLE);
