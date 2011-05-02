@@ -35,19 +35,25 @@ public class Layers extends ListActivity {
         setContentView(R.layout.layers);
         setListAdapter(listAdapter);
         
-        
-        
         hybridButton = (Button) findViewById(R.id.HybridButton);
         mapButton = (Button) findViewById(R.id.MapButton);
         
+        boolean mapMode = getSBASitesApplication().getMapMode();
+        hybridButton.setEnabled(!mapMode);
+        mapButton.setEnabled(mapMode);
+        
         hybridButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				
+				getSBASitesApplication().setMapMode(true);
+				hybridButton.setEnabled(false);
+		        mapButton.setEnabled(true);
 			}
         });
         mapButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				
+				getSBASitesApplication().setMapMode(false);
+				hybridButton.setEnabled(true);
+		        mapButton.setEnabled(false);
 			}
         });
     }
@@ -59,7 +65,6 @@ public class Layers extends ListActivity {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		SiteLayer layer = listAdapter.getItem(position);
-		Log.d(TAG, layer.toString());
 		if (null != layer) {
 			layer.activated = !layer.activated;
 		}

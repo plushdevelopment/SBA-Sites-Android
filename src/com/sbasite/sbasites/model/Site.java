@@ -75,7 +75,7 @@ public class Site extends ActiveRecordBase<Site> {
 	}
 
 	public static ArrayList<Site> loadSitesForRegionInLayer(Context context, double minLat, double maxLat, double minLong, double maxLong, String layers) {
-		return Site.query(context, Site.class, null, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong + " AND SITE_LAYER IN " + layers, "SITE_NAME", "20");
+		return Site.query(context, Site.class, null, "SITE_LATITUDE BETWEEN " + minLat + " AND " + maxLat + " AND SITE_LONGITUDE BETWEEN " + minLong + " AND " + maxLong + " AND SITE_LAYER IN " + layers, "SITE_NAME", "30");
 	}
 
 	public int getPinIcon() {
@@ -117,8 +117,8 @@ public class Site extends ActiveRecordBase<Site> {
 		"County: " + county + "\n" + 
 		"State/Province: " + stateProvince + "\n" + 
 		"Zip: " + zip + "\n" + 
-		"Latitude: " + Double.toString(latitude) + "\n" +
-		"Longitude: " + Double.toString(longitude) + "\n" +
+		"Latitude: " + latitudeString() + "\n" +
+		"Longitude: " + longitudeString() + "\n" +
 		"Structure ID: " + structureID + "\n" +
 		"Structure Type: " + structureType + "\n" +
 		"Height(ft): " + structureHeight + "\n" +

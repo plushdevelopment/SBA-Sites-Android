@@ -55,6 +55,6 @@ public class Instructions extends Activity implements OnClickListener {
 				emailIntent.setType("text/plain");
 				startActivity(Intent.createChooser(emailIntent, "Send mail..."));
 				finish();
-				};
+				}
 			}
 }

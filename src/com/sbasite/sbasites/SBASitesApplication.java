@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 import com.sbasite.sbasites.activity.SBAMapActivity;
 import com.sbasite.sbasites.controller.SitesSqliteOpenHelper;
 import com.sbasite.sbasites.model.Site;
@@ -44,6 +45,7 @@ public class SBASitesApplication extends GDApplication implements LoadMoreSitesR
 	public String lastModifiedUpdated;
 	public String lastDeletedUpdated;
 	public boolean satelliteMode=false;
+	private OverlayItem selectedItem;
 
 	@Override
 	public void onCreate() {
@@ -75,6 +77,14 @@ public class SBASitesApplication extends GDApplication implements LoadMoreSitesR
     public synchronized Class<?> getHomeActivityClass() {
         return SBAMapActivity.class;
     }
+	
+	public synchronized boolean getMapMode() {
+		return satelliteMode;
+	}
+	
+	public synchronized void setMapMode(boolean mode) {
+		satelliteMode = mode;
+	}
 
 	public synchronized void setCurrentSites(ArrayList<Site> currentSites) {
 		this.currentSites = currentSites;

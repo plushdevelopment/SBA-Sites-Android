@@ -3,21 +3,25 @@ package com.sbasite.sbasites.view;
 import java.util.ArrayList;
 import java.util.List;
  
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
  
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
+import com.readystatesoftware.mapviewballoons.BalloonItemizedOverlay;
  
-public class MyItemizedOverlay extends ItemizedOverlay {
+public class MyItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
  
-	private List items;
+	private ArrayList<OverlayItem> items;
 	private Drawable marker;
- 
-	public MyItemizedOverlay(Drawable defaultMarker) {
-		super(defaultMarker);
-		items = new ArrayList();
+	private Context context;
+	
+	public MyItemizedOverlay(Drawable defaultMarker, MapView mapView) {
+		super(boundCenterBottom(defaultMarker), mapView);
+		context = mapView.getContext();
+		items = new ArrayList<OverlayItem>();
 		marker = defaultMarker;
 	}
  
@@ -30,6 +34,11 @@ public class MyItemizedOverlay extends ItemizedOverlay {
 	public int size() {
 		return items.size();
  
+	}
+	
+	public void removeOverlays() {
+		items.removeAll(items);
+		populate();
 	}
  
 	/*

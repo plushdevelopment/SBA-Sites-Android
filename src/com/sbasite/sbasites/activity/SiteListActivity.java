@@ -8,6 +8,7 @@ import com.sbasite.sbasites.R.id;
 import com.sbasite.sbasites.R.layout;
 import com.sbasite.sbasites.adapter.SiteListAdapter;
 import com.sbasite.sbasites.model.Site;
+import com.sbasite.sbasites.view.SiteOverlayItem;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -44,9 +45,13 @@ public class SiteListActivity extends ListActivity {
 		Site site = listAdapter.getItem(position);
 		Log.d(TAG, site.toString());
 	    if (null != site) {
-			Intent intent = new Intent();
+			Intent intent = new Intent(this, SiteDetailActivity.class);
 			intent.putExtra("MobileKey", site.mobileKey);
-			setResult(RESULT_OK, intent);
+			startActivity(intent);
+	    	
+			//Intent intent = new Intent();
+			//intent.putExtra("MobileKey", site.mobileKey);
+			//setResult(RESULT_OK, intent);
 		}
 		finish();
 	    
