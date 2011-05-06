@@ -25,6 +25,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapController;
@@ -62,10 +64,23 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 	private LayerItemizedOverlay layerItemizedOverlay;
 	private MyLocationOverlay myLocationOverlay;
 	private MyItemizedOverlay searchResultOverlay;
+	
+	GoogleAnalyticsTracker tracker;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		tracker = GoogleAnalyticsTracker.getInstance();
+
+	    // Start the tracker in manual dispatch mode...
+	    tracker.start("UA-19524393-2", this);
+	    
+	    tracker.trackEvent(
+	            "Clicks",  // Category
+	            "Button",  // Action
+	            "clicked", // Label
+	            77);  
 
 		setActionBarContentView(R.layout.main);
 		addActionBarItem(Type.LocateMyself);
@@ -121,14 +136,6 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 		icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
 		searchResultOverlay = new MyItemizedOverlay(icon, mapView);
 		overlays.add(searchResultOverlay);
-		
-		/*
-		layerItemizedOverlay.setOnFocusChangeListener(new OnFocusChangeListener() {
-			public void onFocusChange(View v, boolean hasFocus) {
-				
-			}
-		});
-		 */
 	}
 
 	/**
@@ -254,10 +261,9 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 			Log.d(TAG, String.format("Latitude: %d, Longitude: %d", result.coordinates.getLatitudeE6(), result.coordinates.getLongitudeE6()));
 			navigateToLocation(result.coordinates.getLatitudeE6(), result.coordinates.getLongitudeE6(), mapView);
 			manageOverlays();
-			OverlayItem resultOverlayItem = new OverlayItem(result.coordinates, result.title, null);
-			searchResultOverlay.addItem(resultOverlayItem);
-			mapView.invalidate();
-			searchResultOverlay.setFocus(resultOverlayItem);
+			//OverlayItem resultOverlayItem = new OverlayItem(result.coordinates, result.title, " ");
+			//searchResultOverlay.addItem(resultOverlayItem);
+			//mapView.invalidate();
 		}
 	}
 

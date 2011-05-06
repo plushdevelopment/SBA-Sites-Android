@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.sbasite.sbasites" android:versionName="App Version - 15.0" android:versionCode="15">
+	package="com.sbasite.sbasites" android:versionName="@string/app_version" android:versionCode="17">
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.INTERNET" />
-
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="8"></uses-sdk>
-
 	<application android:icon="@drawable/icon" android:theme="@style/Theme.GDCatalog"
 		android:name=".SBASitesApplication" android:label="@string/app_name">
 		<meta-data android:name="AA_DB_NAME" android:value="Application.db" />

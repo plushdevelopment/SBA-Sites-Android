@@ -2,7 +2,7 @@
 <com.sbasite.sbasites.view.LayerListItemView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/list_item_background">
+    >
 	<ImageView
 	   	android:id="@+id/layer_pin_icon"
 	   	android:layout_width="32px"
