@@ -2,6 +2,7 @@
 <com.sbasite.sbasites.view.LayerListItemView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@drawable/list_item_background"
     >
 	<ImageView
 	   	android:id="@+id/layer_pin_icon"
@@ -17,13 +18,13 @@
 	   	android:layout_height="wrap_content"
 	   	android:layout_marginTop="6dip"
 	   	android:layout_marginBottom="6dip"
-    	android:layout_toRightOf="@id/layer_pin_icon"
-    	 />
+    	android:layout_toRightOf="@id/layer_pin_icon"/>
 	<TextView
 	   	android:id="@+id/layer_active"
 	   	android:layout_width="wrap_content"
 	   	android:layout_height="wrap_content"
     	android:layout_below="@+id/layer_layer_name"
     	android:layout_toRightOf="@id/layer_pin_icon" 
-    	android:paddingBottom="6sp" />
+    	android:paddingBottom="6sp" 
+    	/>
 </com.sbasite.sbasites.view.LayerListItemView>

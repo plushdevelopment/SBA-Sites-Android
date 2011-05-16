@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.sbasite.sbasites" android:versionName="@string/app_version" android:versionCode="17">
+	package="com.sbasite.sbasites" android:versionName="@string/app_version" android:versionCode="20">
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.INTERNET" />
@@ -27,13 +27,16 @@
 			android:screenOrientation="portrait" android:name=".activity.Instructions">
 		</activity>
 		<activity android:label="@string/layers"
-			android:screenOrientation="portrait" android:name=".activity.Layers">
+			android:screenOrientation="portrait" android:name=".activity.Layers"
+			android:theme="@style/Theme.OTweet">
 		</activity>
 		<activity android:label="@string/list_view"
-			android:screenOrientation="portrait" android:name=".activity.SiteListActivity">
+			android:screenOrientation="portrait" android:name=".activity.SiteListActivity"
+			android:theme="@style/Theme.OTweet">
 		</activity>
 		<activity android:label="@string/site_detail_activity"
-			android:screenOrientation="portrait" android:name=".activity.SiteDetailActivity" android:theme="@style/Theme.OTweet">
+			android:screenOrientation="portrait" android:name=".activity.SiteDetailActivity"
+			android:theme="@style/Theme.OTweet">
 		</activity>
 		<activity android:label="@string/site_name_id"
 			android:screenOrientation="portrait" android:name=".activity.SearchSiteNameAddress">
@@ -48,7 +51,8 @@
 			android:screenOrientation="portrait" android:name=".activity.AboutSbaCommunications">
 		</activity>
 		<activity android:label="Search" android:screenOrientation="portrait"
-			android:launchMode="singleTask" android:name=".activity.SearchListActivity">
+			android:launchMode="singleTask" android:name=".activity.SearchListActivity"
+			android:theme="@style/Theme.OTweet">
 			<intent-filter>
 				<action android:name="android.intent.action.SEARCH" />
 			</intent-filter>

@@ -95,13 +95,16 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		
+		myLocationOverlay.disableCompass();
+		myLocationOverlay.disableMyLocation();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 		mapView.setSatellite(getSBASitesApplication().getMapMode());
+		myLocationOverlay.enableCompass();
+		myLocationOverlay.enableMyLocation();
 		manageOverlays();
 	}
 
@@ -166,12 +169,18 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 	}
 
 	public void manageOverlays() {
-
+		
+		Log.d(TAG, String.format("Overlays count: %d", overlays.size()));
+		
+		mapView.setClickable(false);
+		layerItemizedOverlay.hideBalloon();
 		removeOverlaysNotinView();
 		removeDisabledLayers();
 		
 		if (myLocationOverlay.getMyLocation() == null) {
-			overlays.remove(myLocationOverlay);
+			if (overlays.contains(myLocationOverlay)) {
+				overlays.remove(myLocationOverlay);
+			}
 			myLocationOverlay = new MyLocationOverlay(this, mapView);
 			myLocationOverlay.enableMyLocation();
 			myLocationOverlay.enableCompass();
@@ -215,6 +224,8 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 				layerItemizedOverlay.addOverlay(new SiteOverlayItem(site));
 			}
 		}
+		mapView.invalidate();
+		mapView.setClickable(true);
 	}
 
 	public void removeOverlaysNotinView() {
@@ -278,8 +289,6 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 				mapView.setClickable(true);
 				mapView.getController().setCenter(location);
 				mapView.getController().setZoom(13);
-
-				//createAndShowMyItemizedOverlay();
 				manageOverlays();
 
 			} else {
