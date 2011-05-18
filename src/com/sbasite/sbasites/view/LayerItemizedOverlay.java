@@ -15,12 +15,13 @@ import com.sbasite.sbasites.model.Site;
 public class LayerItemizedOverlay extends BalloonItemizedOverlay<SiteOverlayItem> {
 
 	private static final String TAG = LayerItemizedOverlay.class.getSimpleName();
-	private ArrayList<SiteOverlayItem> mapOverlays = new ArrayList<SiteOverlayItem>();
+	private ArrayList<SiteOverlayItem> myMapOverlays = new ArrayList<SiteOverlayItem>();
 	private Context context;
 	
 	public LayerItemizedOverlay(Drawable defaultMarker, MapView mapView) {
 		super(boundCenterBottom(defaultMarker), mapView);
 		context = mapView.getContext();
+		populate();
 	}
 	
 	@Override
@@ -29,33 +30,36 @@ public class LayerItemizedOverlay extends BalloonItemizedOverlay<SiteOverlayItem
 	}
 
 	public void removeOverlay(SiteOverlayItem overlay) {
-	    mapOverlays.remove(overlay);
+	    myMapOverlays.remove(overlay);
+	    setLastFocusedIndex(-1);
 	    populate();
 	}
 	
 	public void removeOverlays(ArrayList<SiteOverlayItem> overlays) {
-	    mapOverlays.removeAll(overlays);
+	    myMapOverlays.removeAll(overlays);
+	    setLastFocusedIndex(-1);
 	    populate();
 	}
 
 	public void addOverlay(SiteOverlayItem overlay) {
-	    mapOverlays.add(overlay);
+	    myMapOverlays.add(overlay);
+	    setLastFocusedIndex(-1);
 	    populate();
 	}
 
 	@Override
 	protected SiteOverlayItem createItem(int i) {
-		return mapOverlays.get(i);
+		return myMapOverlays.get(i);
 	}
 
 	@Override
 	public int size() {
-		return mapOverlays.size();
+		return myMapOverlays.size();
 	}
 
 	@Override
 	protected boolean onBalloonTap(int index) {
-		SiteOverlayItem item = mapOverlays.get(index);
+		SiteOverlayItem item = myMapOverlays.get(index);
 		Intent intent = new Intent(context, SiteDetailActivity.class);
 		intent.putExtra("MobileKey", item.getSite().mobileKey);
 		context.startActivity(intent);

@@ -6,7 +6,6 @@ import greendroid.widget.ActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -28,11 +27,9 @@ import android.widget.ProgressBar;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.maps.GeoPoint;
-import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
-import com.google.android.maps.OverlayItem;
 import com.sbasite.sbasites.R;
 import com.sbasite.sbasites.SBASitesApplication;
 import com.sbasite.sbasites.model.SearchResult;
@@ -115,30 +112,32 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 		firstUpdate=true;
 		mapView=(SBAMapView)findViewById(R.id.map);
 		mapView.setClickable(false);
-		mapView.setTraffic(false);
+		
 		mapView.setBuiltInZoomControls(false);
 		mapView.addListener(this);
 
 		mapController = mapView.getController(); 
 		mapController.setCenter(getPoint(46.0730555556, -100.546666667)); // Set center to the center of North America
 		mapController.setZoom(4);
-
+		
 		overlays = mapView.getOverlays();
-
+		
 		myLocationOverlay = new MyLocationOverlay(this, mapView);
 		myLocationOverlay.enableMyLocation();
 		myLocationOverlay.enableCompass();
 		overlays.add(myLocationOverlay);
-
+		
 		Drawable marker = getResources().getDrawable(R.drawable.yellow_icon);
 		marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker.getIntrinsicHeight());
 		layerItemizedOverlay = new LayerItemizedOverlay(marker, mapView);
 		overlays.add(layerItemizedOverlay);
 		
+		/*
 		Drawable icon = getResources().getDrawable(R.drawable.marker);
 		icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
 		searchResultOverlay = new MyItemizedOverlay(icon, mapView);
 		overlays.add(searchResultOverlay);
+		*/
 	}
 
 	/**
@@ -169,9 +168,6 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 	}
 
 	public void manageOverlays() {
-		
-		Log.d(TAG, String.format("Overlays count: %d", overlays.size()));
-		
 		mapView.setClickable(false);
 		layerItemizedOverlay.hideBalloon();
 		removeOverlaysNotinView();
@@ -237,10 +233,6 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 			}
 		}
 		layerItemizedOverlay.removeOverlays(overlaysToRemove);
-		
-		searchResultOverlay.removeOverlays();
-		
-		mapView.invalidate();
 	}
 
 	private void removeDisabledLayers() {
@@ -252,7 +244,6 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 			}
 		}
 		layerItemizedOverlay.removeOverlays(overlaysToRemove);
-		mapView.invalidate();
 	}
 
 	private void setUpViews() {
