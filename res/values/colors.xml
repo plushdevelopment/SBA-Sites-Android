@@ -4,12 +4,12 @@
 	<color name="color_background">#FFBBBBBB</color>
 	<color name="color_foreground_inverse">#FF444444</color>
 
-	<color name="title_color_light">#FFC01414</color>
-	<color name="title_color_dark">#FF860000</color>
+	<color name="title_color_light">#FFaebbcb</color>
+	<color name="title_color_dark">#FF6e85a2</color>
 	<color name="title_border">#FF282828</color>
 
-	<color name="button_color_light">#FFC01414</color>
-	<color name="button_color_dark">#FF860000</color>
+	<color name="button_color_light">#FFaebbcb</color>
+	<color name="button_color_dark">#FF6e85a2</color>
 	<color name="button_color_disabled">#FF430000</color>
 	<color name="button_default_border">#FF444444</color>
 	<color name="button_focused_border">#FFFFD400</color>

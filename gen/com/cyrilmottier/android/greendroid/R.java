@@ -744,6 +744,7 @@ containing a value of this type.
         public static final int gdi_scroll=0x7f06001d;
         public static final int hdpi=0x7f060005;
         public static final int imageView1=0x7f06000c;
+        public static final int imageView2=0x7f060038;
         public static final int instructions=0x7f060077;
         public static final int layer_active=0x7f060033;
         public static final int layer_layer_name=0x7f060032;
@@ -755,7 +756,6 @@ containing a value of this type.
         public static final int map=0x7f060037;
         public static final int mdpi=0x7f060004;
         public static final int normal=0x7f060000;
-        public static final int progressBar1=0x7f060038;
         public static final int relativeLayout1=0x7f060051;
         public static final int search_result_subtitle=0x7f06003a;
         public static final int search_result_title=0x7f060039;

@@ -2,7 +2,10 @@
 package com.sbasite.sbasites.activity;
 
 import greendroid.app.GDMapActivity;
+import greendroid.graphics.drawable.ActionBarDrawable;
+import greendroid.widget.ActionBar;
 import greendroid.widget.ActionBarItem;
+import greendroid.widget.NormalActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
 
 import java.util.ArrayList;
@@ -24,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.maps.GeoPoint;
@@ -52,15 +56,12 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 	private ImageView welcomeImageView;
 	private LocationManager locManager;
 	private LocationListener locListener;
-	private ProgressBar progressBar;
 	private static boolean firstUpdate=true;
 	private Location location;
-
 	private MapController mapController;
 	private List<Overlay> overlays;
 	private LayerItemizedOverlay layerItemizedOverlay;
 	private MyLocationOverlay myLocationOverlay;
-	private MyItemizedOverlay searchResultOverlay;
 	
 	GoogleAnalyticsTracker tracker;
 
@@ -80,6 +81,7 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 	            77);  
 
 		setActionBarContentView(R.layout.main);
+		
 		addActionBarItem(Type.LocateMyself);
 		addActionBarItem(Type.Search);
 		addActionBarItem(Type.Locate);
@@ -87,6 +89,9 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 		initMap();
 		initLocationManager();
 		setUpViews();
+		ActionBar bar = getActionBar();
+		TextView title = ((TextView) bar.findViewById(R.id.gd_action_bar_title));
+		//title.setText("SBA Sites");
 	}
 
 	@Override
@@ -247,8 +252,6 @@ public class SBAMapActivity extends GDMapActivity implements SBAMapViewListener 
 	}
 
 	private void setUpViews() {
-		progressBar = (ProgressBar)findViewById(R.id.progressBar1);
-		progressBar.setVisibility(View.GONE);
 		welcomeImageView=(ImageView)findViewById(R.id.imageView1);
 		welcomeImageView.setVisibility(View.VISIBLE);
 	}

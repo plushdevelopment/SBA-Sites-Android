@@ -24,8 +24,10 @@ import com.sbasite.sbasites.tasks.LoadModifiedSitesAsyncTask.LoadModifiedSitesRe
 import com.sbasite.sbasites.tasks.LoadMoreSitesAsyncTask.LoadMoreSitesResponder;
 import com.sbasite.sbasites.tasks.LoadMoreSitesAsyncTask.LoadMoreSitesResult;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.util.Log;
 
 public class SBASitesApplication extends GDApplication implements LoadMoreSitesResponder, LoadDeletedSitesResponder, LoadModifiedSitesResponder {
 
@@ -45,7 +47,6 @@ public class SBASitesApplication extends GDApplication implements LoadMoreSitesR
 	public String lastModifiedUpdated;
 	public String lastDeletedUpdated;
 	public boolean satelliteMode=false;
-	private OverlayItem selectedItem;
 
 	@Override
 	public void onCreate() {
@@ -65,12 +66,11 @@ public class SBASitesApplication extends GDApplication implements LoadMoreSitesR
 		lastAddedUpdated = prefs.getString("lastAddedUpdated", "2011-04-18T23:19:06.960Z");
 		lastModifiedUpdated = prefs.getString("lastModifiedUpdated", "2008-02-15T23:43:54.122Z");
 		lastDeletedUpdated = prefs.getString("lastDeletedUpdated", "2011-04-19T02:08:48.115Z");
-		*/
 		
 		// Starts loading new sites
-		//String urlString = "http://map.sbasite.com/Mobile/GetData?LastUpdate=" + lastAddedUpdated + "&Skip=" + totalAdded + "&Take=" + take + "&Version=2&Action=1";
-        //new LoadMoreSitesAsyncTask(this, this).execute(urlString);
-        
+		String urlString = "http://map.sbasite.com/Mobile/GetData?LastUpdate=" + lastAddedUpdated + "&Skip=" + totalAdded + "&Take=" + take + "&Version=2&Action=1";
+        new LoadMoreSitesAsyncTask(this, this).execute(urlString);
+        */
 	}
 	
 	@Override
@@ -112,6 +112,7 @@ public class SBASitesApplication extends GDApplication implements LoadMoreSitesR
 		totalAdds = result.totalRecordsCount;
 		totalAdded+=take;
 		Editor editor = prefs.edit();
+		Log.d(TAG, String.format("Total added: %d/%d", totalAdded, totalAdds));
 		if (totalAdded < totalAdds) {
 			editor.putInt("totalAdded", totalAdded);
 			editor.commit();
@@ -138,6 +139,7 @@ public class SBASitesApplication extends GDApplication implements LoadMoreSitesR
 		totalDeletes = result.totalRecordsCount;
 		totalDeleted+=take;
 		Editor editor = prefs.edit();
+		Log.d(TAG, String.format("Total deleted: %d/%d", totalDeleted, totalDeletes));
 		if (totalDeleted < totalDeletes) {
 			editor.putInt("totalDeleted", totalDeleted);
 			editor.commit();
@@ -160,6 +162,7 @@ public class SBASitesApplication extends GDApplication implements LoadMoreSitesR
 		totalUpdates = result.totalRecordsCount;
 		totalUpdated+=take;
 		Editor editor = prefs.edit();
+		Log.d(TAG, String.format("Total updated: %d/%d", totalUpdated, totalUpdates));
 		if (totalUpdated < totalUpdates) {
 			editor.putInt("totalUpdated", totalUpdated);
 			editor.commit();
