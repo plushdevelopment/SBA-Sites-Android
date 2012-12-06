@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="com.sbasite.sbasites" android:versionName="@string/app_version" android:versionCode="3">
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="8"></uses-sdk>
+	<application android:icon="@drawable/icon" android:theme="@style/Theme.GDCatalog"
+		android:name=".SBASitesApplication" android:label="@string/app_name">
+		<meta-data android:name="AA_DB_NAME" android:value="Application.db" />
+		<meta-data android:name="AA_DB_VERSION" android:value="1" />
+		<uses-library android:required="true" android:name="com.google.android.maps"></uses-library>
+		<activity android:label="@string/app_name"
+			android:screenOrientation="portrait" android:name=".activity.SBAMapActivity"
+			android:launchMode="singleTask">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+			<meta-data android:name="android.app.searchable"
+				android:resource="@xml/searchable" />
+			<meta-data android:name="android.app.default_searchable"
+				android:value=".activity.SearchListActivity" />
+		</activity>
+		<activity android:label="@string/instructions"
+			android:screenOrientation="portrait" android:name=".activity.Instructions">
+		</activity>
+		<activity android:label="@string/layers"
+			android:screenOrientation="portrait" android:name=".activity.Layers"
+			android:theme="@style/Theme.OTweet">
+		</activity>
+		<activity android:label="@string/list_view"
+			android:screenOrientation="portrait" android:name=".activity.SiteListActivity"
+			android:theme="@style/Theme.OTweet">
+		</activity>
+		<activity android:label="@string/site_detail_activity"
+			android:screenOrientation="portrait" android:name=".activity.SiteDetailActivity"
+			android:theme="@style/Theme.OTweet">
+		</activity>
+		<activity android:label="@string/site_name_id"
+			android:screenOrientation="portrait" android:name=".activity.SearchSiteNameAddress">
+		</activity>
+		<activity android:label="@string/coordinates"
+			android:screenOrientation="portrait" android:name=".activity.SearchCoordinates">
+		</activity>
+		<activity android:screenOrientation="portrait" android:name=".activity.SearchAddress"
+			android:label="@string/address">
+		</activity>
+		<activity android:label="@string/about_sba_communications"
+			android:screenOrientation="portrait" android:name=".activity.AboutSbaCommunications">
+		</activity>
+		<activity android:label="Search" android:screenOrientation="portrait"
+			android:launchMode="singleTask" android:name=".activity.SearchListActivity"
+			android:theme="@style/Theme.OTweet">
+			<intent-filter>
+				<action android:name="android.intent.action.SEARCH" />
+			</intent-filter>
+			<meta-data android:name="android.app.searchable"
+				android:resource="@xml/searchable" />
+			<meta-data android:name="android.app.default_searchable"
+				android:value=".activity.SearchListActivity" />
+		</activity>
+		<activity android:label="Site Image" android:name=".activity.SiteImageViewActivity"
+			android:screenOrientation="portrait"></activity>
+		<service android:name=".service.SBASyncService"></service>
+	</application>
+</manifest>
