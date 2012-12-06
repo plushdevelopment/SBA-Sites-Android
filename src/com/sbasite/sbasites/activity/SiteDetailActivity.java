@@ -84,7 +84,7 @@ public class SiteDetailActivity extends Activity implements LoadSiteDetailsAsync
 			public void onClick(View v) {
 				Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
 				emailIntent.setType("text/plain");
-				String[] recipients = new String[]{site.email, "jsilberstein@sbasite.com", "bgottfried@sbasite.com"};
+				String[] recipients = new String[]{site.email, "jsilberstein@sbasite.com", "siteinquiry@sbasite.com"};
 				emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, recipients);
 				emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, site.siteName);
 				emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, site.toString());
